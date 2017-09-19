@@ -1,0 +1,649 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block content %}
+    <div class="header"><!--лого, поиск, корзина, часы работы -->
+        <div class="container container-fluid">
+            <div class="row">
+
+                <div class="col-sm-12">
+
+                    <div class="col-sm-3">
+                        <a href="#"><img class="logo" src="{% static 'images/logo.jpg' %}"></a>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="slogan">
+                            <h1>Все для творчества,<br> школы и офиса</h1>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="registration">
+                            <a href="#form" class="popup"><b><i class="fa fa-user-circle-o" aria-hidden="true"></i>Вход/регистрация</b></a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-12">
+
+                    <div class="col-sm-3">
+                        <div class="work_time">
+                            <h4>8(800)000-00-00</h4>
+                            <p>Пн-пт с 9:00 до 20:00</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="search">
+                            <input type="text" name="search" placeholder="Введите код или название товара..">
+                        </div>
+                    </div>
+                    
+                    <div class="basket">
+                        <a href="korzina.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i>1 235 руб</a>
+                    </div>
+
+                </div>
+                    
+            </div>  
+        </div>      
+    </div><!--end -->
+
+<div class="hidden"><!--form registration -->
+        <form id="form" class="format"><!-- вывод формы регистрации -->
+            <div class="login-page">
+                  <div class="form1"> 
+                    <form class="register-form">
+                    <h4>Регистрация</h4>
+                      <input type="text" placeholder="Логин"/>
+                      <input type="password" placeholder="Пароль"/>
+                      <input type="text" placeholder="E-mail"/>
+                      <button>Создать</button>
+                      <p class="message">Уже зарегестрированы?? <a href="#form2" class="popup1">Войти</a></p>
+                    </form>
+                    </div></div>
+                    </form>
+                     
+                    <form id="form2" class="login-form">
+                    <h4>Войдите в систему</h4>
+                      <input type="text" placeholder="Логин"/>
+                      <input type="password" placeholder="Пароль"/>
+                      <button class="voi">Войти</button>
+                      <p class="message">Не зарегестрированы? <a href="#form" class="popup">Создать аккаунт</a></p>
+                    </form>
+                  
+
+    </div><!--end-->
+
+    <nav class="navbar"> <!-- by inka-->
+  <div class="row container-fluid">
+    <div class="col-md-1 col-xs-1"></div>
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed navbar-left" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="icon-bar"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></span>
+      </button>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="col-md-10 col-xs-10 collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">
+                <i class="fa fa-bars" aria-hidden="true"></i> Каталог товаров <span class="caret"></span>
+            </a>
+            <div class="dropdown-menu">
+                <div class="row float-none top15">
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/бумажная продукция.jpg' %}" height="60" class="leftimg ram0"></div>
+                            <div class="col-md-6 pad0 "><p class="p1">Бумажная продукция</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/фотобумага.jpg' %}" height="60" class="leftimg ram3"></div> <div class="col-md-6 pad0 "><p class="p1">Фото бумага и пленки</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/фотоальбомы фоторамки.jpg' %}" height="55" class="leftimg ram"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Фото альбомы и фоторамки</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/распродажа.jpg' %}" height="60" class="leftimg"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Распродажа</p></div> 
+                        </a>
+                    </div>
+                </div>
+                <div class="row float-none top15">
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/канцтовары.jpg' %}" height="35" class="leftimg ram2"></div>
+                            <div class="col-md-6 pad0"><p>Товары для офиса,<br>канц.товары </p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/писменные принадлежности.png' %}" height="50" class="leftimg ram4"></div>
+                            <div class="col-md-6 pad0"><p>Письменные и чертежные<br>принадлежности </p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/папки и архив.jpg' %}" height="85" class="leftimg"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Папки и архивация</p></div>
+                        </a>
+                    </div>
+                    
+                </div>
+                <div class="row float-none top15">
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/демонстрационное оборуд.jpg' %}" height="60" class="leftimg"></div>
+                            <div class="col-md-6 pad0"><p>Демонстрационное<br> оборудование</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/расх.jpg' %}" height="55" class="leftimg ram5"></div>
+                            <div class="col-md-6 pad0"><p>Офисная техника и<br>расходные материалы </p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/мебель.png' %}" height="75" class="leftimg"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Мебель</p></div>
+                        </a>
+                    </div>
+                  
+                </div>
+                <div class="row float-none top15">
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/товары для школы.jpg' %}" height="40" class="leftimg ram6"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Товары для школы</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/игры детские.jpg' %}" height="60" class="leftimg ram7"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Товары для детей, книги</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/худ школа.jpg' %}" height="65" class="leftimg ram8"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Художественные материалы</p></div>
+                        </a>
+                    </div>
+                   
+                </div>
+                <div class="row float-none top15">
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/творчество.jpg' %}" height="60" class="leftimg ram9"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Рукоделие и творчество</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/suveniry.png' %}" height="55" class="leftimg ram9"></div>
+                            <div class="col-md-6 pad0"><p class="p1">Подарки и сувениры</p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                        <a href="#">
+                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/хозтовары.png' %}" height="85" class="leftimg ram10"></div>
+                            <div class="col-md-6 pad0"><p>Хоз.товары и <br>паковочные материалы </p></div>
+                        </a>
+                    </div>
+                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                    </div>
+                </div>
+           </div>
+        </li>
+        <li>
+            <a class="" href="#">
+                <i class="fa fa-address-card-o" aria-hidden="true"></i> О компании
+            </a>
+        </li>
+        <li>
+            <a class="" href="#">
+                <i class="fa fa-male" aria-hidden="true"></i> Физ. лицам
+            </a>
+        </li>
+        <li>
+            <a class="" href="#">
+                <i class="fa fa-address-card-o" aria-hidden="true"></i> Юр. лицам
+            </a>
+        </li>
+        <li>
+            <a class="" href="#">
+                <i class="fa fa-handshake-o" aria-hidden="true"></i> Оптовикам
+            </a>
+        </li>
+        <li>
+            <a class="" href="#">
+                <i class="fa fa-address-book-o" aria-hidden="true"></i> Контакты
+            </a>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+    <div class="col-md-1 col-xs-1"></div>
+  </div><!-- /.container-fluid -->
+</nav> <!--end by inka-->
+
+    <div class="my-content">
+    
+        <section class="s-sale">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="owl-carousel carousel-sale">
+                    
+                    <div class="carousel-sale-item">
+                        <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
+                        <div class="carousel-sale-description">
+                            <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
+                            <span>С 30 августа по 30 сентября</span>
+                        </div>
+                    </div>
+                    <div class="carousel-sale-item">
+                        <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
+                        <div class="carousel-sale-description">
+                            <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
+                            <span>С 30 августа по 30 сентября</span>
+                        </div>
+                    </div>
+                    <div class="carousel-sale-item">
+                        <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
+                        <div class="carousel-sale-description">
+                            <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
+                            <span>С 30 августа по 30 сентября</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="s-week"> <!-- tovari nedeli nachalo -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                            <h2 class="h2 text-center">Товары недели</h2>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-2"> <!-- товар 1-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/1879488.jpg' %}">
+                                    </div>
+                                    <p>Готовальня Rotring centro</p>
+                                    <span>2 100 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-2"> <!-- товар 1-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/1879488.jpg' %}">
+                                    </div>
+                                    <p>Готовальня Rotring centro</p>
+                                    <span>2 100 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"><!-- товар 2-->
+                            <div class="prod">
+                                <a href="">
+                                    <img src="{% static 'images/icon_hit.png' %}">
+                                    <div class="foto">
+                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
+                                    </div>
+                                    <p>Рюкзак №1 school черный</p>
+                                    <span>1 085 руб</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="s-compilation"> <!-- kategorii nachalo -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-3"> 
+                            <div class="cat h">
+                                <span>Все для свадьбы</span>
+                                <img src="{% static 'images/kategorii main/img-20150817110608-359.jpg' %}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 h"> 
+                            <div class="cat hh"> 
+                                <span>Все для детей</span>
+                                <img src="{% static 'images/kategorii main/507.jpg' %}" alt="">
+                            </div>
+                            <div class="cat hh b">
+                                <span> Все для офиса</span>
+                                <img src="{% static 'images/kategorii main/review-slider-blurry-PrismHR-office-banner.jpg' %}" alt="">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="cat h">
+                                <span>Все для художника</span>
+                                    <img src="{% static 'images/kategorii main/художникам.jpg' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="s-new"> <!-- novinki nachalo -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2 class="h2 text-center">Новинки</h2>
+                        <div class="col-sm-4 tov">
+                                <div class="new">
+                                    <img  src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="" >
+                                </div>
+                                <img src="{% static 'images/nedeli/816S2kQwHqL._SL1500_.jpg' %}" alt="">
+                                <p>Спиннер, игрушка интимстресс</p>
+                                <span>190 руб</span>
+                        </div>
+                            <div class="col-sm-8 tov">
+                            <div class="col-sm-3 l">
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 l">
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 l">
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 l">
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                                <div class="tov-l">
+                                    <div class="new">
+                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
+                                    </div>
+                                    <div class="kartinka">
+                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
+                                        <p> Портфель деловой</p>
+                                        <span>1 074 руб</span>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="text"> <!-- o komoanii -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="zagolovok">
+                            <h2 class="h2 text-center">О нас</h2>
+                        </div>
+                        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+<div class="podpiska"> <!-- block podpiski -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="text-podpiska">
+                    <h2>Подпишитесь на новости и получайте скидки!</h2>
+                    <input type="text" placeholder="Ввведите e-mail">
+                    <button>Подписаться</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="spis">
+                    <div class="col-sm-3">
+                    <h4>Помощь покупателю</h4>
+                    <ul>
+                        <li>Как зарегистрироваться</li>
+                        <li>Как сделать заказ</li>
+                        <li>Оплата</li>
+                        <li>Доставка</li>
+                        <li>Самовывоз</li>
+                    </ul>
+                    </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="spis">
+                            <h4>Информация для покупателей</h4>
+                            <ul>
+                                <li><a href="simple-page.html">Политика конфеденциальности</a></li>
+                                <li>Гарантии</li>
+                                <li>Обмен и возврат</li>
+                                <li>Скидочные карты</li>
+                                <li>Оптовикам</li>
+                                <li>Физ.лицам</li>
+                                <li>Юр.лицам</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="spis">
+                            <h4>О компании</h4>
+                            <ul>
+                                <li>Контакты</li>
+                                <li>О нас</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="spis">
+                            <h4>Связаться с нами</h4>
+                            <div class="dannie">
+                                <ul>
+                                    <li><i class="fa fa-phone" aria-hidden="true">&nbsp;8(800)000-00-00</i></li>
+                                    <li><i class="fa fa-envelope-o" aria-hidden="true">&nbsp;Info@kancmiropt.ru</i></li>
+                                </ul>
+                            </div>
+                            <h4>Мы в социальных сетях</h4>
+                            <div class="soc-seti">
+                            <i class="fa fa-odnoklassniki" aria-hidden="true"></i>
+                            <i class="fa fa-vk" aria-hidden="true"></i>
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="copywrite">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <i class="fa fa-copyright" aria-hidden="true">&nbsp;Канцелярский мир, 2017</i>
+                <img src="{% static 'images/plategi.png' %}" alt="">
+                <a href="">Разработан Quokka</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'lib',
     'mptt',
     'odinass',
+    'pages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -111,8 +112,11 @@ STATICFILES_FINDERS += (
 BOWER_COMPONENTS_ROOT = path('static')
 
 BOWER_INSTALLED_APPS = (
-    'include-media#1.4',
-    'normalize-scss#3',
+    'bootstrap#3.3',
+    'font-awesome#4.7',
+    'jquery-ui#1.12',
+    'magnific-popup#1.1',
+    'owl.carousel#2.2',
 )
 
 # './manage.py bower_install' - install bower apps
@@ -144,8 +148,25 @@ PIPELINE = {
     'SASS_BINARY': 'sassc',
     'COFFEE_SCRIPT_ARGUMENTS': '-b',
     'STYLESHEETS': {
+        'styles': {
+            'source_filenames': (
+                'scss/styles.scss',
+            ),
+            'output_filename': 'css/styles.css',
+        },
     },
     'JAVASCRIPT': {
+        'scripts': {
+            'source_filenames': (
+                'bower_components/jquery/dist/jquery.min.js',
+                'bower_components/bootstrap/dist/js/bootstrap.min.js',
+                'bower_components/owl.carousel/dist/owl.carousel.min.js',
+                'bower_components/magnific-popup/dist/jquery.magnific-popup.min.js',  # NOQA
+                'bower_components/jquery-ui/jquery-ui.min.js',
+                'js/common.js',
+            ),
+            'output_filename': 'js/scripts.js',
+        },
     },
     'COMPILERS': (
         'pipeline.compilers.coffee.CoffeeScriptCompiler',

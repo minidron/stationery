@@ -1,14 +1,15 @@
-
 {% load static pipeline %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <title>{% block title %}{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
-    <title>{% block title %}{% endblock title %}</title>
-    {% block extra-styles %}{% endblock extra-styles %}
-    {% block extra-scripts %}{% endblock extra-scripts %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    {% block extra-styles %}{% stylesheet 'styles' %}{% endblock extra-styles %}
+    {% block extra-scripts %}{% javascript 'scripts' %}{% endblock extra-scripts %}
 </head>
 <body class="{% spaceless %}{% block bodyclass %}{% endblock %}{% endspaceless %}">
     {% block content %}{% endblock content %}
