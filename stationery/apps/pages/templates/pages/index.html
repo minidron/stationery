@@ -78,166 +78,69 @@
 
     </div><!--end-->
 
-    <nav class="navbar"> <!-- by inka-->
-  <div class="row container-fluid">
-    <div class="col-md-1 col-xs-1"></div>
+<nav class="navbar">
+    <div class="row container-fluid">
+        <div class="col-md-1 col-xs-1"></div>
 
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed navbar-left" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="icon-bar"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></span>
-      </button>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed navbar-left" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="icon-bar"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></span></button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="col-md-10 col-xs-10 collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {% for nav in top_nav %}
+                <li class="{% if nav.childs %}dropdown{% endif %}">
+                    {% if nav.childs %}
+                        <a href="{{ nav.url }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars" aria-hidden="true"></i> {{ nav.title }} <span class="caret"></span></a>
+                        <div class="dropdown-menu">
+                            <div class="row float-none top15">
+                                {% for nav_child in nav.childs %}
+                                <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
+                                    <a href="{{ nav_child.url }}">
+                                        <div class="col-md-6 pad0"><img src="{% static 'images/lists/бумажная продукция.jpg' %}" height="60" class="leftimg ram0"></div>
+                                        <div class="col-md-6 pad0 "><p class="p1">{{ nav_child.title }}</p></div>
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{{ nav.url }}">{{ nav.title }}</a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+                <li>
+                    <a class="" href="#">
+                        <i class="fa fa-address-card-o" aria-hidden="true"></i> О компании
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="#">
+                        <i class="fa fa-male" aria-hidden="true"></i> Физ. лицам
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="#">
+                        <i class="fa fa-address-card-o" aria-hidden="true"></i> Юр. лицам
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="#">
+                        <i class="fa fa-handshake-o" aria-hidden="true"></i> Оптовикам
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="#">
+                        <i class="fa fa-address-book-o" aria-hidden="true"></i> Контакты
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-1 col-xs-1"></div>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="col-md-10 col-xs-10 collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="#">
-                <i class="fa fa-bars" aria-hidden="true"></i> Каталог товаров <span class="caret"></span>
-            </a>
-            <div class="dropdown-menu">
-                <div class="row float-none top15">
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/бумажная продукция.jpg' %}" height="60" class="leftimg ram0"></div>
-                            <div class="col-md-6 pad0 "><p class="p1">Бумажная продукция</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/фотобумага.jpg' %}" height="60" class="leftimg ram3"></div> <div class="col-md-6 pad0 "><p class="p1">Фото бумага и пленки</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/фотоальбомы фоторамки.jpg' %}" height="55" class="leftimg ram"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Фото альбомы и фоторамки</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/распродажа.jpg' %}" height="60" class="leftimg"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Распродажа</p></div> 
-                        </a>
-                    </div>
-                </div>
-                <div class="row float-none top15">
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/канцтовары.jpg' %}" height="35" class="leftimg ram2"></div>
-                            <div class="col-md-6 pad0"><p>Товары для офиса,<br>канц.товары </p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/писменные принадлежности.png' %}" height="50" class="leftimg ram4"></div>
-                            <div class="col-md-6 pad0"><p>Письменные и чертежные<br>принадлежности </p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/папки и архив.jpg' %}" height="85" class="leftimg"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Папки и архивация</p></div>
-                        </a>
-                    </div>
-                    
-                </div>
-                <div class="row float-none top15">
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/демонстрационное оборуд.jpg' %}" height="60" class="leftimg"></div>
-                            <div class="col-md-6 pad0"><p>Демонстрационное<br> оборудование</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/расх.jpg' %}" height="55" class="leftimg ram5"></div>
-                            <div class="col-md-6 pad0"><p>Офисная техника и<br>расходные материалы </p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/мебель.png' %}" height="75" class="leftimg"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Мебель</p></div>
-                        </a>
-                    </div>
-                  
-                </div>
-                <div class="row float-none top15">
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/товары для школы.jpg' %}" height="40" class="leftimg ram6"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Товары для школы</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/игры детские.jpg' %}" height="60" class="leftimg ram7"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Товары для детей, книги</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/худ школа.jpg' %}" height="65" class="leftimg ram8"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Художественные материалы</p></div>
-                        </a>
-                    </div>
-                   
-                </div>
-                <div class="row float-none top15">
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/творчество.jpg' %}" height="60" class="leftimg ram9"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Рукоделие и творчество</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/suveniry.png' %}" height="55" class="leftimg ram9"></div>
-                            <div class="col-md-6 pad0"><p class="p1">Подарки и сувениры</p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                        <a href="#">
-                            <div class="col-md-6 pad0"><img src="{% static 'images/lists/хозтовары.png' %}" height="85" class="leftimg ram10"></div>
-                            <div class="col-md-6 pad0"><p>Хоз.товары и <br>паковочные материалы </p></div>
-                        </a>
-                    </div>
-                    <div class="col-xs-3 col-md-5 col-lg-3 catalog-text">
-                    </div>
-                </div>
-           </div>
-        </li>
-        <li>
-            <a class="" href="#">
-                <i class="fa fa-address-card-o" aria-hidden="true"></i> О компании
-            </a>
-        </li>
-        <li>
-            <a class="" href="#">
-                <i class="fa fa-male" aria-hidden="true"></i> Физ. лицам
-            </a>
-        </li>
-        <li>
-            <a class="" href="#">
-                <i class="fa fa-address-card-o" aria-hidden="true"></i> Юр. лицам
-            </a>
-        </li>
-        <li>
-            <a class="" href="#">
-                <i class="fa fa-handshake-o" aria-hidden="true"></i> Оптовикам
-            </a>
-        </li>
-        <li>
-            <a class="" href="#">
-                <i class="fa fa-address-book-o" aria-hidden="true"></i> Контакты
-            </a>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-    <div class="col-md-1 col-xs-1"></div>
-  </div><!-- /.container-fluid -->
-</nav> <!--end by inka-->
+</nav>
 
     <div class="my-content">
     

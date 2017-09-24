@@ -9,6 +9,8 @@ from odinass.models import Category, Product, Property, PropertyValue
 class CategoryAdmin(MPTTModelAdmin):
     readonly_fields = [
         'id',
+        'title',
+        'parent',
     ]
 
     fieldsets = (
