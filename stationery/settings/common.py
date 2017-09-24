@@ -38,6 +38,8 @@ INSTALLED_APPS = (
     'pipeline',
     'lib',
     'mptt',
+    'adminsortable2',
+    'ckeditor',
     'odinass',
     'pages',
 )

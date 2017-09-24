@@ -18,6 +18,7 @@ urlpatterns = [
             url=staticfiles_storage.url('favicon.ico'), permanent=True)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^1c/', include('odinass.urls', namespace='1c')),
+    url(r'^', include('pages.urls', namespace='pages')),
 ]
 
 
