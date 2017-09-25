@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+import time
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -8,8 +9,11 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 
+from celery.result import AsyncResult
+
 from odinass.conf import settings as odinass_settings
-from odinass.utils import ExportManager, ImportManager
+from odinass.tasks import import_file
+from odinass.utils import ExportManager
 
 
 logger = logging.getLogger(__name__)
@@ -49,6 +53,10 @@ class ExchangeView(View):
 
     def success(self, success_text=''):
         result = '{}\n{}'.format('success', success_text)
+        return HttpResponse(result)
+
+    def progress(self, success_text=''):
+        result = '{}\n{}'.format('progress', success_text)
         return HttpResponse(result)
 
     def error(self, error_text=''):
@@ -126,7 +134,12 @@ class ExchangeView(View):
         if not os.path.exists(file_path):
             return self.error('%s doesn\'t exist' % filename)
 
-        ImportManager(file_path)
+        if AsyncResult(filename).state == 'PENDING':
+            import_file.apply_async((file_path,), task_id=filename)
+
+        if AsyncResult(filename).state in ['PENDING', 'STARTED']:
+            time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
+            return self.progress()
 
         if odinass_settings.DELETE_FILES_AFTER_IMPORT:
             try:
