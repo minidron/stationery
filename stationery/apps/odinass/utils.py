@@ -32,34 +32,6 @@ class ImportManager(object):
                     'parent_id': group['parent'],
                 })
 
-        for property in self.properties:
-            Property.objects.update_or_create(
-                id=property['id'], defaults={
-                    'title': property['name'],
-                })
-
-            for option in property['value_options']:
-                PropertyValue.objects.update_or_create(
-                    id=option['id'], defaults={
-                        'title': option['value'],
-                        'property_id': property['id'],
-                    })
-
-        for product in self.products:
-            instance, created = Product.objects.update_or_create(
-                id=product['id'], defaults={
-                    'title': product['name'],
-                    'article': product['article'],
-                })
-            for group in product['groups']:
-                instance.categories.add(Category.objects.get(pk=group))
-
-            for property_value in product['property_values']:
-                if property_value['value']:
-                    instance.property_values.add(PropertyValue.objects.get(
-                        pk=property_value['value'],
-                        property_id=property_value['id']))
-
     def _get_tree(self):
         if self.tree is not None:
             return self.tree
@@ -72,7 +44,7 @@ class ImportManager(object):
         """
         Загрузка Групп товаров
         """
-        stack = node.findall('Группы/Группа')
+        stack = node.findall('Группа')
         while len(stack):
             item = stack.pop(0)
             if isinstance(item, tuple):
@@ -93,54 +65,82 @@ class ImportManager(object):
         """
         Загрузка Свойств и ВариантыЗначений
         """
-        for property_node in node.findall('Свойства/Свойство'):
-            value_type = get_text(property_node.find('ТипЗначений'))
-            property_item = {
-                'id': get_text(property_node.find('Ид')),
-                'name': get_text(property_node.find('Наименование')),
-                'value_type': value_type,
-            }
+        value_type = get_text(node.find('ТипЗначений'))
+        property_item = {
+            'id': get_text(node.find('Ид')),
+            'name': get_text(node.find('Наименование')),
+            'value_type': value_type,
+        }
 
-            value_options = []
-            for value_option in property_node.findall(
-                    'ВариантыЗначений/%s' % value_type):
-                value_options.append({
-                    'id': get_text(value_option.find('ИдЗначения')),
-                    'value': get_text(value_option.find('Значение')),
+        value_options = []
+        for value_option in node.findall(
+                'ВариантыЗначений/%s' % value_type):
+            value_options.append({
+                'id': get_text(value_option.find('ИдЗначения')),
+                'value': get_text(value_option.find('Значение')),
+            })
+        property_item['value_options'] = value_options
+
+        Property.objects.update_or_create(
+            id=property_item['id'], defaults={
+                'title': property_item['name'],
+            })
+
+        for option in property_item['value_options']:
+            PropertyValue.objects.update_or_create(
+                id=option['id'], defaults={
+                    'title': option['value'],
+                    'property_id': property_item['id'],
                 })
-            property_item['value_options'] = value_options
-            self.properties.append(property_item)
+
+        return None
 
     def _parse_products(self, node):
         """
         Загрузка Товаров
         """
-        for product_node in node.findall('Товары/Товар'):
-            property_values = []
-            for property_node in product_node.findall(
-                    'ЗначенияСвойств/ЗначенияСвойства'):
-                property_values.append({
-                    'id': get_text(property_node.find('Ид')),
-                    'value': get_text(property_node.find('Значение')),
-                })
-
-            requisite_values = []
-            for requisite_node in product_node.findall(
-                    'ЗначенияРеквизитов/ЗначениеРеквизита'):
-                requisite_values.append({
-                    'name': get_text(requisite_node.find('Наименование')),
-                    'value': get_text(requisite_node.find('Значение')),
-                })
-
-            self.products.append({
-                'id': get_text(product_node.find('Ид')),
-                'article': get_text(product_node.find('Артикул')),
-                'name': get_text(product_node.find('Наименование')),
-                'groups': [get_text(id)
-                           for id in product_node.findall('Группы/Ид')],
-                'property_values': property_values,
-                'requisite_values': requisite_values,
+        property_values = []
+        for property_node in node.findall(
+                'ЗначенияСвойств/ЗначенияСвойства'):
+            property_values.append({
+                'id': get_text(property_node.find('Ид')),
+                'value': get_text(property_node.find('Значение')),
             })
+
+        requisite_values = []
+        for requisite_node in node.findall(
+                'ЗначенияРеквизитов/ЗначениеРеквизита'):
+            requisite_values.append({
+                'name': get_text(requisite_node.find('Наименование')),
+                'value': get_text(requisite_node.find('Значение')),
+            })
+
+        instance, created = Product.objects.update_or_create(
+            id=get_text(node.find('Ид')), defaults={
+                'title': get_text(node.find('Наименование')),
+                'article': get_text(node.find('Артикул')),
+            })
+
+        for group in [get_text(id) for id in node.findall('Группы/Ид')]:
+            instance.categories.add(Category.objects.get(pk=group))
+
+        for property_value in property_values:
+            if property_value['value']:
+                instance.property_values.add(PropertyValue.objects.get(
+                    pk=property_value['value'],
+                    property_id=property_value['id']))
+
+        # bla = {
+        #     'id': get_text(node.find('Ид')),
+        #     'article': get_text(node.find('Артикул')),
+        #     'name': get_text(node.find('Наименование')),
+        #     'groups': [get_text(id)
+        #                for id in node.findall('Группы/Ид')],
+        #     'property_values': property_values,
+        #     'requisite_values': requisite_values,
+        # }
+
+        return None
 
     def _parse_price_types(self, node):
         """
@@ -157,22 +157,54 @@ class ImportManager(object):
             pass
 
     def import_all(self):
-        self.import_classifier()
-        self.import_catalog()
-        self.import_offers_pack()
+        context = ET.iterparse(self.file_path, events=('start', 'end'))
+        context = iter(context)
+        event, root = next(context)
 
-    def import_classifier(self):
-        tree = self._get_tree()
-        classifier = tree.find('Классификатор')
-        if classifier is not None:
-            self._parse_groups(classifier)
-            self._parse_properties(classifier)
+        is_classifier = False
+        is_catalog = False
+        clear = True
+        groups = None
 
-    def import_catalog(self):
-        tree = self._get_tree()
-        catalog = tree.find('Каталог')
-        if catalog is not None:
-            self._parse_products(catalog)
+        for event, el in context:
+            if el.tag == 'Классификатор' and event == 'start':
+                is_classifier = True
+            if el.tag == 'Классификатор' and event == 'end':
+                is_classifier = False
+
+            if el.tag == 'Каталог' and event == 'start':
+                is_catalog = True
+            if el.tag == 'Каталог' and event == 'end':
+                is_catalog = False
+
+            if is_classifier:
+                if el.tag == 'Группы' and not groups and event == 'start':
+                    groups = el
+                    clear = False
+                elif el.tag == 'Группы' and el is groups and event == 'end':
+                    groups = None
+                    clear = True
+                    self._parse_groups(el)
+
+                if el.tag == 'Свойство' and event == 'start':
+                    clear = False
+                elif el.tag == 'Свойство' and event == 'end':
+                    clear = True
+                    self._parse_properties(el)
+
+            if is_catalog:
+                if el.tag == 'Товар' and event == 'start':
+                    clear = False
+                elif el.tag == 'Товар' and event == 'end':
+                    clear = True
+                    self._parse_products(el)
+
+            if event == 'end' and clear:
+                el.clear()
+
+        root.clear()
+
+        # self.import_offers_pack()
 
     def import_offers_pack(self):
         tree = self._get_tree()
