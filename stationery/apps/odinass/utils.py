@@ -1,5 +1,3 @@
-import os
-
 from io import BytesIO
 
 from django.utils import timezone
@@ -15,32 +13,37 @@ def get_text(element):
 
 class ImportManager(object):
     """
-    Импорт данных из 1С
+    Импорт данных 1С CommerceML
     """
     def __init__(self, file_path):
         self.file_path = file_path
-        self.tree = None
-        self.groups = []
-        self.properties = []
-        self.products = []
-        self.import_all()
+        if 'import' in file_path:
+            self._parse_wrapper('Группы', 'Классификатор', 'import_groups')
+            self._parse_wrapper('Свойство', 'Свойства', 'import_property')
+            self._parse_wrapper('Товар', 'Товары', 'import_product')
 
-        for group in self.groups:
-            Category.objects.update_or_create(
-                id=group['id'], defaults={
-                    'title': group['name'],
-                    'parent_id': group['parent'],
-                })
+    def _parse_wrapper(self, tag, parent, func_name):
+        tree = ET.iterparse(self.file_path, events=('start', 'end'))
+        tree = iter(tree)
+        event, root = next(tree)
+        stack = [root.tag]
+        for ev, el in tree:
+            if ev == 'start':
+                stack.append(el.tag)
+            else:
+                assert ev == 'end'
+                stack.pop()
+                if el.tag == tag and stack[-1] == parent:
+                    getattr(self, func_name)(el)
+                    el.clear()
+                if tag not in stack or parent not in stack:
+                    el.clear()
+                else:
+                    if stack.index(tag) - stack.index(parent) != 1:
+                        el.clear()
+        root.clear()
 
-    def _get_tree(self):
-        if self.tree is not None:
-            return self.tree
-        if not os.path.exists(self.file_path):
-            message = 'File doesn\'t exist: %s' % self.file_path
-            raise OSError(message)
-        return ET.parse(self.file_path)
-
-    def _parse_groups(self, node):
+    def import_groups(self, node):
         """
         Загрузка Групп товаров
         """
@@ -52,16 +55,18 @@ class ImportManager(object):
             else:
                 parent = None
 
-            self.groups.append({
-                'id': get_text(item.find('Ид')),
-                'name': get_text(item.find('Наименование')),
-                'parent': get_text(parent.find('Ид')) if parent else None,
-            })
+            Category.objects.update_or_create(
+                id=get_text(item.find('Ид')),
+                defaults={
+                    'title': get_text(item.find('Наименование')),
+                    'parent_id': get_text(
+                        parent.find('Ид')) if parent else None,
+                })
 
             stack = [(group, item)
                      for group in item.findall('Группы/Группа')] + stack
 
-    def _parse_properties(self, node):
+    def import_property(self, node):
         """
         Загрузка Свойств и ВариантыЗначений
         """
@@ -93,9 +98,7 @@ class ImportManager(object):
                     'property_id': property_item['id'],
                 })
 
-        return None
-
-    def _parse_products(self, node):
+    def import_product(self, node):
         """
         Загрузка Товаров
         """
@@ -129,89 +132,6 @@ class ImportManager(object):
                 instance.property_values.add(PropertyValue.objects.get(
                     pk=property_value['value'],
                     property_id=property_value['id']))
-
-        # bla = {
-        #     'id': get_text(node.find('Ид')),
-        #     'article': get_text(node.find('Артикул')),
-        #     'name': get_text(node.find('Наименование')),
-        #     'groups': [get_text(id)
-        #                for id in node.findall('Группы/Ид')],
-        #     'property_values': property_values,
-        #     'requisite_values': requisite_values,
-        # }
-
-        return None
-
-    def _parse_price_types(self, node):
-        """
-        Загрузка ТипыЦен
-        """
-        for price_node in node.findall('ТипыЦен/ТипЦены'):
-            pass
-
-    def _parse_offers(self, node):
-        """
-        Загрузка Предложения
-        """
-        for offer_node in node.findall('Предложения/Предложение'):
-            pass
-
-    def import_all(self):
-        context = ET.iterparse(self.file_path, events=('start', 'end'))
-        context = iter(context)
-        event, root = next(context)
-
-        is_classifier = False
-        is_catalog = False
-        clear = True
-        groups = None
-
-        for event, el in context:
-            if el.tag == 'Классификатор' and event == 'start':
-                is_classifier = True
-            if el.tag == 'Классификатор' and event == 'end':
-                is_classifier = False
-
-            if el.tag == 'Каталог' and event == 'start':
-                is_catalog = True
-            if el.tag == 'Каталог' and event == 'end':
-                is_catalog = False
-
-            if is_classifier:
-                if el.tag == 'Группы' and not groups and event == 'start':
-                    groups = el
-                    clear = False
-                elif el.tag == 'Группы' and el is groups and event == 'end':
-                    groups = None
-                    clear = True
-                    self._parse_groups(el)
-
-                if el.tag == 'Свойство' and event == 'start':
-                    clear = False
-                elif el.tag == 'Свойство' and event == 'end':
-                    clear = True
-                    self._parse_properties(el)
-
-            if is_catalog:
-                if el.tag == 'Товар' and event == 'start':
-                    clear = False
-                elif el.tag == 'Товар' and event == 'end':
-                    clear = True
-                    self._parse_products(el)
-
-            if event == 'end' and clear:
-                el.clear()
-
-        root.clear()
-
-        # self.import_offers_pack()
-
-    def import_offers_pack(self):
-        tree = self._get_tree()
-        offers_pack = tree.find('ПакетПредложений')
-        if offers_pack is not None:
-            self._parse_price_types(offers_pack)
-            self._parse_offers(offers_pack)
 
 
 class ExportManager(object):
