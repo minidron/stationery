@@ -18,29 +18,48 @@ class ImportManager(object):
     def __init__(self, file_path):
         self.file_path = file_path
         if 'import' in file_path:
-            self._parse_wrapper('Группы', 'Классификатор', 'import_groups')
-            self._parse_wrapper('Свойство', 'Свойства', 'import_property')
-            self._parse_wrapper('Товар', 'Товары', 'import_product')
+            self._parse({
+                'Группы': {
+                    'parent': 'Классификатор',
+                    'func_name': 'import_groups',
+                },
+                'Свойство': {
+                    'parent': 'Свойства',
+                    'func_name': 'import_property',
+                },
+            })
+            self._parse({
+                'Товар': {
+                    'parent': 'Товары',
+                    'func_name': 'import_product',
+                },
+            })
 
-    def _parse_wrapper(self, tag, parent, func_name):
+    def _parse(self, tags):
         tree = ET.iterparse(self.file_path, events=('start', 'end'))
         tree = iter(tree)
-        event, root = next(tree)
+        _, root = next(tree)
         stack = [root.tag]
-        for ev, el in tree:
-            if ev == 'start':
+        parents = [v['parent'] for k, v in tags.items()]
+        pairs = ['%s__%s' % (v['parent'], k) for k, v in tags.items()]
+        for event, el in tree:
+            if event == 'start':
                 stack.append(el.tag)
             else:
-                assert ev == 'end'
+                assert event == 'end'
                 stack.pop()
-                if el.tag == tag and stack[-1] == parent:
-                    getattr(self, func_name)(el)
+
+                if el.tag in tags and stack[-1] == tags[el.tag]['parent']:
+                    getattr(self, tags[el.tag]['func_name'])(el)
                     el.clear()
-                if tag not in stack or parent not in stack:
+
+                if not bool(set(stack) & set(parents)):
                     el.clear()
                 else:
-                    if stack.index(tag) - stack.index(parent) != 1:
+                    path = '__'.join(stack)
+                    if not any(pair in path for pair in pairs):
                         el.clear()
+
         root.clear()
 
     def import_groups(self, node):
@@ -89,6 +108,7 @@ class ImportManager(object):
         Property.objects.update_or_create(
             id=property_item['id'], defaults={
                 'title': property_item['name'],
+                'value_type': property_item['value_type'],
             })
 
         for option in property_item['value_options']:

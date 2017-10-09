@@ -42,128 +42,36 @@
                             <h2 class="h2 text-center">Товары недели</h2>
                     </div>
                     <div class="col-sm-12">
-                        <div class="col-sm-2"> <!-- товар 1-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/1879488.jpg' %}">
-                                    </div>
-                                    <p>Готовальня Rotring centro</p>
-                                    <span>2 100 руб</span>
-                                </a>
+                        {% for product in hot %}
+                            <div class="col-sm-2"> <!-- товар 1-->
+                                <div class="prod">
+                                    <a href="{% url 'pages:product' product.pk %}">
+                                        <img src="{% static 'images/icon_hit.png' %}">
+                                        <div class="foto">
+                                            <img src="{% static 'images/nedeli/1879488.jpg' %}">
+                                        </div>
+                                        <p>{{ product.title }}</p>
+                                        <span>2 100 руб</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     <div class="col-sm-12">
-                        <div class="col-sm-2"> <!-- товар 1-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/1879488.jpg' %}">
-                                    </div>
-                                    <p>Готовальня Rotring centro</p>
-                                    <span>2 100 руб</span>
-                                </a>
+                        {% for product in hot2 %}
+                            <div class="col-sm-2"> <!-- товар 1-->
+                                <div class="prod">
+                                    <a href="{% url 'pages:product' product.pk %}">
+                                        <img src="{% static 'images/icon_hit.png' %}">
+                                        <div class="foto">
+                                            <img src="{% static 'images/nedeli/1879488.jpg' %}">
+                                        </div>
+                                        <p>{{ product.title }}</p>
+                                        <span>2 100 руб</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"><!-- товар 2-->
-                            <div class="prod">
-                                <a href="">
-                                    <img src="{% static 'images/icon_hit.png' %}">
-                                    <div class="foto">
-                                        <img src="{% static 'images/nedeli/5b36fc195a6a4fbe3c0a3ee68d62c7f6.jpg' %}">
-                                    </div>
-                                    <p>Рюкзак №1 school черный</p>
-                                    <span>1 085 руб</span>
-                                </a>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

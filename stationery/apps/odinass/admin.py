@@ -1,8 +1,9 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 
 from mptt.admin import MPTTModelAdmin
 
-from odinass.models import Category, Product, Property, PropertyValue
+from odinass.models import Category, Product, Property
 
 
 @admin.register(Category)
@@ -16,8 +17,14 @@ class CategoryAdmin(MPTTModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'id',
                 'title',
+                'is_published',
+                'image',
+            ),
+        }),
+        ('Дополнительно', {
+            'fields': (
+                'id',
                 'parent',
             ),
         }),
@@ -26,12 +33,35 @@ class CategoryAdmin(MPTTModelAdmin):
 
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = [
+        'field_values',
+        'id',
+        'title',
+        'value_type',
+    ]
 
+    fieldsets = (
+        (None, {
+            'fields': (
+                'title',
+                'field_values',
+            ),
+        }),
+        ('Дополнительно', {
+            'fields': (
+                'id',
+                'value_type',
+            ),
+        }),
+    )
 
-@admin.register(PropertyValue)
-class PropertyValueAdmin(admin.ModelAdmin):
-    pass
+    def field_values(self, instance):
+        values = instance.property_values.values_list('title', flat=True)
+        if not values:
+            return ''
+
+        return mark_safe('<br />'.join(['&middot; %s' % v for v in values]))
+    field_values.short_description = 'варианты значений'
 
 
 @admin.register(Product)

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <!--
+                <div class="bread-cums">
+                    <p><a href="#">Главная </a> / <a href="#">Каталог </a>/ <a href="#">Канцелярские товары</a> / <a href="#">Товары для офиса </a>/ <a href="">Калькуляторы</a></p>
+                </div>
+                -->
+                <div class="col-sm-3">
+                    <div class="sidebar">
+                        <div class="block">
+                            <h4 class="extremum-click">Цена <i class="fa fa-angle-down " aria-hidden="true"></i></h4>
+                            <div class="pr extremum-slide">
+                                От <input type="text" id="minCost" value="0" /> До <input type="text" id="maxCost" value="10000" />
+
+                                <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <h4 class="extremum-click">Торговая марка <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
+                            <hr>
+                            <div class="ch extremum-slide">
+                                <input type="checkbox" name="option1" value="a1" checked> Canon
+                                <Br>
+                                <input type="checkbox" name="option2" value="a2"> Casio
+                                <Br>
+                                <input type="checkbox" name="option3" value="a3"> Citizen
+                                <Br>
+                                <input type="checkbox" name="option4" value="a4"> Масма
+                                <Br>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <h4 class="extremum-click">Наличие <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
+                            <hr>
+                            <div class="ch extremum-slide">
+                                <input type="radio" name="dostavka" value="ie"> Все
+                                <Br>
+                                <input type="radio" name="dostavka" value="opera"> В наличии
+                                <Br>
+                                <input type="radio" name="dostavka" value="opera"> Под заказ
+                                <Br>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <h4 class="extremum-click">Разрядность <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
+                            <hr>
+                            <div class="ch extremum-slide">
+                                <input type="checkbox" name="option1" value="a1" checked> 12
+                                <Br>
+                                <input type="checkbox" name="option2" value="a2"> 8
+                                <Br>
+                                <input type="checkbox" name="option3" value="a3"> 16
+                                <Br>
+                                <input type="checkbox" name="option4" value="a4"> 14
+                                <Br>
+                                <input type="checkbox" name="option4" value="a4"> 10
+                                <Br>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <h4 class="extremum-click">Количество функций <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
+                            <hr>
+                            <div class="ch extremum-slide">
+                                <input type="checkbox" name="option1" value="a1" checked> До 200
+                                <Br>
+                                <input type="checkbox" name="option2" value="a2"> От 201 до 300
+                                <Br>
+                            </div>
+                        </div>
+                        <button>Очистить</button>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="fis">
+                        <div class="col-sm-3">
+                            <div class="iko">
+                                Вид: <button class="fa fa-th-list fa-lg list"></button>
+                                <button class="fa fa-th fa-lg grid"></button>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            Сортировать по:
+                        <select>
+                        <option>Цена ^</option>
+                        <option>Цена </option>
+                        <option>А-Я</option>
+                        <option>Я-А</option>
+                        </select>
+                        </div>
+                        <div class="col-sm-5">
+                            Показывать товаров:
+                        <select>
+                        <option>10</option>
+                        <option>30</option>
+                        <option>50</option>
+                        <option>100</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    {% for product in category.products.all %}
+                    <div class="blo col-sm-12 list">
+                        <div class="col-sm-8 mom">
+                            <div class="col-sm-12">
+                                <div class="col-sm-5">
+                                    <img src="{% static 'images/tov/2.jpg' %}" alt="">
+                                </div>
+                                <div class="col-sm-7 mo">
+                                    <h4><a href="{% url 'pages:product' product.pk %}">{{ product.title }}</a></h4>
+                                    {% if product.article %}
+                                        <p>Код: <b>{{ product.article }}</b></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 vv">
+                            <div class="pri">
+                                <h3>560 руб</h3>
+                                <hr>
+                            </div>
+                            <div class="ik">
+                                <button>В корзину</button>
+                                <div class="amount">
+                                    <span class="down"><i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+                                    <input type="text" value="1" />
+                                    <span class="up"><i class="fa fa-caret-square-o-up" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                            <div class="na">
+                                <hr>
+                                <p>В наличии</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

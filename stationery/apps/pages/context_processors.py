@@ -1,10 +1,12 @@
+from django.urls import reverse
+
 from odinass.models import Category
 
 from pages.models import Page
 
 
 def menu(request):
-    categories = Category.objects.root_nodes().values('title')
+    categories = Category.objects.root_nodes().values('title', 'pk')
     pages = Page.objects.values('title', 'icon', 'slug')
 
     return {
@@ -15,7 +17,7 @@ def menu(request):
                 'image': None,
                 'childs': [{
                     'title': category['title'],
-                    'url': '#',
+                    'url': reverse('pages:category', args=[category['pk']]),
                     'image': None,
                 } for category in categories],
             }
