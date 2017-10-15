@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from xml.etree import cElementTree as ET
 
+from odinass import models as odinass_models
 from odinass.models import Category, Product, Property, PropertyValue
 
 
@@ -32,6 +33,19 @@ class ImportManager(object):
                 'Товар': {
                     'parent': 'Товары',
                     'func_name': 'import_product',
+                },
+            })
+        if 'offers' in file_path:
+            self._parse({
+                'ТипЦены': {
+                    'parent': 'ТипыЦен',
+                    'func_name': 'import_price_type',
+                },
+            })
+            self._parse({
+                'Предложение': {
+                    'parent': 'Предложения',
+                    'func_name': 'import_offer',
                 },
             })
 
@@ -152,6 +166,32 @@ class ImportManager(object):
                 instance.property_values.add(PropertyValue.objects.get(
                     pk=property_value['value'],
                     property_id=property_value['id']))
+
+    def import_price_type(self, node):
+        """
+        Загрузка Тип цены
+        """
+        odinass_models.PriceType.objects.update_or_create(
+            id=get_text(node.find('Ид')),
+            defaults={
+                'title': get_text(node.find('Наименование')),
+            })
+
+    def import_offer(self, node):
+        """
+        Загрузка Предложения
+        """
+        ids = get_text(node.find('Ид')).split('#')
+        if len(ids) == 2:
+            prodict_id, id = ids
+        else:
+            prodict_id = id = ids.pop()
+        odinass_models.Offer.objects.update_or_create(
+            id=id,
+            defaults={
+                'title': get_text(node.find('Наименование')),
+                'product_id': prodict_id,
+            })
 
 
 class ExportManager(object):

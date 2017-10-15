@@ -113,3 +113,44 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class PriceType(models.Model):
+    """
+    Тип цены
+    """
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(
+        'наименование', max_length=254)
+
+    class Meta:
+        default_related_name = 'price_types'
+        ordering = ['title']
+        verbose_name = 'тип цены'
+        verbose_name_plural = 'тип цен'
+
+    def __str__(self):
+        return self.title
+
+
+class Offer(models.Model):
+    """
+    Предложение
+    """
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(
+        'наименование', max_length=254)
+    product = models.ForeignKey(
+        'odinass.Product',
+        verbose_name='товар')
+
+    class Meta:
+        default_related_name = 'offers'
+        ordering = ['title']
+        verbose_name = 'предложение'
+        verbose_name_plural = 'предложения'
+
+    def __str__(self):
+        return self.title
