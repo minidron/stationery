@@ -1,11 +1,13 @@
 from io import BytesIO
 
+from decimal import Decimal, InvalidOperation
+
 from django.utils import timezone
 
 from xml.etree import cElementTree as ET
 
 from odinass import models as odinass_models
-from odinass.models import Category, Product, Property, PropertyValue
+from odinass.models import Category, Product, Property, PropertyValue, Price
 
 
 def get_text(element):
@@ -152,9 +154,20 @@ class ImportManager(object):
                 'value': get_text(requisite_node.find('Значение')),
             })
 
+        title = get_text(node.find('Наименование'))
+        if not title:
+            el = [el for el in node.findall(
+                  'ЗначенияРеквизитов/ЗначениеРеквизита')
+                  if el.findtext('Наименование') == 'Полное наименование']
+            el_title = el[0].findtext('Значение')
+            if el_title:
+                title = el_title
+            else:
+                return
+
         instance, created = Product.objects.update_or_create(
             id=get_text(node.find('Ид')), defaults={
-                'title': get_text(node.find('Наименование')),
+                'title': title[:254],
                 'article': get_text(node.find('Артикул')),
             })
 
@@ -181,6 +194,10 @@ class ImportManager(object):
         """
         Загрузка Предложения
         """
+        title = get_text(node.find('Наименование'))
+        if not title:
+            return
+
         ids = get_text(node.find('Ид')).split('#')
         if len(ids) == 2:
             prodict_id, id = ids
@@ -189,9 +206,20 @@ class ImportManager(object):
         odinass_models.Offer.objects.update_or_create(
             id=id,
             defaults={
-                'title': get_text(node.find('Наименование')),
+                'title': title,
                 'product_id': prodict_id,
             })
+
+        for price in node.findall('Цены/Цена'):
+            if not get_text(price.find('ЦенаЗаЕдиницу')):
+                continue
+            Price.objects.update_or_create(
+                offer_id=id,
+                price_type_id=get_text(price.find('ИдТипаЦены')),
+                defaults={
+                    'currency': get_text(price.find('Валюта')),
+                    'price': float(get_text(price.find('ЦенаЗаЕдиницу'))),
+                })
 
 
 class ExportManager(object):

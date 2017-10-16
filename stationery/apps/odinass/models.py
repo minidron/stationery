@@ -154,3 +154,30 @@ class Offer(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Price(models.Model):
+    """
+    Цены
+    """
+    currency = models.CharField(
+        'валюта',
+        max_length=254)
+    price = models.DecimalField(
+        'цена',
+        max_digits=12, decimal_places=2)
+    price_type = models.ForeignKey(
+        'odinass.PriceType',
+        verbose_name='тип цены')
+    offer = models.ForeignKey(
+        'odinass.Offer',
+        verbose_name='предложение')
+
+    class Meta:
+        default_related_name = 'prices'
+        ordering = ['currency']
+        verbose_name = 'цена'
+        verbose_name_plural = 'цены'
+
+    def __str__(self):
+        return '%s %s' % (self.price, self.currency)

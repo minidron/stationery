@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 
 from mptt.admin import MPTTModelAdmin
 
-from odinass.models import Category, Offer, Product, Property, PriceType
+from odinass.models import Category, Offer, Product, Property, PriceType, Price
 
 
 @admin.register(Category)
@@ -116,4 +116,9 @@ class PriceTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Price)
+class PriceAdmin(admin.ModelAdmin):
     pass
