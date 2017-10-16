@@ -116,7 +116,9 @@ class PriceTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = [
+        'product',
+    ]
 
 
 @admin.register(Price)

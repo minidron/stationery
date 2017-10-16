@@ -2,7 +2,7 @@ from django.views.generic import DetailView, TemplateView
 
 from pages.models import Page
 
-from odinass.models import Category, Product
+from odinass.models import Category, Offer, Product
 
 
 class IndexView(TemplateView):
@@ -27,7 +27,7 @@ class CategoryView(DetailView):
 
 
 class ProductView(DetailView):
-    model = Product
+    model = Offer
     template_name = 'pages/product.html'
 
 

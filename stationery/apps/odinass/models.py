@@ -1,6 +1,8 @@
 import uuid
 
 from django.db import models
+from django.urls import reverse
+
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -155,6 +157,9 @@ class Offer(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('pages:product', args=[str(self.id)])
+
 
 class Price(models.Model):
     """
@@ -180,4 +185,7 @@ class Price(models.Model):
         verbose_name_plural = 'цены'
 
     def __str__(self):
-        return '%s %s' % (self.price, self.currency)
+        price = 'нет цены'
+        if self.price:
+            price = '%s %s' % (self.price, self.currency)
+        return price
