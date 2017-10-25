@@ -5,6 +5,7 @@ import time
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import Http404, HttpResponse
+from django.middleware import csrf
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
@@ -13,7 +14,7 @@ from celery.result import AsyncResult
 
 from odinass.conf import settings as odinass_settings
 from odinass.tasks import import_file
-from odinass.utils import ExportManager
+from odinass.utils import ExportManager, ImportManager
 
 
 logger = logging.getLogger(__name__)
@@ -23,22 +24,18 @@ logger = logging.getLogger(__name__)
 class ExchangeView(View):
     def __init__(self, **kwargs):
         self.routes_map = {
-            ('catalog', 'checkauth'): 'check_auth',
-            ('catalog', 'file'): 'upload_file',
-            ('catalog', 'import'): 'import_file',
-            ('catalog', 'init'): 'init',
-            ('sale', 'checkauth'): 'check_auth',
-            ('sale', 'file'): 'fake_upload_file',
-            ('sale', 'init'): 'sale_init',
-            ('sale', 'query'): 'export_query',
-            ('sale', 'success'): 'export_success',
-            # ('import', 'import'): import_file,
+            ('catalog', 'checkauth'): 'catalog_checkauth',
+            ('catalog', 'init'): 'catalog_init',
+            ('catalog', 'file'): 'catalog_file',
+            ('catalog', 'import'): 'catalog_import',
+            ('catalog', 'complete'): 'catalog_complete',
         }
         super().__init__(**kwargs)
 
     def get(self, request, *args, **kwargs):
-        method_name = self.routes_map.get((request.GET.get('type'),
-                                           request.GET.get('mode')))
+        type_mode = (request.GET.get('type'), request.GET.get('mode'))
+
+        method_name = self.routes_map.get(type_mode)
         if not method_name:
             raise Http404
 
@@ -52,62 +49,55 @@ class ExchangeView(View):
         return self.get(request, *args, **kwargs)
 
     def success(self, success_text=''):
-        result = '{}\n{}'.format('success', success_text)
-        return HttpResponse(result)
+        response = '{}\n{}'.format('success', success_text)
+        return HttpResponse(response)
 
     def progress(self, success_text=''):
-        result = '{}\n{}'.format('progress', success_text)
-        return HttpResponse(result)
+        response = '{}\n{}'.format('progress', success_text)
+        return HttpResponse(response)
 
-    def error(self, error_text=''):
-        result = '{}\n{}'.format('failure', error_text)
-        return HttpResponse(result)
+    def failure(self, error_text=''):
+        response = '{}\n{}'.format('failure', error_text)
+        return HttpResponse(response)
 
-    def check_auth(self, request, *args, **kwargs):
+    def catalog_checkauth(self, request, *args, **kwargs):
         """
-        Создание сессии.
+        Авторизация на сайте.
         """
         session = request.session
         session.create()
-        success_text = '{}\n{}'.format(settings.SESSION_COOKIE_NAME,
-                                       session.session_key)
-        return self.success(success_text)
+        response = '\n'.join([
+            settings.SESSION_COOKIE_NAME,
+            session.session_key,
+        ])
+        return self.success(response)
 
-    def init(self, request, *args, **kwargs):
+    def catalog_init(self, request, *args, **kwargs):
         """
-        Настройки импорта.
+        Инициализация на сайте.
         """
-        result = 'zip={}\nfile_limit={}'.format(
-            'yes' if odinass_settings.USE_ZIP else 'no',
-            odinass_settings.IMPORT_FILE_LIMIT)
-        return HttpResponse(result)
+        response = '\n'.join([
+            'zip=%s' % 'yes' if odinass_settings.USE_ZIP else 'no',
+            'file_limit=%s' % odinass_settings.IMPORT_FILE_LIMIT,
+            'sessid=%s' % request.session.session_key,
+            'version=3.1',
+        ])
+        return HttpResponse(response)
 
-    def sale_init(self, request, *args, **kwargs):
+    def catalog_file(self, request, *args, **kwargs):
         """
-        Настройки экспорта.
-        """
-        result = 'zip={}\nfile_limit={}'.format(
-            'yes' if odinass_settings.USE_ZIP else 'no',
-            odinass_settings.EXPORT_FILE_LIMIT)
-        return HttpResponse(result)
-
-    def upload_file(self, request, *args, **kwargs):
-        """
-        Загрузка файлов на сервер.
+        Выгрузка файлов на сайт.
         """
         try:
             filename = os.path.basename(request.GET['filename'])
         except KeyError:
-            return self.error('Filename param required')
+            return self.failure('Filename param required')
 
         if not os.path.exists(odinass_settings.UPLOAD_ROOT):
             try:
                 os.makedirs(odinass_settings.UPLOAD_ROOT)
             except OSError:
-                return self.error('Can\'t create upload directory')
-
-        filename = '%s_%s%s' % (filename[:-4], request.session.session_key,
-                                filename[-4:])
+                return self.failure('Can\'t create upload directory')
 
         temp_file = SimpleUploadedFile(filename, request.read(),
                                        content_type='text/xml')
@@ -118,28 +108,27 @@ class ExchangeView(View):
                 f.write(chunk)
         return self.success()
 
-    def import_file(self, request, *args, **kwargs):
+    def catalog_import(self, request, *args, **kwargs):
         """
-        Импорт ранее загруженных файлов.
+        Ожидание окончания обработки данных на сайте.
         """
         try:
             filename = os.path.basename(request.GET['filename'])
         except KeyError:
-            return self.error('Filename param required')
-
-        filename = '%s_%s%s' % (filename[:-4], request.session.session_key,
-                                filename[-4:])
+            return self.failure('Filename param required')
 
         file_path = os.path.join(odinass_settings.UPLOAD_ROOT, filename)
         if not os.path.exists(file_path):
-            return self.error('%s doesn\'t exist' % filename)
+            return self.failure('%s doesn\'t exist' % filename)
 
-        if AsyncResult(filename).state == 'PENDING':
-            import_file.apply_async((file_path,), task_id=filename)
+        ImportManager(file_path)
 
-        if AsyncResult(filename).state in ['PENDING', 'STARTED']:
-            time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
-            return self.progress()
+        # if AsyncResult(filename).state == 'PENDING':
+        #     import_file.apply_async((file_path,), task_id=filename)
+
+        # if AsyncResult(filename).state in ['PENDING', 'STARTED']:
+        #     time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
+        #     return self.progress()
 
         if odinass_settings.DELETE_FILES_AFTER_IMPORT:
             try:
@@ -148,18 +137,8 @@ class ExchangeView(View):
                 logger.error('Can\'t delete %s after import' % filename)
         return self.success()
 
-    def export_query(self, request, *args, **kwargs):
+    def catalog_complete(self, request, *args, **kwargs):
         """
-        Экспорт изменений.
-        """
-        export_manager = ExportManager()
-        return HttpResponse(export_manager.export(), content_type='text/xml')
-
-    def export_success(self, request, *args, **kwargs):
-        return self.success()
-
-    def fake_upload_file(self, request, *args, **kwargs):
-        """
-        Нам не нужны заказы из 1С.
+        Окончание обработки данных на сайте.
         """
         return self.success()

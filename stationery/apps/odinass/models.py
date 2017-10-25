@@ -3,8 +3,9 @@ import uuid
 from django.db import models
 from django.urls import reverse
 
-
 from mptt.models import MPTTModel, TreeForeignKey
+
+from odinass.utils import format_price
 
 
 class Category(MPTTModel):
@@ -33,6 +34,47 @@ class Category(MPTTModel):
         ordering = ['title']
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('pages:category', args=[str(self.id)])
+
+    @property
+    def offers(self):
+        return (Offer.objects.select_related('product')
+                             .filter(product__categories=self))
+
+
+class Product(models.Model):
+    """
+    Товар
+    """
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+
+    title = models.CharField(
+        'название', max_length=254)
+
+    article = models.CharField(
+        'артикул', blank=True, max_length=254)
+
+    categories = models.ManyToManyField(
+        'odinass.Category',
+        verbose_name='категории',
+        blank=True)
+
+    property_values = models.ManyToManyField(
+        'odinass.PropertyValue',
+        verbose_name='значения свойства',
+        blank=True)
+
+    class Meta:
+        default_related_name = 'products'
+        ordering = ['title']
+        verbose_name = 'товар'
+        verbose_name_plural = 'товары'
 
     def __str__(self):
         return self.title
@@ -84,37 +126,22 @@ class PropertyValue(models.Model):
         return self.title
 
 
-class Product(models.Model):
+class SalesType(object):
     """
-    Товар
+    Тип продажи
     """
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
+    RETAIL = 1
+    WHOLESALE = 2
 
-    title = models.CharField(
-        'название', max_length=254)
+    CHOICES = (
+        (RETAIL, 'розница'),
+        (WHOLESALE, 'оптовая продажа'),
+    )
 
-    article = models.CharField(
-        'артикул', blank=True, max_length=254)
-
-    categories = models.ManyToManyField(
-        'odinass.Category',
-        verbose_name='категории',
-        blank=True)
-
-    property_values = models.ManyToManyField(
-        'odinass.PropertyValue',
-        verbose_name='значения свойства',
-        blank=True)
-
-    class Meta:
-        default_related_name = 'products'
-        ordering = ['title']
-        verbose_name = 'товар'
-        verbose_name_plural = 'товары'
-
-    def __str__(self):
-        return self.title
+    CHOICES_MACHINE_NAME = {
+        RETAIL: 'retail',
+        WHOLESALE: 'wholesale',
+    }
 
 
 class PriceType(models.Model):
@@ -124,7 +151,12 @@ class PriceType(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(
-        'наименование', max_length=254)
+        'наименование',
+        max_length=254)
+    sales_type = models.IntegerField(
+        'тип продажи',
+        choices=SalesType.CHOICES, db_index=True, blank=True, null=True,
+        unique=True)
 
     class Meta:
         default_related_name = 'price_types'
@@ -134,31 +166,6 @@ class PriceType(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Offer(models.Model):
-    """
-    Предложение
-    """
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(
-        'наименование', max_length=254)
-    product = models.ForeignKey(
-        'odinass.Product',
-        verbose_name='товар')
-
-    class Meta:
-        default_related_name = 'offers'
-        ordering = ['title']
-        verbose_name = 'предложение'
-        verbose_name_plural = 'предложения'
-
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse('pages:product', args=[str(self.id)])
 
 
 class Price(models.Model):
@@ -189,3 +196,42 @@ class Price(models.Model):
         if self.price:
             price = '%s %s' % (self.price, self.currency)
         return price
+
+
+class Offer(models.Model):
+    """
+    Предложение
+    """
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(
+        'наименование', max_length=254)
+    product = models.ForeignKey(
+        'odinass.Product',
+        verbose_name='товар')
+
+    class Meta:
+        default_related_name = 'offers'
+        ordering = ['title']
+        verbose_name = 'предложение'
+        verbose_name_plural = 'предложения'
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('pages:product', args=[str(self.id)])
+
+    @property
+    def price(self):
+        price = self.prices.filter(price_type__sales_type=SalesType.RETAIL)
+        if len(price):
+            price = price.first()
+        else:
+            return 'нет цены'
+        return '%s %s' % (format_price(price.price), price.currency)
+
+    @property
+    def features(self):
+        return (PropertyValue.objects
+                             .filter(product=self.product))

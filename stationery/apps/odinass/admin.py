@@ -111,14 +111,25 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(PriceType)
 class PriceTypeAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        'title',
+        'sales_type',
+    ]
 
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
     readonly_fields = [
         'product',
+        'field_prices',
     ]
+
+    def field_prices(self, instance):
+        values = instance.prices.all()
+        if not values:
+            return ''
+        return mark_safe('<br />'.join(['&middot; %s' % v for v in values]))
+    field_prices.short_description = 'цены'
 
 
 @admin.register(Price)

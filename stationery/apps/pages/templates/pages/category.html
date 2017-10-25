@@ -6,11 +6,19 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <!--
                 <div class="bread-cums">
-                    <p><a href="#">Главная </a> / <a href="#">Каталог </a>/ <a href="#">Канцелярские товары</a> / <a href="#">Товары для офиса </a>/ <a href="">Калькуляторы</a></p>
+                    <p>
+                        <a href="/">Главная</a>
+                        {% for ancestor in object.get_ancestors %}
+                            / <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a>
+                        {% endfor %}
+                        / <span class="active">{{ object.title }}</span>
+                    </p>
                 </div>
-                -->
+
+
+    
+                {% if object.offers %}
                 <div class="col-sm-3">
                     <div class="sidebar">
                         <div class="block">
@@ -77,6 +85,26 @@
                         <button>Очистить</button>
                     </div>
                 </div>
+                {% endif %}
+
+
+
+                <div class="col1">
+                    {% for descendant in object.get_descendants %}
+                        <div class="col-sm-2">
+                            <div class="kat">
+                                <a href="{{ descendant.get_absolute_url }}">
+                                    <img src="{% static 'images/lists/бумажная продукция.jpg' %}" alt="">
+                                    <hr>
+                                    <h5>{{ descendant.title }}</h5>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+
+
                 <div class="col-sm-9">
                     <div class="fis">
                         <div class="col-sm-3">
@@ -87,60 +115,70 @@
                         </div>
                         <div class="col-sm-4">
                             Сортировать по:
-                        <select>
+                            <select>
                         <option>Цена ^</option>
                         <option>Цена </option>
                         <option>А-Я</option>
                         <option>Я-А</option>
-                        </select>
+                    </select>
                         </div>
                         <div class="col-sm-5">
                             Показывать товаров:
-                        <select>
+                            <select>
                         <option>10</option>
                         <option>30</option>
                         <option>50</option>
                         <option>100</option>
-                        </select>
+                    </select>
                         </div>
                     </div>
 
-                    {% for product in category.products.all %}
-                    <div class="blo col-sm-12 list">
-                        <div class="col-sm-8 mom">
-                            <div class="col-sm-12">
-                                <div class="col-sm-5">
-                                    <img src="{% static 'images/tov/2.jpg' %}" alt="">
+                    {% for offer in object.offers %}
+                        <div class="blo col-sm-12 list">
+                            <div class="col-sm-8 mom">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-5">
+                                        <img src="{% static 'images/tov/2.jpg' %}" alt="">
+                                    </div>
+                                    <div class="col-sm-7 mo">
+                                        <h4><a href="{{ offer.get_absolute_url }}">{{ offer.title }}</a></h4>
+                                        <p>Код: <b>{{ offer.product.article }}</b></p>
+                                        {% if offer.features %}
+                                            <ul class="dad">
+                                                {% for prop in offer.features %}
+                                                    <li>{{ prop.property }}: {{ prop }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                                <div class="col-sm-7 mo">
-                                    <h4><a href="{% url 'pages:product' product.pk %}">{{ product.title }}</a></h4>
-                                    {% if product.article %}
-                                        <p>Код: <b>{{ product.article }}</b></p>
-                                    {% endif %}
+                            </div>
+                            <div class="col-sm-4 vv">
+                                <div class="pri">
+                                    <h3>{{ offer.price }}</h3>
+                                    <hr>
                                 </div>
+                                <div class="ik">
+                                    <button>В корзину</button>
+                                    <div class="amount">
+                                        <span class="down"><i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
+                                        <input type="text" value="1" />
+                                        <span class="up"><i class="fa fa-caret-square-o-up" aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                                <!--
+                                <div class="na">
+                                    <hr>
+                                    <p>В наличии</p>
+                                </div>
+                                <div class="part">
+                                    <p class="kol">Мин партия: 1шт</p>
+                                    <p class="upak">В упаковке: 40шт</p>
+                                </div>
+                                -->
                             </div>
                         </div>
-                        <div class="col-sm-4 vv">
-                            <div class="pri">
-                                <h3>560 руб</h3>
-                                <hr>
-                            </div>
-                            <div class="ik">
-                                <button>В корзину</button>
-                                <div class="amount">
-                                    <span class="down"><i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
-                                    <input type="text" value="1" />
-                                    <span class="up"><i class="fa fa-caret-square-o-up" aria-hidden="true"></i></span>
-                                </div>
-                            </div>
-                            <div class="na">
-                                <hr>
-                                <p>В наличии</p>
-                            </div>
-                        </div>
-                    </div>
                     {% endfor %}
-
                 </div>
             </div>
         </div>

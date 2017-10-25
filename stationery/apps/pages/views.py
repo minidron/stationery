@@ -2,7 +2,7 @@ from django.views.generic import DetailView, TemplateView
 
 from pages.models import Page
 
-from odinass.models import Category, Offer, Product
+from odinass.models import Category, Offer
 
 
 class IndexView(TemplateView):
@@ -11,8 +11,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'hot': Product.objects.all()[:5],
-            'hot2': Product.objects.all()[5:10],
+            'hot': Offer.objects.all()[:8],
         })
         return context
 

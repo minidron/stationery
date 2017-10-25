@@ -4,5 +4,5 @@ from odinass.views import ExchangeView
 
 
 urlpatterns = [
-    url(r'^exchange$', ExchangeView.as_view(), name='exchange'),
+    url(r'^exchange/$', ExchangeView.as_view(), name='exchange'),
 ]

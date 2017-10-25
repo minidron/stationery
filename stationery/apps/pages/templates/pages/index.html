@@ -43,34 +43,18 @@
                     </div>
                     <div class="col-sm-12">
                         {% for product in hot %}
-                            <div class="col-sm-2"> <!-- товар 1-->
-                                <div class="prod">
-                                    <a href="{% url 'pages:product' product.pk %}">
-                                        <img src="{% static 'images/icon_hit.png' %}">
-                                        <div class="foto">
-                                            <img src="{% static 'images/nedeli/1879488.jpg' %}">
-                                        </div>
-                                        <p>{{ product.title }}</p>
-                                        <span>2 100 руб</span>
-                                    </a>
-                                </div>
+                        <div class="col-sm-3"> <!-- товар 1-->
+                            <div class="prod">
+                                <a href="{% url 'pages:product' product.pk %}">
+                                    <div class="foto">
+                                        <img class="sticker" src="{% static 'images/icon_hit.png' %}">
+                                        <img src="{% static 'images/nedeli/1879488.jpg' %}">
+                                    </div>
+                                    <p>{{ product.title }}</p>
+                                    <span>{{ product.price }}</span>
+                                </a>
                             </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-sm-12">
-                        {% for product in hot2 %}
-                            <div class="col-sm-2"> <!-- товар 1-->
-                                <div class="prod">
-                                    <a href="{% url 'pages:product' product.pk %}">
-                                        <img src="{% static 'images/icon_hit.png' %}">
-                                        <div class="foto">
-                                            <img src="{% static 'images/nedeli/1879488.jpg' %}">
-                                        </div>
-                                        <p>{{ product.title }}</p>
-                                        <span>2 100 руб</span>
-                                    </a>
-                                </div>
-                            </div>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>

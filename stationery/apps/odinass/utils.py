@@ -1,17 +1,31 @@
 from io import BytesIO
 
-from decimal import Decimal, InvalidOperation
-
 from django.utils import timezone
 
-from xml.etree import cElementTree as ET
+from lxml import etree as ET
 
 from odinass import models as odinass_models
-from odinass.models import Category, Product, Property, PropertyValue, Price
+
+
+def format_price(value):
+    if not value:
+        value = 0
+    elif isinstance(value, str):
+        value = int(float(value))
+    return '{0:,}'.format(value).replace(',', ' ')
 
 
 def get_text(element):
     return getattr(element, 'text', '')
+
+
+def get_tag(nstag):
+    start = nstag.nsmap.get(None)
+    if start:
+        start = len(start) + 2
+    else:
+        start = 0
+    return nstag.tag[start:]
 
 
 class ImportManager(object):
@@ -26,24 +40,21 @@ class ImportManager(object):
                     'parent': 'Классификатор',
                     'func_name': 'import_groups',
                 },
+                'ТипЦены': {
+                    'parent': 'ТипыЦен',
+                    'func_name': 'import_price_type',
+                },
                 'Свойство': {
                     'parent': 'Свойства',
                     'func_name': 'import_property',
                 },
-            })
-            self._parse({
                 'Товар': {
                     'parent': 'Товары',
                     'func_name': 'import_product',
                 },
             })
+
         if 'offers' in file_path:
-            self._parse({
-                'ТипЦены': {
-                    'parent': 'ТипыЦен',
-                    'func_name': 'import_price_type',
-                },
-            })
             self._parse({
                 'Предложение': {
                     'parent': 'Предложения',
@@ -51,38 +62,45 @@ class ImportManager(object):
                 },
             })
 
+        if 'prices' in file_path:
+            self._parse({
+                'Предложение': {
+                    'parent': 'Предложения',
+                    'func_name': 'import_price',
+                },
+            })
+
     def _parse(self, tags):
         tree = ET.iterparse(self.file_path, events=('start', 'end'))
         tree = iter(tree)
         _, root = next(tree)
-        stack = [root.tag]
+        stack = [get_tag(root)]
         parents = [v['parent'] for k, v in tags.items()]
         pairs = ['%s__%s' % (v['parent'], k) for k, v in tags.items()]
-        for event, el in tree:
+        for event, node in tree:
             if event == 'start':
-                stack.append(el.tag)
+                stack.append(get_tag(node))
             else:
                 assert event == 'end'
                 stack.pop()
 
-                if el.tag in tags and stack[-1] == tags[el.tag]['parent']:
-                    getattr(self, tags[el.tag]['func_name'])(el)
-                    el.clear()
+                if get_tag(node) in tags and stack[-1] == tags[get_tag(node)]['parent']:  # NOQA
+                    getattr(self, tags[get_tag(node)]['func_name'])(node)
+                    node.clear()
 
                 if not bool(set(stack) & set(parents)):
-                    el.clear()
+                    node.clear()
                 else:
                     path = '__'.join(stack)
                     if not any(pair in path for pair in pairs):
-                        el.clear()
-
+                        node.clear()
         root.clear()
 
     def import_groups(self, node):
         """
-        Загрузка Групп товаров
+        Загрузка Групп товаров.
         """
-        stack = node.findall('Группа')
+        stack = node.findall('Группа', node.nsmap)
         while len(stack):
             item = stack.pop(0)
             if isinstance(item, tuple):
@@ -90,136 +108,121 @@ class ImportManager(object):
             else:
                 parent = None
 
-            Category.objects.update_or_create(
-                id=get_text(item.find('Ид')),
+            odinass_models.Category.objects.update_or_create(
+                id=get_text(item.find('Ид', node.nsmap)),
                 defaults={
-                    'title': get_text(item.find('Наименование')),
-                    'parent_id': get_text(
-                        parent.find('Ид')) if parent else None,
-                })
+                    'title': get_text(item.find('Наименование', node.nsmap)),
+                    'parent_id': (get_text(parent.find('Ид', node.nsmap))
+                                  if parent is not None else None)})
 
             stack = [(group, item)
-                     for group in item.findall('Группы/Группа')] + stack
+                     for group in item.findall('Группы/Группа',
+                                               node.nsmap)] + stack
 
     def import_property(self, node):
         """
-        Загрузка Свойств и ВариантыЗначений
+        Загрузка Свойств и ВариантыЗначений.
         """
-        value_type = get_text(node.find('ТипЗначений'))
-        property_item = {
-            'id': get_text(node.find('Ид')),
-            'name': get_text(node.find('Наименование')),
-            'value_type': value_type,
-        }
+        id = get_text(node.find('Ид', node.nsmap))
+        value_type = get_text(node.find('ТипЗначений', node.nsmap))
+        title = get_text(node.find('Наименование', node.nsmap))
 
-        value_options = []
-        for value_option in node.findall(
-                'ВариантыЗначений/%s' % value_type):
-            value_options.append({
-                'id': get_text(value_option.find('ИдЗначения')),
-                'value': get_text(value_option.find('Значение')),
-            })
-        property_item['value_options'] = value_options
+        instance, created = odinass_models.Property.objects.update_or_create(
+            id=id, defaults={'title': title, 'value_type': value_type})
 
-        Property.objects.update_or_create(
-            id=property_item['id'], defaults={
-                'title': property_item['name'],
-                'value_type': property_item['value_type'],
-            })
-
-        for option in property_item['value_options']:
-            PropertyValue.objects.update_or_create(
-                id=option['id'], defaults={
-                    'title': option['value'],
-                    'property_id': property_item['id'],
-                })
+        value_type = 'ВариантыЗначений/%s' % value_type
+        for value_option in node.findall(value_type, node.nsmap):
+            v_id = get_text(value_option.find('ИдЗначения', node.nsmap))
+            v_title = get_text(value_option.find('Значение', node.nsmap))
+            if v_id:
+                odinass_models.PropertyValue.objects.update_or_create(
+                    id=v_id,
+                    defaults={
+                        'title': v_title,
+                        'property_id': id})
 
     def import_product(self, node):
         """
-        Загрузка Товаров
+        Загрузка Товаров.
         """
-        property_values = []
-        for property_node in node.findall(
-                'ЗначенияСвойств/ЗначенияСвойства'):
-            property_values.append({
-                'id': get_text(property_node.find('Ид')),
-                'value': get_text(property_node.find('Значение')),
-            })
+        details = node.findall(
+            'ЗначенияРеквизитов/ЗначениеРеквизита/Наименование', node.nsmap)
 
-        requisite_values = []
-        for requisite_node in node.findall(
-                'ЗначенияРеквизитов/ЗначениеРеквизита'):
-            requisite_values.append({
-                'name': get_text(requisite_node.find('Наименование')),
-                'value': get_text(requisite_node.find('Значение')),
-            })
-
-        title = get_text(node.find('Наименование'))
+        title = get_text(node.find('Наименование', node.nsmap))
         if not title:
-            el = [el for el in node.findall(
-                  'ЗначенияРеквизитов/ЗначениеРеквизита')
-                  if el.findtext('Наименование') == 'Полное наименование']
-            el_title = el[0].findtext('Значение')
-            if el_title:
-                title = el_title
-            else:
-                return
+            node_title = [nd for nd in details
+                          if nd.text == 'Полное наименование'].pop()
+            title = get_text(
+                node_title.getparent().find('Значение', node.nsmap))
 
-        instance, created = Product.objects.update_or_create(
-            id=get_text(node.find('Ид')), defaults={
-                'title': title[:254],
-                'article': get_text(node.find('Артикул')),
-            })
+        id = get_text(node.find('Ид', node.nsmap))
+        node_article = [nd for nd in details if nd.text == 'Код'].pop()
+        article = get_text(
+            node_article.getparent().find('Значение', node.nsmap))
 
-        for group in [get_text(id) for id in node.findall('Группы/Ид')]:
-            instance.categories.add(Category.objects.get(pk=group))
+        instance, created = odinass_models.Product.objects.update_or_create(
+            id=id, defaults={'title': title, 'article': article})
 
-        for property_value in property_values:
-            if property_value['value']:
-                instance.property_values.add(PropertyValue.objects.get(
-                    pk=property_value['value'],
-                    property_id=property_value['id']))
+        property_value = 'ЗначенияСвойств/ЗначенияСвойства'
+        for value in node.findall(property_value, node.nsmap):
+            pv_id = get_text(value.find('Значение', node.nsmap))
+            if pv_id:
+                instance.property_values.add(
+                    odinass_models.PropertyValue.objects.get(
+                        pk=pv_id,
+                        property_id=get_text(value.find('Ид', node.nsmap))))
 
-    def import_price_type(self, node):
-        """
-        Загрузка Тип цены
-        """
-        odinass_models.PriceType.objects.update_or_create(
-            id=get_text(node.find('Ид')),
-            defaults={
-                'title': get_text(node.find('Наименование')),
-            })
+        for group in node.findall('Группы/Ид', node.nsmap):
+            instance.categories.add(
+                odinass_models.Category.objects.get(pk=get_text(group)))
 
     def import_offer(self, node):
         """
-        Загрузка Предложения
+        Загрузка Предложений.
         """
-        title = get_text(node.find('Наименование'))
+        title = get_text(node.find('Наименование', node.nsmap))
         if not title:
             return
 
-        ids = get_text(node.find('Ид')).split('#')
-        if len(ids) == 2:
-            prodict_id, id = ids
-        else:
-            prodict_id = id = ids.pop()
-        odinass_models.Offer.objects.update_or_create(
-            id=id,
+        ids = get_text(node.find('Ид', node.nsmap)).split('#')
+        for id in ids:
+            odinass_models.Offer.objects.update_or_create(
+                id=id,
+                defaults={
+                    'title': title,
+                    'product_id': ids[0]})
+
+    def import_price_type(self, node):
+        """
+        Загрузка Типы Цен.
+        """
+        odinass_models.PriceType.objects.update_or_create(
+            id=get_text(node.find('Ид', node.nsmap)),
             defaults={
-                'title': title,
-                'product_id': prodict_id,
+                'title': get_text(node.find('Наименование', node.nsmap)),
             })
 
-        for price in node.findall('Цены/Цена'):
-            if not get_text(price.find('ЦенаЗаЕдиницу')):
+    def import_price(self, node):
+        """
+        Загрузка Цен предложений.
+        """
+        for price in node.findall('Цены/Цена', node.nsmap):
+            if not get_text(price.find('ЦенаЗаЕдиницу', node.nsmap)):
                 continue
-            Price.objects.update_or_create(
-                offer_id=id,
-                price_type_id=get_text(price.find('ИдТипаЦены')),
-                defaults={
-                    'currency': get_text(price.find('Валюта')),
-                    'price': float(get_text(price.find('ЦенаЗаЕдиницу'))),
-                })
+
+            ids = get_text(node.find('Ид', node.nsmap)).split('#')
+            for id in ids:
+                price_type = get_text(price.find('ИдТипаЦены', node.nsmap))
+                currency = get_text(price.find('Валюта', node.nsmap))
+                cost = float(get_text(price.find('ЦенаЗаЕдиницу', node.nsmap)))
+
+                odinass_models.Price.objects.update_or_create(
+                    offer_id=id,
+                    price_type_id=price_type,
+                    defaults={
+                        'currency': currency,
+                        'price': cost,
+                    })
 
 
 class ExportManager(object):

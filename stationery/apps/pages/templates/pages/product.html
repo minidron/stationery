@@ -7,9 +7,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <!--
-                    <p>Главная / Канцелярские товары / скобы, степлеры / степлеры / <span class="active">Степлер №24/6 OMAX до 20 листов, серо-черный</span></p>
-                    -->
+                    <p>
+                        <a href="/">Главная</a> /
+                        {% for ancestor in object.product.categories.first.get_ancestors %}
+                            <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a> /
+                        {% endfor %}
+                        <a href="{{ object.product.categories.first.get_absolute_url }}">{{ object.product.categories.first }}</a> /
+                        <span class="active">{{ object.title }}</span>
+                    </p>
                     <div class="col-sm-8 cart">
                         <h2 class="h2">{{ object.title }}</h2>
                         <!--<span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> / 13 Отзывов</span>-->
@@ -44,7 +49,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4 cart-l">
-                        <p class="cen">Цена: {{ object.prices.first }}</p><hr>
+                        <p class="cen">Цена: {{ object.price }}</p><hr>
                         <a href="#" class="button">В корзину</a>
                         <a href="#" class="button">Заказать в 1 клик</a><hr>
                         {# <p class="dos"><i class="fa fa-check"></i>В наличии (1536 шт.)</p> #}
@@ -57,7 +62,6 @@
             </div>
         </div>
     </section>
-    <!--
     <section class="harak">
         <div class="container">
             <div class="row">
@@ -65,20 +69,20 @@
                     <div class="tabs">
                         <ul class="tabs__caption">
                             <li class="active">Характеритики</li>
+                            <!--
                             <li>Отзывы</li>
+                            -->
                         </ul>
                         <div class="tabs__content active">
-                        <ul class="conta">
-                        <li> 10+2 разрядов.</li>
-                        <li>242 функции.</li>
-                        <li>Металлическая панель.</li>
-                        <li>Двухстрочный дисплей.</li>
-                        <li>Мягкий футляр.</li>
-                        <li>Размер — 143×78 мм.</li>
-                        <li>Производитель — Китай</li>  
-                        </ul>
-                        <p></p>
-                         </div>
+                            {% if object.features %}
+                                <ul class="conta">
+                                    {% for prop in object.features %}
+                                        <li>{{ prop.property }}: {{ prop }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                        <!--
                          <div class="tabs__content">
                             <div class="blok-otziv">
                                 <div class="col-sm-3">
@@ -101,10 +105,10 @@
                             </div>
                             </div> 
                          </div>
+                         -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    -->
 {% endblock content %}
