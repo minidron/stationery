@@ -3,10 +3,13 @@
 {% load static %}
 
 {% block content %}
+
+<section class="s-products">
+
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <div class="bread-cums">
+                <div class="bread-crumbs">
                     <p>
                         <a href="/">Главная</a>
                         {% for ancestor in object.get_ancestors %}
@@ -16,171 +19,156 @@
                     </p>
                 </div>
 
+                <div class="owl-carousel categories">
+                    {% for descendant in object.get_descendants %}
+                    <li class="product-wrapper-filter">
+                        <a href="{{ descendant.get_absolute_url }}" class="product">
+                            <div class="product-photo">
+                                <img src="{% static 'images/lists/бумажная продукция.jpg' %}" alt="" class="product-item">
+                            </div>
+                            <div class="product-text">
+                                <h2 class="product-text-name-category">{{ descendant.title }}</h2>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </div>
 
-    
                 {% if object.offers %}
-                <div class="col-sm-3">
-                    <div class="sidebar">
-                        <div class="block">
-                            <h4 class="extremum-click">Цена <i class="fa fa-angle-down " aria-hidden="true"></i></h4>
-                            <div class="pr extremum-slide">
-                                От <input type="text" id="minCost" value="0" /> До <input type="text" id="maxCost" value="10000" />
-
-                                <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="block">
-                            <h4 class="extremum-click">Торговая марка <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
-                            <hr>
-                            <div class="ch extremum-slide">
-                                <input type="checkbox" name="option1" value="a1" checked> Canon
-                                <Br>
-                                <input type="checkbox" name="option2" value="a2"> Casio
-                                <Br>
-                                <input type="checkbox" name="option3" value="a3"> Citizen
-                                <Br>
-                                <input type="checkbox" name="option4" value="a4"> Масма
-                                <Br>
-                            </div>
-                        </div>
-                        <div class="block">
-                            <h4 class="extremum-click">Наличие <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
-                            <hr>
-                            <div class="ch extremum-slide">
-                                <input type="radio" name="dostavka" value="ie"> Все
-                                <Br>
-                                <input type="radio" name="dostavka" value="opera"> В наличии
-                                <Br>
-                                <input type="radio" name="dostavka" value="opera"> Под заказ
-                                <Br>
-                            </div>
-                        </div>
-                        <div class="block">
-                            <h4 class="extremum-click">Разрядность <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
-                            <hr>
-                            <div class="ch extremum-slide">
-                                <input type="checkbox" name="option1" value="a1" checked> 12
-                                <Br>
-                                <input type="checkbox" name="option2" value="a2"> 8
-                                <Br>
-                                <input type="checkbox" name="option3" value="a3"> 16
-                                <Br>
-                                <input type="checkbox" name="option4" value="a4"> 14
-                                <Br>
-                                <input type="checkbox" name="option4" value="a4"> 10
-                                <Br>
-                            </div>
-                        </div>
-                        <div class="block">
-                            <h4 class="extremum-click">Количество функций <i class="fa fa-angle-down" aria-hidden="true"></i></h4>
-                            <hr>
-                            <div class="ch extremum-slide">
-                                <input type="checkbox" name="option1" value="a1" checked> До 200
-                                <Br>
-                                <input type="checkbox" name="option2" value="a2"> От 201 до 300
-                                <Br>
-                            </div>
-                        </div>
-                        <button>Очистить</button>
+                <div class="col-sm-3 filter">
+                    <div class="filter-group">
+                        <h3>Цена</h3>
+                        <label for="minCost">От</label><input type="text" name="" value="0" id="minCost">
+                        <label for="maxCost">До</label><input type="text" name="" value="1000" id="maxCost">
+                        <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider"></div>
                     </div>
+
+                    <div class="filter-group">
+                        <h3>Торговая марка</h3>
+                        <div class="check-group">
+                            <p><input type="checkbox" name="" value=""> Canon</p>
+                            <p><input type="checkbox" name="" value=""> Canon</p>
+                            <p><input type="checkbox" name="" value=""> Canon</p>
+                            <p><input type="checkbox" name="" value=""> Canon</p>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Наличие</h3>
+                        <div class="check-group">
+                            <p><input type="radio" name="" value=""> Все</p>
+                            <p><input type="radio" name="" value=""> В наличии</p>
+                            <p><input type="radio" name="" value=""> Под заказ</p>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Разрядность</h3>
+                        <div class="check-group">
+                            <p><input type="checkbox" name="" value=""> 8</p>
+                            <p><input type="checkbox" name="" value=""> 10</p>
+                            <p><input type="checkbox" name="" value=""> 12</p>
+                            <p><input type="checkbox" name="" value=""> 14</p>
+                            <p><input type="checkbox" name="" value=""> 16</p>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Количество функций</h3>
+                        <div class="check-group">
+                            <p><input type="checkbox" name="" value=""> До 200</p>
+                            <p><input type="checkbox" name="" value=""> От 200 до 300</p>
+                        </div>
+                    </div>
+                    <button type="button" name="button">Очистить</button>
                 </div>
                 {% endif %}
 
 
-
-                <div class="col1">
-                    {% for descendant in object.get_descendants %}
-                        <div class="col-sm-2">
-                            <div class="kat">
-                                <a href="{{ descendant.get_absolute_url }}">
-                                    <img src="{% static 'images/lists/бумажная продукция.jpg' %}" alt="">
-                                    <hr>
-                                    <h5>{{ descendant.title }}</h5>
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-
-
-
                 <div class="col-sm-9">
-                    <div class="fis">
-                        <div class="col-sm-3">
-                            <div class="iko">
-                                Вид: <button class="fa fa-th-list fa-lg list"></button>
-                                <button class="fa fa-th fa-lg grid"></button>
-                            </div>
+                    <div class="filter-view">
+                        <div class="col-sm-4 view-product">
+                            <p>Вид: </p>
+                            <span><i class="fa fa-list"></i></span>
+                            <span><i class="fa fa-th"></i></span>
                         </div>
-                        <div class="col-sm-4">
-                            Сортировать по:
-                            <select>
-                        <option>Цена ^</option>
-                        <option>Цена </option>
-                        <option>А-Я</option>
-                        <option>Я-А</option>
-                    </select>
+                        <div class="col-sm-4 sort-by">
+                            <p>Сортировать по <select class="" name="">
+                                <option>Цена </option>
+                                <option>Цена </option>
+                                <option>А-Я </option>
+                                <option>Я-А </option>
+                            </select></p>
                         </div>
-                        <div class="col-sm-5">
-                            Показывать товаров:
-                            <select>
-                        <option>10</option>
-                        <option>30</option>
-                        <option>50</option>
-                        <option>100</option>
-                    </select>
+                        <div class="col-sm-4 view-by">
+                            <p>Показывать товаров <select class="" name="">
+                                <option>10 </option>
+                                <option>30 </option>
+                                <option>50 </option>
+                                <option>100 </option>
+                            </select></p>
                         </div>
                     </div>
 
-                    {% for offer in object.offers %}
-                        <div class="blo col-sm-12 list">
-                            <div class="col-sm-8 mom">
-                                <div class="col-sm-12">
-                                    <div class="col-sm-5">
-                                        <img src="{% static 'images/tov/2.jpg' %}" alt="">
-                                    </div>
-                                    <div class="col-sm-7 mo">
-                                        <h4><a href="{{ offer.get_absolute_url }}">{{ offer.title }}</a></h4>
-                                        <p>Код: <b>{{ offer.product.article }}</b></p>
-                                        {% if offer.features %}
-                                            <ul class="dad">
-                                                {% for prop in offer.features %}
-                                                    <li>{{ prop.property }}: {{ prop }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 vv">
-                                <div class="pri">
-                                    <h3>{{ offer.price }}</h3>
-                                    <hr>
-                                </div>
-                                <div class="ik">
-                                    <button>В корзину</button>
-                                    <div class="amount">
-                                        <span class="down"><i class="fa fa-caret-square-o-down" aria-hidden="true"></i></span>
-                                        <input type="text" value="1" />
-                                        <span class="up"><i class="fa fa-caret-square-o-up" aria-hidden="true"></i></span>
-                                    </div>
-                                </div>
-                                <!--
-                                <div class="na">
-                                    <hr>
-                                    <p>В наличии</p>
-                                </div>
-                                <div class="part">
-                                    <p class="kol">Мин партия: 1шт</p>
-                                    <p class="upak">В упаковке: 40шт</p>
-                                </div>
-                                -->
-                            </div>
-                        </div>
-                    {% endfor %}
+                    <div class="col-sm-12">
+                        <ul class="products clearfix">
+                            {% for offer in object.offers %}
+                                <li class="product-wrapper">
+                                    <a href="{{ offer.get_absolute_url }}" class="product">
+                                        <div class="product-main">
+                                            <div class="product-photo">
+                                                <img src="{% static 'images/nedeli/111.jpg' %}" alt="" class="product-item">
+                                                <div class="product-preview">
+                                                    <span class="button">Быстрый просмотр</span>
+                                                </div>
+                                            </div>
+                                            <div class="product-text">
+                                                <h2 class="product-text-name">{{ offer.title }}</h2>
+                                                {% if offer.features %}
+                                                    <ul class="dad">
+                                                        {% for prop in offer.features %}
+                                                            <li>{{ prop.property }}: {{ prop }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                                <div class="product-icons">
+                                                    <div class="product-icons-item">
+                                                        <span class="fa fa-heart-o"></span>
+                                                        <span class="product-icons-item-text">В избранное</span>
+                                                    </div>
+                                                    <div class="product-icons-item">
+                                                        <span class="fa fa-balance-scale"></span>
+                                                        <span class="product-icons-item-text">В сравнение</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="product-details">
+                                            <div class="product-details-availability">
+                                                <span><i class="fa fa-check"></i> В наличии</span>
+                                            </div>
+                                            <!--
+                                            <span class="product-details-price-old">
+                                                <b>720</b><small>руб.</small>
+                                            </span>
+                                            -->
+                                            <span class="product-details-price">
+                                                <b>{{ offer.price }}</b>
+                                            </span>
+                                            <div class="product-details-buttons">
+                                                <div class="buttons">
+                                                    <span class="button to-cart"><i class="fa fa-shopping-cart"></i>В корзину</span>
+                                                    <span class="button"><i class="fa fa-cart"></i>Купить в 1 клик</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
+
 {% endblock content %}

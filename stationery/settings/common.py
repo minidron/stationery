@@ -118,7 +118,6 @@ BOWER_INSTALLED_APPS = (
     'bootstrap#3.3',
     'font-awesome#4.7',
     'jquery-ui#1.12',
-    'magnific-popup#1.1',
     'owl.carousel#2.2',
 )
 

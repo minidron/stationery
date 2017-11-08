@@ -4,213 +4,200 @@
 
 
 {% block content %}
-    <div class="my-content">
-        <section class="s-sale">
-            <div class="col-sm-10 col-sm-offset-1">
-                <div class="owl-carousel carousel-sale">
-                    
-                    <div class="carousel-sale-item">
-                        <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
-                        <div class="carousel-sale-description">
-                            <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
-                            <span>С 30 августа по 30 сентября</span>
-                        </div>
-                    </div>
-                    <div class="carousel-sale-item">
-                        <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
-                        <div class="carousel-sale-description">
-                            <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
-                            <span>С 30 августа по 30 сентября</span>
-                        </div>
-                    </div>
-                    <div class="carousel-sale-item">
-                        <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
-                        <div class="carousel-sale-description">
-                            <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
-                            <span>С 30 августа по 30 сентября</span>
-                        </div>
-                    </div>
+    <section class="s-sale">
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="owl-carousel carousel-sale">
 
+                <div class="carousel-sale-item">
+                    <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
+                    <div class="carousel-sale-description">
+                        <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
+                        <span>С 30 августа по 30 сентября</span>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="s-week"> <!-- tovari nedeli nachalo -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                            <h2 class="h2 text-center">Товары недели</h2>
+                <div class="carousel-sale-item">
+                    <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
+                    <div class="carousel-sale-description">
+                        <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
+                        <span>С 30 августа по 30 сентября</span>
                     </div>
-                    <div class="col-sm-12">
+                </div>
+                <div class="carousel-sale-item">
+                    <div class="carousel-sale-foto"><img src="{% static 'images/main-slide.jpg' %}" alt="Скидки"></div>
+                    <div class="carousel-sale-description">
+                        <p>Готовимся к школе<br>Скидки до 30% на <br> школьные принадлежности</p>
+                        <span>С 30 августа по 30 сентября</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="s-products hit">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <h2 class="text-center">Товары недели</h2>
+                    <ul class="products clearfix">
                         {% for product in hot %}
-                        <div class="col-sm-3"> <!-- товар 1-->
-                            <div class="prod">
-                                <a href="{% url 'pages:product' product.pk %}">
-                                    <div class="foto">
-                                        <img class="sticker" src="{% static 'images/icon_hit.png' %}">
-                                        <img src="{% static 'images/nedeli/1879488.jpg' %}">
+                            <li class="product-wrapper">
+                                <a href="{% url 'pages:product' product.pk %}" class="product">
+
+                                    <div class="product-photo">
+                                        <img src="{% static 'images/icon_hit.png' %}" alt="" class="sticker">
+                                        <img src="{% static 'images/nedeli/111.jpg' %}" alt="" class="product-item">
+                                        <div class="product-preview">
+                                            <span class="button">Быстрый просмотр</span>
+                                        </div>
                                     </div>
-                                    <p>{{ product.title }}</p>
-                                    <span>{{ product.price }}</span>
+                                    <div class="product-text">
+                                        <h2 class="product-text-name">{{ product.title }}</h2>
+                                        <div class="product-icons">
+                                            <div class="product-icons-item">
+                                                <span class="fa fa-heart-o"></span>
+                                                <span class="product-icons-item-text">В избранное</span>
+                                            </div>
+                                            <div class="product-icons-item">
+                                                <span class="fa fa-balance-scale"></span>
+                                                <span class="product-icons-item-text">В сравнение</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-details-availability">
+                                            <span><i class="fa fa-check"></i> В наличии</span>
+                                        </div>
+                                        <!--
+                                        <span class="product-details-price-old">
+                                            <b>720</b><small>руб.</small>
+                                        </span>
+                                        -->
+                                        <span class="product-details-price">
+                                            <b>{{ product.price }}</b>
+                                        </span>
+                                        <div class="product-details-buttons">
+                                            <div class="buttons">
+                                                <span class="button to-cart"><i class="fa fa-shopping-cart"></i>В корзину</span>
+                                                <span class="button"><i class="fa fa-cart"></i>Купить в 1 клик</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </a>
-                            </div>
-                        </div>
+                            </li>
                         {% endfor %}
-                    </div>
+                    </ul>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="s-compilation"> <!-- kategorii nachalo -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="col-sm-3"> 
-                            <div class="cat h">
-                                <span>Все для свадьбы</span>
-                                <img src="{% static 'images/kategorii main/img-20150817110608-359.jpg' %}">
-                            </div>
-                        </div>
-                        <div class="col-sm-6 h"> 
-                            <div class="cat hh"> 
-                                <span>Все для детей</span>
-                                <img src="{% static 'images/kategorii main/507.jpg' %}" alt="">
-                            </div>
-                            <div class="cat hh b">
-                                <span> Все для офиса</span>
-                                <img src="{% static 'images/kategorii main/review-slider-blurry-PrismHR-office-banner.jpg' %}" alt="">
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="cat h">
-                                <span>Все для художника</span>
-                                    <img src="{% static 'images/kategorii main/художникам.jpg' %}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <section class="s-compilation">
+        <div class="container">
+            <div class="row">
 
-        <section class="s-new"> <!-- novinki nachalo -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h2 class="h2 text-center">Новинки</h2>
-                        <div class="col-sm-4 tov">
-                                <div class="new">
-                                    <img  src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="" >
-                                </div>
-                                <img src="{% static 'images/nedeli/816S2kQwHqL._SL1500_.jpg' %}" alt="">
-                                <p>Спиннер, игрушка интимстресс</p>
-                                <span>190 руб</span>
+                <div class="col-sm-3">
+                    <div class="compilation-group">
+                        <div class="compil-a">
+                            <span>Все для свадьбы</span>
+                            <img src="{% static 'images/kategorii main/img-20150817110608-359.jpg' %}" alt="">
                         </div>
-                            <div class="col-sm-8 tov">
-                            <div class="col-sm-3 l">
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 l">
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 l">
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 l">
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                                <div class="tov-l">
-                                    <div class="new">
-                                        <img src="{% static 'images/New-Starburst-1024x910.gif' %}" alt="">
-                                    </div>
-                                    <div class="kartinka">
-                                        <img src="{% static 'images/nedeli/g27515331562.jpg' %}" alt="">
-                                        <p> Портфель деловой</p>
-                                        <span>1 074 руб</span>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
                     </div>
                 </div>
-            </div>
-        </section>
+                <div class="col-sm-6">
+                    <div class="compilation-group">
+                        <div class="compil-b">
+                            <span>Все для детей</span>
+                            <img src="{% static 'images/kategorii main/507.jpg' %}" alt="">
+                        </div>
+                        <div class="compil-b">
+                            <span>Все для офиса</span>
+                            <img src="{% static 'images/kategorii main/review-slider-blurry-PrismHR-office-banner.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="compilation-group">
+                        <div class="compil-a">
+                            <span>Все для художника</span>
+                            <img src="{% static 'images/kategorii main/художникам.jpg' %}" alt="">
+                        </div>
+                    </div>
+                </div>
 
-        <section class="text"> <!-- o komoanii -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="zagolovok">
-                            <h2 class="h2 text-center">О нас</h2>
-                        </div>
-                        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="s-products new">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <h2 class="text-center">Новинки</h2>
+                    <ul class="products clearfix">
+                        {% for product in hot %}
+                            <li class="product-wrapper">
+                                <a href="{% url 'pages:product' product.pk %}" class="product">
+
+                                    <div class="product-photo">
+                                        <img src="{% static 'images/icon-new.gif' %}" alt="" class="sticker">
+                                        <img src="{% static 'images/nedeli/111.jpg' %}" alt="" class="product-item">
+                                        <div class="product-preview">
+                                            <span class="button">Быстрый просмотр</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-text">
+                                        <h2 class="product-text-name">{{ product.title }}</h2>
+                                        <div class="product-icons">
+                                            <div class="product-icons-item">
+                                                <span class="fa fa-heart-o"></span>
+                                                <span class="product-icons-item-text">В избранное</span>
+                                            </div>
+                                            <div class="product-icons-item">
+                                                <span class="fa fa-balance-scale"></span>
+                                                <span class="product-icons-item-text">В сравнение</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-details-availability">
+                                            <span><i class="fa fa-check"></i> В наличии</span>
+                                        </div>
+                                        <!--
+                                        <span class="product-details-price-old">
+                                            <b>720</b><small>руб.</small>
+                                        </span>
+                                        -->
+                                        <span class="product-details-price">
+                                            <b>{{ product.price }}</b>
+                                        </span>
+                                        <div class="product-details-buttons">
+                                            <div class="buttons">
+                                                <span class="button to-cart"><i class="fa fa-shopping-cart"></i>В корзину</span>
+                                                <span class="button"><i class="fa fa-cart"></i>Купить в 1 клик</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+
+    <section class="s-about">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2 class="text-center">О нас</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}
