@@ -34,51 +34,29 @@
                     {% endfor %}
                 </div>
 
-                {% if object.offers %}
-                <div class="col-sm-3 filter">
-                    <div class="filter-group">
-                        <h3>Цена</h3>
-                        <label for="minCost">От</label><input type="text" name="" value="0" id="minCost">
-                        <label for="maxCost">До</label><input type="text" name="" value="1000" id="maxCost">
-                        <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider"></div>
-                    </div>
+                {% if offers %}
+                <form action="" method="GET">
+                    <div class="col-sm-3 filter">
+                        <div class="filter-group">
+                            <h3>Цена</h3>
+                            <label for="minCost">От</label><input type="text" name="minCost" value="{{ price__min }}" id="minCost">
+                            <label for="maxCost">До</label><input type="text" name="maxCost" value="{{ price__max }}" id="maxCost">
+                            <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider"></div>
+                        </div>
 
-                    <div class="filter-group">
-                        <h3>Торговая марка</h3>
-                        <div class="check-group">
-                            <p><input type="checkbox" name="" value=""> Canon</p>
-                            <p><input type="checkbox" name="" value=""> Canon</p>
-                            <p><input type="checkbox" name="" value=""> Canon</p>
-                            <p><input type="checkbox" name="" value=""> Canon</p>
-                        </div>
+                        {% for field in form_search %}
+                            {% if field.name != 'minCost' and field.name != 'maxCost' %}
+                                <div class="filter-group">
+                                    <h3>{{ field.label }}</h3>
+                                    <div class="check-group">
+                                        <p>{{ field }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <button type="submit" name="button">Найти</button>
                     </div>
-                    <div class="filter-group">
-                        <h3>Наличие</h3>
-                        <div class="check-group">
-                            <p><input type="radio" name="" value=""> Все</p>
-                            <p><input type="radio" name="" value=""> В наличии</p>
-                            <p><input type="radio" name="" value=""> Под заказ</p>
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <h3>Разрядность</h3>
-                        <div class="check-group">
-                            <p><input type="checkbox" name="" value=""> 8</p>
-                            <p><input type="checkbox" name="" value=""> 10</p>
-                            <p><input type="checkbox" name="" value=""> 12</p>
-                            <p><input type="checkbox" name="" value=""> 14</p>
-                            <p><input type="checkbox" name="" value=""> 16</p>
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <h3>Количество функций</h3>
-                        <div class="check-group">
-                            <p><input type="checkbox" name="" value=""> До 200</p>
-                            <p><input type="checkbox" name="" value=""> От 200 до 300</p>
-                        </div>
-                    </div>
-                    <button type="button" name="button">Очистить</button>
-                </div>
+                </form>
                 {% endif %}
 
 
@@ -109,7 +87,7 @@
 
                     <div class="col-sm-12">
                         <ul class="products clearfix">
-                            {% for offer in object.offers %}
+                            {% for offer in offers %}
                                 <li class="product-wrapper">
                                     <a href="{{ offer.get_absolute_url }}" class="product">
                                         <div class="product-main">
