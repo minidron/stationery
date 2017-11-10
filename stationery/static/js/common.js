@@ -69,8 +69,8 @@ $(function() {
     });
 
     jQuery("#slider").slider({
-        min: parseInt(jQuery('#minCost').val()),
-        max: parseInt(jQuery('#maxCost').val()),
+        min: parseInt(jQuery('#minCost').data('price')),
+        max: parseInt(jQuery('#maxCost').data('price')),
         values: [parseInt(jQuery('#minCost').val()), parseInt(jQuery('#maxCost').val())],
         range: true,
         

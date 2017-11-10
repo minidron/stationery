@@ -1,5 +1,5 @@
 from django import forms
-from django.db.models import Max, Min
+from django.db.models import IntegerField, Case, Max, Min, Q, When
 from django.views.generic import DetailView, TemplateView
 
 from pages.models import Page
@@ -44,17 +44,34 @@ class CategoryView(DetailView):
                     .filter(property_values__products__categories=category)
                     .distinct())
 
-        # import ipdb; ipdb.set_trace()
+        form_search = self.get_search_form(properties)(
+            self.request.GET or None)
 
-        context.update({
-            'offers': offers,
-            'properties': properties,
-            'form_search': self.get_search_form(properties),
-        })
+        search_params = {}
 
         if prices['price__min'] and prices['price__max']:
             context['price__min'] = int(prices['price__min'])
             context['price__max'] = int(prices['price__max'])
+
+            if form_search.is_valid():
+                offers = offers.annotate(
+                    retail_price=Case(
+                        When(prices__price_type__sales_type=SalesType.RETAIL,
+                             then='prices__price'),
+                        output_field=IntegerField(),
+                    ))
+
+                data = form_search.cleaned_data
+                filter_price = (
+                    Q(retail_price__gte=data['minCost']) &
+                    Q(retail_price__lte=data['maxCost']))
+
+        result = offers.filter(filter_price, **search_params)
+        context.update({
+            'offers': result,
+            'properties': properties,
+            'form_search': form_search,
+        })
 
         return context
 

@@ -39,8 +39,8 @@
                     <div class="col-sm-3 filter">
                         <div class="filter-group">
                             <h3>Цена</h3>
-                            <label for="minCost">От</label><input type="text" name="minCost" value="{{ price__min }}" id="minCost">
-                            <label for="maxCost">До</label><input type="text" name="maxCost" value="{{ price__max }}" id="maxCost">
+                            <label for="minCost">От</label><input type="text" name="minCost" value="{{ form_search.minCost.value|default:price__min }}" data-price="{{ price__min }}" id="minCost">
+                            <label for="maxCost">До</label><input type="text" name="maxCost" value="{{ form_search.maxCost.value|default:price__max }}" data-price="{{ price__max }}" id="maxCost">
                             <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="slider"></div>
                         </div>
 
