@@ -1,5 +1,5 @@
 from django import forms
-from django.db.models import IntegerField, Case, Max, Min, Q, When
+from django.db.models import Count, IntegerField, Case, Max, Min, Q, When
 from django.views.generic import DetailView, TemplateView
 
 from pages.models import Page
@@ -47,27 +47,39 @@ class CategoryView(DetailView):
         form_search = self.get_search_form(properties)(
             self.request.GET or None)
 
-        search_params = {}
-
         if prices['price__min'] and prices['price__max']:
             context['price__min'] = int(prices['price__min'])
             context['price__max'] = int(prices['price__max'])
 
-            if form_search.is_valid():
-                offers = offers.annotate(
-                    retail_price=Case(
-                        When(prices__price_type__sales_type=SalesType.RETAIL,
-                             then='prices__price'),
-                        output_field=IntegerField(),
-                    ))
+        result = offers
+        if form_search.is_valid():
+            data = form_search.cleaned_data
+            result = result.annotate(
+                retail_price=Case(
+                    When(prices__price_type__sales_type=SalesType.RETAIL,
+                         then='prices__price'),
+                    output_field=IntegerField(),
+                ))
 
-                data = form_search.cleaned_data
-                filter_price = (
-                    Q(retail_price__gte=data['minCost']) &
-                    Q(retail_price__lte=data['maxCost']))
+            filter_prices = (
+                Q(retail_price__gte=data['minCost']) &
+                Q(retail_price__lte=data['maxCost']))
+            result = result.filter(filter_prices)
 
-        result = offers.filter(filter_price, **search_params)
+            filter_properties = []
+            for param_key, param_value in data.items():
+                if param_value and param_key not in ['minCost', 'maxCost']:
+                    filter_properties.append(param_value)
+
+            if filter_properties:
+                result = (result.filter(
+                        product__property_values__in=filter_properties)
+                                .annotate(
+                                    num_tags=Count('product__property_values'))
+                                .filter(num_tags=len(filter_properties)))
+
         context.update({
+            'test_offers': offers,
             'offers': result,
             'properties': properties,
             'form_search': form_search,
