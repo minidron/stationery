@@ -5,11 +5,20 @@ from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic import RedirectView, TemplateView
 
+from rest_framework import routers
+
 from pages.views import IndexView
+
+from odinass.views import SearchOfferViewSet
+
+
+router = routers.DefaultRouter()
+router.register(r'search_offer', SearchOfferViewSet)
 
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
+    url(r'^api/', include(router.urls, namespace='api')),
     url(r'^robots.txt$',
         TemplateView.as_view(
             template_name='robots.txt', content_type='text/plain')),

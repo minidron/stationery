@@ -12,7 +12,11 @@ from django.views.generic import View
 
 from celery.result import AsyncResult
 
+from rest_framework.viewsets import ReadOnlyModelViewSet
+
 from odinass.conf import settings as odinass_settings
+from odinass.models import Offer
+from odinass.serializers import SearchOfferSerializer, SearchOfferFilter
 from odinass.tasks import import_file
 from odinass.utils import ExportManager, ImportManager
 
@@ -142,3 +146,9 @@ class ExchangeView(View):
         Окончание обработки данных на сайте.
         """
         return self.success()
+
+
+class SearchOfferViewSet(ReadOnlyModelViewSet):
+    filter_class = SearchOfferFilter
+    queryset = Offer.objects.all()
+    serializer_class = SearchOfferSerializer

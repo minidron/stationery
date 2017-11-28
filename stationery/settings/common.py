@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django_extensions',
     'djangobower',
     'pipeline',
+    'rest_framework',
+    'django_filters',
     'lib',
     'mptt',
     'adminsortable2',
@@ -116,6 +118,7 @@ BOWER_COMPONENTS_ROOT = path('static')
 
 BOWER_INSTALLED_APPS = (
     'bootstrap#3.3',
+    'devbridge-autocomplete#1.4',
     'font-awesome#4.7',
     'jquery-ui#1.12',
     'owl.carousel#2.2',
@@ -165,6 +168,7 @@ PIPELINE = {
                 'bower_components/owl.carousel/dist/owl.carousel.min.js',
                 'bower_components/magnific-popup/dist/jquery.magnific-popup.min.js',  # NOQA
                 'bower_components/jquery-ui/jquery-ui.min.js',
+                'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
                 'js/common.js',
             ),
             'output_filename': 'js/scripts.js',
@@ -173,6 +177,18 @@ PIPELINE = {
     'COMPILERS': (
         'pipeline.compilers.coffee.CoffeeScriptCompiler',
         'pipeline.compilers.sass.SASSCompiler',
+    ),
+}
+# -----------------------------------------------------------------------------
+
+
+# API -------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    # 'DEFAULT_RENDERER_CLASSES': [
+    #     'rest_framework.renderers.JSONRenderer',
+    # ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
 # -----------------------------------------------------------------------------

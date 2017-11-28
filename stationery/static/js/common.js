@@ -115,19 +115,19 @@ $(function() {
 
 
   // фильтрация ввода в поля
-    jQuery('input').keypress(function(event){
-        var key, keyChar;
-        if(!event) var event = window.event;
+    // jQuery('input').keypress(function(event){
+    //     var key, keyChar;
+    //     if(!event) var event = window.event;
 
-        if (event.keyCode) key = event.keyCode;
-        else if(event.which) key = event.which;
+    //     if (event.keyCode) key = event.keyCode;
+    //     else if(event.which) key = event.which;
 
-        if(key==null || key==0 || key==8 || key==13 || key==9 || key==46 || key==37 || key==39 ) return true;
-        keyChar=String.fromCharCode(key);
+    //     if(key==null || key==0 || key==8 || key==13 || key==9 || key==46 || key==37 || key==39 ) return true;
+    //     keyChar=String.fromCharCode(key);
 
-        if(!/\d/.test(keyChar)) return false;
+    //     if(!/\d/.test(keyChar)) return false;
 
-    });
+    // });
 
     $('.view-product span').click(function() {
         var $elem = $(this);
@@ -137,4 +137,30 @@ $(function() {
         $productList.toggleClass('table-layout products');
     });
 
+});
+
+
+$(function() {
+    $('#search-offer').devbridgeAutocomplete({
+        serviceUrl: '/api/search_offer/',
+        paramName: 'title',
+        minChars: 2,
+        maxHeight: 'auto',
+        transformResult: function(response) {
+            return {
+                suggestions: $.map(JSON.parse(response), function(dataItem) {
+                    return { value: dataItem.title, data: {
+                        link: dataItem.url,
+                        price: dataItem.price_retail,
+                    }};
+                })
+            };
+        },
+        formatResult: function(suggestion, currentValue){
+            return suggestion.value + '<div class="price">' + suggestion.data.price + '</div>';
+        },
+        onSelect: function (suggestion) {
+            window.location.href = suggestion.data.link;
+        },
+    });
 });
