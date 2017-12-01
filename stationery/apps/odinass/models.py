@@ -47,6 +47,49 @@ class Category(MPTTModel):
                              .filter(product__categories=self))
 
 
+class Warehouse(models.Model):
+    """
+    Склад
+    """
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(
+        'название',
+        max_length=254, db_index=True)
+
+    class Meta:
+        default_related_name = 'warehouses'
+        ordering = ['title']
+        verbose_name = 'склад'
+        verbose_name_plural = 'склады'
+
+    def __str__(self):
+        return self.title
+
+
+class Property(models.Model):
+    """
+    Свойство
+    """
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(
+        'название',
+        max_length=254)
+    value_type = models.CharField(
+        'тип значений',
+        max_length=254, blank=True)
+
+    class Meta:
+        default_related_name = 'properties'
+        ordering = ['title']
+        verbose_name = 'свойство'
+        verbose_name_plural = 'свойства'
+
+    def __str__(self):
+        return self.title
+
+
 class Product(models.Model):
     """
     Товар
@@ -75,29 +118,6 @@ class Product(models.Model):
         ordering = ['title']
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
-
-    def __str__(self):
-        return self.title
-
-
-class Property(models.Model):
-    """
-    Свойство
-    """
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(
-        'название',
-        max_length=254)
-    value_type = models.CharField(
-        'тип значений',
-        max_length=254, blank=True)
-
-    class Meta:
-        default_related_name = 'properties'
-        ordering = ['title']
-        verbose_name = 'свойство'
-        verbose_name_plural = 'свойства'
 
     def __str__(self):
         return self.title
@@ -196,6 +216,29 @@ class Price(models.Model):
         if self.price:
             price = '%s %s' % (self.price, self.currency)
         return price
+
+
+class Rest(models.Model):
+    """
+    Остаток
+    """
+    value = models.IntegerField(
+        'остаток',
+        default=0)
+    warehouse = models.ForeignKey(
+        'odinass.Warehouse',
+        verbose_name='склад')
+    offer = models.ForeignKey(
+        'odinass.Offer',
+        verbose_name='предложение')
+
+    class Meta:
+        default_related_name = 'rests'
+        verbose_name = 'остаток'
+        verbose_name_plural = 'остатки'
+
+    def __str__(self):
+        return str(self.value)
 
 
 class Offer(models.Model):

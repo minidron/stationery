@@ -44,6 +44,10 @@ class ImportManager(object):
                     'parent': 'ТипыЦен',
                     'func_name': 'import_price_type',
                 },
+                'Склад': {
+                    'parent': 'Склады',
+                    'func_name': 'import_warehouse',
+                },
                 'Свойство': {
                     'parent': 'Свойства',
                     'func_name': 'import_property',
@@ -67,6 +71,14 @@ class ImportManager(object):
                 'Предложение': {
                     'parent': 'Предложения',
                     'func_name': 'import_price',
+                },
+            })
+
+        if 'rests' in file_path:
+            self._parse({
+                'Предложение': {
+                    'parent': 'Предложения',
+                    'func_name': 'import_rest',
                 },
             })
 
@@ -118,6 +130,16 @@ class ImportManager(object):
             stack = [(group, item)
                      for group in item.findall('Группы/Группа',
                                                node.nsmap)] + stack
+
+    def import_warehouse(self, node):
+        """
+        Загрузка Складов.
+        """
+        id = get_text(node.find('Ид', node.nsmap))
+        title = get_text(node.find('Наименование', node.nsmap))
+
+        instance, created = odinass_models.Warehouse.objects.update_or_create(
+            id=id, defaults={'title': title})
 
     def import_property(self, node):
         """
@@ -222,6 +244,22 @@ class ImportManager(object):
                     defaults={
                         'currency': currency,
                         'price': cost,
+                    })
+
+    def import_rest(self, node):
+        """
+        Загрузка остатков.
+        """
+        offer_ids = get_text(node.find('Ид', node.nsmap)).split('#')
+        for offer_id in offer_ids:
+            for rest in node.findall('Остатки/Остаток', node.nsmap):
+                warehouse_id = get_text(rest.find('Склад/Ид', node.nsmap))
+                odinass_models.Rest.objects.update_or_create(
+                    offer_id=offer_id,
+                    warehouse_id=warehouse_id,
+                    defaults={
+                        'value': int(get_text(rest.find('Склад/Количество',
+                                                        node.nsmap))),
                     })
 
 

@@ -3,10 +3,10 @@ from django.utils.safestring import mark_safe
 
 from mptt.admin import MPTTModelAdmin
 
-from odinass.models import Category, Offer, Product, Property, PriceType, Price
+from odinass import models as odinass_models
 
 
-@admin.register(Category)
+@admin.register(odinass_models.Category)
 class CategoryAdmin(MPTTModelAdmin):
     readonly_fields = [
         'id',
@@ -31,7 +31,15 @@ class CategoryAdmin(MPTTModelAdmin):
     )
 
 
-@admin.register(Property)
+@admin.register(odinass_models.Warehouse)
+class WarehouseAdmin(admin.ModelAdmin):
+    readonly_fields = [
+        'id',
+        'title',
+    ]
+
+
+@admin.register(odinass_models.Property)
 class PropertyAdmin(admin.ModelAdmin):
     readonly_fields = [
         'field_values',
@@ -63,7 +71,7 @@ class PropertyAdmin(admin.ModelAdmin):
     field_values.short_description = 'варианты значений'
 
 
-@admin.register(Product)
+@admin.register(odinass_models.Product)
 class ProductAdmin(admin.ModelAdmin):
     filter_horizontal = ('categories', )
 
@@ -109,7 +117,7 @@ class ProductAdmin(admin.ModelAdmin):
     field_properties.short_description = 'свойства'
 
 
-@admin.register(PriceType)
+@admin.register(odinass_models.PriceType)
 class PriceTypeAdmin(admin.ModelAdmin):
     list_display = [
         'title',
@@ -117,11 +125,12 @@ class PriceTypeAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Offer)
+@admin.register(odinass_models.Offer)
 class OfferAdmin(admin.ModelAdmin):
     readonly_fields = [
         'product',
         'field_prices',
+        'field_rests',
     ]
 
     def field_prices(self, instance):
@@ -131,7 +140,20 @@ class OfferAdmin(admin.ModelAdmin):
         return mark_safe('<br />'.join(['&middot; %s' % v for v in values]))
     field_prices.short_description = 'цены'
 
+    def field_rests(self, instance):
+        values = instance.rests.all()
+        if not values:
+            return ''
+        return mark_safe('<br />'.join([
+            '&middot; %s - %s' % (v.warehouse, v.value) for v in values]))
+    field_rests.short_description = 'остатки'
 
-@admin.register(Price)
+
+@admin.register(odinass_models.Price)
 class PriceAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(odinass_models.Rest)
+class RestAdmin(admin.ModelAdmin):
     pass
