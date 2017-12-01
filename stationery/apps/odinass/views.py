@@ -5,7 +5,6 @@ import time
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import Http404, HttpResponse
-from django.middleware import csrf
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
@@ -18,7 +17,7 @@ from odinass.conf import settings as odinass_settings
 from odinass.models import Offer
 from odinass.serializers import SearchOfferSerializer, SearchOfferFilter
 from odinass.tasks import import_file
-from odinass.utils import ExportManager, ImportManager
+# from odinass.utils import ImportManager
 
 
 logger = logging.getLogger(__name__)
@@ -125,20 +124,20 @@ class ExchangeView(View):
         if not os.path.exists(file_path):
             return self.failure('%s doesn\'t exist' % filename)
 
-        ImportManager(file_path)
+        # ImportManager(file_path)
 
-        # if AsyncResult(filename).state == 'PENDING':
-        #     import_file.apply_async((file_path,), task_id=filename)
+        if AsyncResult(filename).state == 'PENDING':
+            import_file.apply_async((file_path,), task_id=filename)
 
-        # if AsyncResult(filename).state in ['PENDING', 'STARTED']:
-        #     time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
-        #     return self.progress()
+        if AsyncResult(filename).state in ['PENDING', 'STARTED']:
+            time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
+            return self.progress()
 
-        if odinass_settings.DELETE_FILES_AFTER_IMPORT:
-            try:
-                os.remove(file_path)
-            except OSError:
-                logger.error('Can\'t delete %s after import' % filename)
+        # if odinass_settings.DELETE_FILES_AFTER_IMPORT:
+        #     try:
+        #         os.remove(file_path)
+        #     except OSError:
+        #         logger.error('Can\'t delete %s after import' % filename)
         return self.success()
 
     def catalog_complete(self, request, *args, **kwargs):
