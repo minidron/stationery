@@ -17,7 +17,7 @@ from odinass.conf import settings as odinass_settings
 from odinass.models import Offer
 from odinass.serializers import SearchOfferSerializer, SearchOfferFilter
 from odinass.tasks import import_file
-# from odinass.utils import ImportManager
+from odinass.utils import ImportManager
 
 
 logger = logging.getLogger(__name__)
@@ -124,14 +124,14 @@ class ExchangeView(View):
         if not os.path.exists(file_path):
             return self.failure('%s doesn\'t exist' % filename)
 
-        # ImportManager(file_path)
+        ImportManager(file_path)
 
-        if AsyncResult(filename).state == 'PENDING':
-            import_file.apply_async((file_path,), task_id=filename)
+        # if AsyncResult(filename).state == 'PENDING':
+        #     import_file.apply_async((file_path,), task_id=filename)
 
-        if AsyncResult(filename).state in ['PENDING', 'STARTED']:
-            time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
-            return self.progress()
+        # if AsyncResult(filename).state in ['PENDING', 'STARTED']:
+        #     time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
+        #     return self.progress()
 
         # if odinass_settings.DELETE_FILES_AFTER_IMPORT:
         #     try:
