@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+	<meta charset="utf-8">
+
+	<title>Канцелярский мир</title>
+	<meta name="description" content="">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<meta property="og:image" content="path/to/image.jpg">
+	<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-touch-icon-114x114.png">
+
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#000">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#000">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#000">
+
+	<style>body { opacity: 0; overflow-x: hidden; } html { background-color: #fff; }</style>
+
+</head>
+
+<body class="is_home">
+
+	<div id="modal_form" class="modal_form">
+		<span id="modal_close" class="modal_close"><i class="fa fa-close"></i></span>
+		<form id="form" class="registration-form">
+			<h4 class="text-center">Регистрация</h4>
+			<input type="text" placeholder="Логин"/>
+			<input type="password" placeholder="Пароль"/>
+			<input type="text" placeholder="E-mail"/>
+			<button class="button">Создать</button>
+			<p class="message">Уже зарегестрированы?<a href="#form2" id="go_login">Войти</a></p>
+		</form>
+	</div>
+	<div id="modal_form_2" class="modal_form_2">
+		<span id="modal_close_2" class="modal_close_2"><i class="fa fa-close"></i></span>
+		<form id="form2" class="login-form">
+			<h4>Войдите в систему</h4>
+			<input type="text" placeholder="Логин"/>
+			<input type="password" placeholder="Пароль"/>
+			<button class="button">Войти</button>
+			<p class="message">Не зарегестрированы? <a href="#form" id="go">Создать аккаунт</a></p>
+		</form>
+	</div>
+	<div id="overlay" class="overlay"></div>
+
+	<!--
+	////////////////////////
+	////// MAIN MENU //////
+	//////////////////////
+	-->
+
+	<div class="header">
+
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-sm-3">
+					<a href="#"><img class="logo" src="img/logo.jpg"></a>
+					<p class="h-phone">8(800)000-00-00</p>
+					<p class="h-time">Пн-пт с 9:00 до 20:00</p>
+				</div>
+
+				<div class="col-sm-6">
+					<h1 class="h-heading text-center">Все для творчества, школы и офиса</h1>
+					<div class="h-group-search">
+						<input class="h-search" type="text" name="search" placeholder="Введите код или название товара...">
+						<a href="#" class="h-search-btn"><i class="fa fa-search" aria-hidden="true"></i></a>
+					</div>
+				</div>
+
+				<div class="col-sm-3">
+					<a href="#form" id="go" class="registration"><i class="fa fa-user-circle-o" aria-hidden="true"></i>Вход/регистрация</a>
+					<a href="order.html" class="basket"><i class="fa fa-shopping-basket" aria-hidden="true"></i>1 235 руб</a>
+				</div>
+
+				<div class="col-sm-12 main-menu">
+					<ul class="navbar main-menu-list">
+						<li class="main-submenu"><a href="category.html"><i class="fa fa-bars" aria-hidden="true"></i>Каталог товаров</a>
+							<ul class="main-submenu-list">
+								<div class="container">
+									<div class="row">
+										<div class="col-sm-9 main-submenu-list-group">
+											<li><a href="#"><img src="img/lists/бумажная продукция.jpg" alt=""><p>Бумажная продукция</p></a></li>
+											<li><a href="#"><img src="img/lists/фотобумага.jpg" alt=""><p>Фото бумага и пленки</p></a></li>
+											<li><a href="#"><img src="img/lists/фотоальбомы фоторамки.jpg" alt=""><p>Фото альбомы и фоторамки</p></a></li>
+											<li><a href="#"><img src="img/lists/канцтовары.jpg" alt=""><p>Товары для офиса, канц.товары</p></a></li>
+											<li><a href="#"><img src="img/lists/писменные принадлежности.png" alt=""><p>Письменные и чертежные принадлежности</p></a></li>
+											<li><a href="#"><img src="img/lists/папки и архив.jpg" alt=""><p>Фото альбомы и фоторамки</p></a></li>
+											<li><a href="#"><img src="img/lists/бумажная продукция.jpg" alt=""><p>Папки и архивация</p></a></li>
+											<li><a href="#"><img src="img/lists/демонстрационное оборуд.jpg" alt=""><p>Демонстрационное<br> оборудование</p></a></li>
+											<li><a href="#"><img src="img/lists/расх.jpg" alt=""><p>Офисная техника и расходные материалы</p></a></li>
+											<li><a href="#"><img src="img/lists/мебель.png" alt=""><p>Мебель</p></a></li>
+											<li><a href="#"><img src="img/lists/товары для школы.jpg" alt=""><p>Товары для школы</p></a></li>
+											<li><a href="#"><img src="img/lists/игры детские.jpg" alt=""><p>Товары для детей, книги</p></a></li>
+											<li><a href="#"><img src="img/lists/худ школа.jpg" alt=""><p>Художественные материалы</p></a></li>
+											<li><a href="#"><img src="img/lists/творчество.jpg" alt=""><p>Рукоделие и творчество</p></a></li>
+											<li><a href="#"><img src="img/lists/suveniry.png" alt=""><p>Подарки и сувениры</p></a></li>
+											<li><a href="#"><img src="img/lists/хозтовары.png" alt=""><p>Хоз.товары и паковочные материалы</p></a></li>
+										</div>
+										<div class="col-sm-3 main-submenu-list-group-sale">
+											<li><a href="#"><img src="img/lists/распродажа.jpg" alt=""><p>Распродажа</p></a></li>
+										</div>
+									</div>
+								</div>
+							</ul>
+						</li>
+						<li><a href="#"><i class="fa fa-address-card-o" aria-hidden="true"></i>О компании</a></li>
+						<li><a href="#"><i class="fa fa-male" aria-hidden="true"></i>Физ. лицам</a></li>
+						<li><a href="#"><i class="fa fa-address-card-o" aria-hidden="true"></i>Юр. лицам</a></li>
+						<li><a href="#"><i class="fa fa-handshake-o" aria-hidden="true"></i>Оптовикам</a></li>
+						<li><a href="#"><i class="fa fa-address-book-o" aria-hidden="true"></i>Контакты</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+	<!--
+	////////////////////////////
+	////// END MAIN MENU //////
+	//////////////////////////
+	-->
+
+  <section class="s-busket">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul class="status-buy">
+          	<li class="buy-step">
+          		<span>Ваша корзина <i class="fa fa-hand-o-right"></i></span>
+          	</li>
+          	<li class="buy-step">
+          		<span>Авторизация <i class="fa fa-hand-o-right"></i></span>
+          	</li>
+          	<li class="buy-step">
+          		<span>Способ оплаты <i class="fa fa-hand-o-right"></i></span>
+          	</li>
+          	<li class="buy-step">
+          		<span>Подтверждение заказа</span>
+          	</li>
+          </ul>
+        </div>
+        <div class="col-sm-12 ref">
+          <div class="col-sm-6">
+            <p class="ref-c">Товар</p>
+						<div class="col-sm-4 tov">
+							<img src="img/tov/step.jpg">
+						</div>
+						<div class="col-sm-8 tov">
+							<span>Степлер №24/6 OMAX до 20 листов, серо-черный</span>
+							<span class="l"><a href="#">Удалить</a> / <a href="#">В избранное</a></span>
+						</div>
+          </div>
+          <div class="col-sm-2">
+            <p class="ref-c">Цена</p>
+						<span>153 руб.</span>
+          </div>
+          <div class="col-sm-2">
+            <p class="ref-c">Количество</p>
+						<span>4</span>
+          </div>
+          <div class="col-sm-2">
+            <p class="ref-c">Сумма</p>
+						<span>153 руб.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="container-fluid footer">
+
+		<div class="subs">
+			<h2>Подпишитесь на новости и получайте скидки!</h2>
+			<div class="subs-group">
+				<input type="text" name="" placeholder="Введите e-mail">
+				<button type="button" name="button">Подписаться</button>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3 footer-group">
+					<h4>Помощь покупателю</h4>
+					<ul>
+						<li>Как зарегистрироваться</li>
+						<li>Как сделать заказ</li>
+						<li>Оплата</li>
+						<li>Доставка</li>
+						<li>Самовывоз</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-group">
+					<h4>Информация для покупателей</h4>
+					<ul>
+						<li><a href="simple-page.html">Политика конфеденциальности</a></li>
+						<li>Гарантии</li>
+						<li>Обмен и возврат</li>
+						<li>Скидочные карты</li>
+						<li>Оптовикам</li>
+						<li>Физ.лицам</li>
+						<li>Юр.лицам</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-group">
+					<h4>О компании</h4>
+					<ul>
+						<li>Контакты</li>
+						<li>О нас</li>
+					</ul>
+				</div>
+				<div class="col-sm-3 footer-group">
+					<h4>Связаться с нами</h4>
+					<ul>
+						<li><i class="fa fa-phone" aria-hidden="true">&nbsp;8(800)000-00-00</i></li>
+						<li><i class="fa fa-envelope-o" aria-hidden="true">&nbsp;Info@kancmiropt.ru</i></li>
+					</ul>
+					<h4>Мы в социальных сетях</h4>
+					<div class="social">
+						<i class="fa fa-odnoklassniki" aria-hidden="true"></i>
+						<i class="fa fa-vk" aria-hidden="true"></i>
+						<i class="fa fa-facebook" aria-hidden="true"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<link rel="stylesheet" href="css/main.min.css">
+	<script src="js/scripts.min.js"></script>
+
+</body>
+</html>

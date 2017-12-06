@@ -157,3 +157,16 @@ class PriceAdmin(admin.ModelAdmin):
 @admin.register(odinass_models.Rest)
 class RestAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(odinass_models.Log)
+class LogAdmin(admin.ModelAdmin):
+    """
+    Админка для логирования 1С
+    """
+    list_display = [
+        'created',
+        'filename',
+        'action',
+        'status',
+    ]

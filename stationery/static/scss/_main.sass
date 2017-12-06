@@ -958,3 +958,159 @@ body
 					color: $accent
 				.active
 					color: #ccc
+
+.s-cart
+	margin-bottom: 30px
+	.cart
+		border: 1px solid $accent
+		background-color: #fff
+		height: 640px
+		.rate
+			.active
+				color: $accent
+		.main-photo
+			width: 350px
+			height: auto
+			display: block
+			margin: 0 25%
+		.owl-item
+			margin: 0 10px
+			margin-top: 15px
+			.product-wrapper-filter
+				display: block
+				width: 100%
+				float: left
+				transition: width .2s
+				.product
+					display: block
+					border: 1px solid $accent
+					border-radius: 3px
+					position: relative
+					background: #fff
+					margin: 0 20px 20px 0
+					text-decoration: none
+					color: #474747
+					z-index: 0
+					&:hover
+						z-index: 1
+						.product-photo
+							img
+								transform: scale(1.05)
+							.product-preview
+								transform: translateY(0)
+								opacity: 1
+					&-photo
+						position: relative
+						padding-bottom: 80%
+						overflow: hidden
+						.product-item
+							position: absolute
+							top: 0
+							bottom: 0
+							left: 0
+							right: 0
+							max-width: 80%
+							max-height: 80%
+							margin: auto
+							transition: transform .4s ease-out
+		.owl-nav
+			position: absolute
+			top: 0
+			width: 100%
+			z-index: 2
+			> div
+				position: absolute
+				top: 50px
+				color: #999
+				font-size: 40px
+				transition: opasity .5s ease
+				padding: 0 10px
+				&:hover
+					opacity: .6
+				&.owl-prev
+					left: -60px
+				&.owl-next
+					right: -60px
+		&-l
+			border: 1px solid $accent
+			background-color: #fff
+			height: 640px
+			p
+				text-align: center
+				.fa
+					margin-right: 10px
+					color: $accent
+					font-size: 22px
+			.cen
+				text-align: center
+				font-size: 20px
+			.button
+				display: inline-block
+				width: 100%
+				margin: 10px 0
+				background: $accent
+				color: #fff
+				text-align: center
+				border: 0
+				padding: 10px 0
+				border-radius: 20px
+				text-shadow: 1px 1px 1px rgba(0, 0, 0, .1)
+				box-shadow: 1px 1px 10px rgba(0, 0, 0, .4)
+				cursor: pointer
+
+.harak
+	.loly
+		display: inline-block !important
+	.tabs__content
+		display: none
+		background-color: #fff
+		border: 1px solid $accent
+		margin-bottom: 30px
+		p
+			padding-left: 75px
+		h4
+			padding-left: 75px
+		&.active
+			display: block
+	.conta
+		li
+			display: block !important
+			font-size: 18px !important
+	.tabs__caption
+		background-color: #fff
+		border: 1px solid $accent
+		padding: 0
+		li
+			display: inline-block
+			padding: 0 50px
+			font-size: 26px
+			&:hover
+				background-color: rgba($accent, 0.4)
+			&.active
+				color: $accent
+
+.s-busket
+	.status-buy
+		padding: 0 10px
+		background-color: #fff
+		border-radius: 10px
+		text-align: center
+		.buy-step
+			display: inline-block
+			padding: 10px 5%
+		.active
+			background-color: rgba($accent, 0.4)
+	.ref
+		background-color: #fff
+		border-radius: 10px
+		margin-bottom: 30px
+		.tov
+			padding: 0
+			img
+				width: 100%
+			span
+				padding: 10px
+			.l
+				display: block
+		&-c
+			border-bottom: 1px solid $accent

@@ -14,7 +14,7 @@ from celery.result import AsyncResult
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from odinass.conf import settings as odinass_settings
-from odinass.models import Offer
+from odinass.models import ActionLog, StatusLog, Log, Offer
 from odinass.serializers import SearchOfferSerializer, SearchOfferFilter
 from odinass.tasks import import_file
 from odinass.utils import ImportManager
@@ -124,21 +124,31 @@ class ExchangeView(View):
         if not os.path.exists(file_path):
             return self.failure('%s doesn\'t exist' % filename)
 
-        ImportManager(file_path)
+        try:
+            import_log = Log.objects.get(filename=filename)
+        except Log.DoesNotExist:
+            import_log = Log.objects.create(
+                action=ActionLog.IMPORT, status=StatusLog.PROGRESS,
+                filename=filename)
+            import_file.apply_async((file_path,))
 
-        # if AsyncResult(filename).state == 'PENDING':
-        #     import_file.apply_async((file_path,), task_id=filename)
+        if import_log:
+            if import_log.status == StatusLog.PROGRESS:
+                time.sleep(5)  # Небольшая задержка, чтоб 1С не спамил
+                return self.progress()
 
-        # if AsyncResult(filename).state in ['PENDING', 'STARTED']:
-        #     time.sleep(5)  # Небольшая задержка с ответом, чтоб 1С не спамил
-        #     return self.progress()
+            elif import_log.status == StatusLog.FINISHED:
+                if odinass_settings.DELETE_FILES_AFTER_IMPORT:
+                    try:
+                        os.remove(file_path)
+                    except OSError:
+                        logger.error('Cant delete %s after import' % filename)
+                return self.success()
 
-        # if odinass_settings.DELETE_FILES_AFTER_IMPORT:
-        #     try:
-        #         os.remove(file_path)
-        #     except OSError:
-        #         logger.error('Can\'t delete %s after import' % filename)
-        return self.success()
+            elif import_log.status == StatusLog.FAILD:
+                return self.failure()
+
+        return self.failure()
 
     def catalog_complete(self, request, *args, **kwargs):
         """

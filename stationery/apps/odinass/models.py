@@ -278,3 +278,71 @@ class Offer(models.Model):
     def features(self):
         return (PropertyValue.objects
                              .filter(product=self.product))
+
+
+class ActionLog(object):
+    """
+    Список операций для логирования
+    """
+    IMPORT = 1
+    EXPORT = 2
+
+    CHOICES = (
+        (IMPORT, 'импорт'),
+        (EXPORT, 'экспорт'),
+    )
+
+    CHOICES_MACHINE_NAME = {
+        IMPORT: 'import',
+        EXPORT: 'export',
+    }
+
+
+class StatusLog(object):
+    """
+    Список статусов для логирования
+    """
+    PROGRESS = 1
+    FINISHED = 2
+    FAILD = 3
+
+    CHOICES = (
+        (PROGRESS, 'обрабатывается'),
+        (FINISHED, 'завершено'),
+        (FAILD, 'завершено с ошибкой'),
+    )
+
+    CHOICES_MACHINE_NAME = {
+        PROGRESS: 'progress',
+        FINISHED: 'finished',
+        FAILD: 'faild',
+    }
+
+
+class Log(models.Model):
+    """
+    Логирование импорта и экспорта с 1С
+    """
+    action = models.IntegerField(
+        'действие',
+        choices=ActionLog.CHOICES, blank=True, null=True)
+
+    status = models.IntegerField(
+        'статус',
+        choices=StatusLog.CHOICES, default=StatusLog.PROGRESS)
+
+    filename = models.CharField(
+        'название файла',
+        max_length=254, db_index=True)
+
+    created = models.DateTimeField(
+        'время создания',
+        auto_now_add=True, editable=False, null=False, blank=False)
+
+    class Meta:
+        ordering = ['created']
+        verbose_name = 'лог'
+        verbose_name_plural = 'логи'
+
+    def __str__(self):
+        return str(self.created)

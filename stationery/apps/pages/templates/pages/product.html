@@ -7,42 +7,45 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <p>
-                        <a href="/">Главная</a> /
-                        {% for ancestor in object.product.categories.first.get_ancestors %}
-                            <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a> /
-                        {% endfor %}
-                        <a href="{{ object.product.categories.first.get_absolute_url }}">{{ object.product.categories.first }}</a> /
-                        <span class="active">{{ object.title }}</span>
-                    </p>
+                    <div class="bread-crumbs">
+                        <p>
+                            <a href="/">Главная</a> /
+                            {% for ancestor in object.product.categories.first.get_ancestors %}
+                                <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a> /
+                            {% endfor %}
+                            <a href="{{ object.product.categories.first.get_absolute_url }}">{{ object.product.categories.first }}</a> /
+                            <span class="active">{{ object.title }}</span>
+                        </p>
+                    </div>
                     <div class="col-sm-8 cart">
                         <h2 class="h2">{{ object.title }}</h2>
-                        <!--<span><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> / 13 Отзывов</span>-->
-                        <img src="{% static 'images/tov/step.jpg' %}" alt="">
-
+                        <!--
+                        <span class="rate"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> / <a href="#">13 Отзывов</a></span>
+                        -->
+                        <img class="main-photo" src="{% static 'images/tov/step.jpg' %}" alt="">
                         <div class="col-sm-10 col-sm-offset-1">
                             <!--
                             <div class="owl-carousel cart-prices">
                                 <div class="cart-price">
-                                    <img src="{% static 'images/tov/step.jpg' %}">
+                                    <img src="img/tov/step.jpg">
                                 </div>
                                 <div class="cart-price">
-                                    <img src="{% static 'images/tov/step.jpg' %}">
+                                    <img src="img/tov/step.jpg">
                                 </div>
                                 <div class="cart-price">
-                                    <img src="{% static 'images/tov/step.jpg' %}">
+                                    <img src="img/tov/step.jpg">
                                 </div>
                                 <div class="cart-price">
-                                    <img src="{% static 'images/tov/step.jpg' %}">
+                                    <img src="img/tov/step.jpg">
                                 </div>
                                 <div class="cart-price">
-                                    <img src="{% static 'images/tov/step.jpg' %}">
+                                    <img src="img/tov/step.jpg">
                                 </div>
                                 <div class="cart-price">
-                                    <img src="{% static 'images/tov/step.jpg' %}">
+                                    <img src="img/tov/step.jpg">
                                 </div>
                                 <div class="cart-price">
-                                    <img src="{% static 'images/tov/step.jpg' %}">
+                                    <img src="img/tov/step.jpg">
                                 </div>
                             </div>
                             -->
@@ -52,16 +55,22 @@
                         <p class="cen">Цена: {{ object.price }}</p><hr>
                         <a href="#" class="button">В корзину</a>
                         <a href="#" class="button">Заказать в 1 клик</a><hr>
-                        {# <p class="dos"><i class="fa fa-check"></i>В наличии (1536 шт.)</p> #}
+                        <!--
+                        <p class="dos"><i class="fa fa-check"></i>В наличии (1536 шт.)</p>
+                        -->
                         <p class="dos">Как получить товар?</p>
                         <p class="dos"><i class="fa fa-child"></i>самовывоз</p>
                         <p class="dos"><i class="fa fa-car"></i>доставка</p><hr>
                         <p>Код: {{ object.product.article }}</p>
+                        <p>Вес: 0.2</p>
+                        <p>Объем: 0.0008</p>
+                        <p>Партия / упаковка: 1/40/80</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
     <section class="harak">
         <div class="container">
             <div class="row">
@@ -83,7 +92,7 @@
                             {% endif %}
                         </div>
                         <!--
-                         <div class="tabs__content">
+                        <div class="tabs__content">
                             <div class="blok-otziv">
                                 <div class="col-sm-3">
                                     <h4><b>Александ</b></h4>
@@ -104,8 +113,8 @@
                             <p class="otziv">Иногда приходилось скреплять очень большое количество листов бумаги. И мне и нашим коллегам приходилось испытывать неудобства, так как приходилось выдумывать некоторые неловкие способы чтобы скрепить большой документ. Начальство по заявкам приобрело нам этот прибор, это не обычный привычный взгляду степлер, это качественный удобный на большой...</p>
                             </div>
                             </div> 
-                         </div>
-                         -->
+                        </div>
+                        -->
                     </div>
                 </div>
             </div>
