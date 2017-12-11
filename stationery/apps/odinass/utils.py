@@ -1,4 +1,5 @@
 from io import BytesIO
+import os
 
 from django.utils import timezone
 
@@ -34,53 +35,59 @@ class ImportManager(object):
     """
     def __init__(self, file_path):
         self.file_path = file_path
-        if 'import' in file_path:
-            self._parse({
-                'Группы': {
-                    'parent': 'Классификатор',
-                    'func_name': 'import_groups',
-                },
-                'ТипЦены': {
-                    'parent': 'ТипыЦен',
-                    'func_name': 'import_price_type',
-                },
-                'Склад': {
-                    'parent': 'Склады',
-                    'func_name': 'import_warehouse',
-                },
-                'Свойство': {
-                    'parent': 'Свойства',
-                    'func_name': 'import_property',
-                },
-                'Товар': {
-                    'parent': 'Товары',
-                    'func_name': 'import_product',
-                },
-            })
+        filename = os.path.basename(file_path)
+        log = odinass_models.Log.objects.get(filename=filename)
+        try:
+            if 'import' in file_path:
+                self._parse({
+                    'Группы': {
+                        'parent': 'Классификатор',
+                        'func_name': 'import_groups',
+                    },
+                    'ТипЦены': {
+                        'parent': 'ТипыЦен',
+                        'func_name': 'import_price_type',
+                    },
+                    'Склад': {
+                        'parent': 'Склады',
+                        'func_name': 'import_warehouse',
+                    },
+                    'Свойство': {
+                        'parent': 'Свойства',
+                        'func_name': 'import_property',
+                    },
+                    'Товар': {
+                        'parent': 'Товары',
+                        'func_name': 'import_product',
+                    },
+                })
 
-        if 'offers' in file_path:
-            self._parse({
-                'Предложение': {
-                    'parent': 'Предложения',
-                    'func_name': 'import_offer',
-                },
-            })
+            if 'offers' in file_path:
+                self._parse({
+                    'Предложение': {
+                        'parent': 'Предложения',
+                        'func_name': 'import_offer',
+                    },
+                })
 
-        if 'prices' in file_path:
-            self._parse({
-                'Предложение': {
-                    'parent': 'Предложения',
-                    'func_name': 'import_price',
-                },
-            })
+            if 'prices' in file_path:
+                self._parse({
+                    'Предложение': {
+                        'parent': 'Предложения',
+                        'func_name': 'import_price',
+                    },
+                })
 
-        if 'rests' in file_path:
-            self._parse({
-                'Предложение': {
-                    'parent': 'Предложения',
-                    'func_name': 'import_rest',
-                },
-            })
+            if 'rests' in file_path:
+                self._parse({
+                    'Предложение': {
+                        'parent': 'Предложения',
+                        'func_name': 'import_rest',
+                    },
+                })
+        except Exception:
+            log.status = odinass_models.StatusLog.FAILD
+        log.save()
 
     def _parse(self, tags):
         tree = ET.iterparse(self.file_path, events=('start', 'end'))
