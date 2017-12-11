@@ -9,15 +9,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 
-from celery.result import AsyncResult
-
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from odinass.conf import settings as odinass_settings
 from odinass.models import ActionLog, StatusLog, Log, Offer
 from odinass.serializers import SearchOfferSerializer, SearchOfferFilter
 from odinass.tasks import import_file
-from odinass.utils import ImportManager
 
 
 logger = logging.getLogger(__name__)

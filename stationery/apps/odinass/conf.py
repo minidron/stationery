@@ -4,7 +4,7 @@ from django.conf import settings as django_settings
 
 
 ODINASS = {
-    '1C_DELETE_FILES_AFTER_IMPORT': True,
+    'DELETE_FILES_AFTER_IMPORT': True,
     'EXPORT_FILE_LIMIT': 0,
     'IMPORT_FILE_LIMIT': 100000,
     'UPLOAD_ROOT': '1c_tmp',
@@ -14,8 +14,8 @@ ODINASS = {
 
 class AppSettings(object):
     DELETE_FILES_AFTER_IMPORT = getattr(
-        django_settings, '1C_DELETE_FILES_AFTER_IMPORT',
-        ODINASS['1C_DELETE_FILES_AFTER_IMPORT'])
+        django_settings, 'DELETE_FILES_AFTER_IMPORT',
+        ODINASS['DELETE_FILES_AFTER_IMPORT'])
 
     EXPORT_FILE_LIMIT = getattr(
         django_settings,
