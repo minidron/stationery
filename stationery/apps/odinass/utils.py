@@ -85,6 +85,7 @@ class ImportManager(object):
                         'func_name': 'import_rest',
                     },
                 })
+            log.status = odinass_models.StatusLog.FINISHED
         except Exception:
             log.status = odinass_models.StatusLog.FAILD
         log.save()
