@@ -28,10 +28,15 @@ class Category(MPTTModel):
     image = models.ImageField(
         'изображене',
         upload_to='category/', null=True, blank=True)
+    order = models.PositiveIntegerField(
+        default=0, blank=False, null=False)
+
+    class MPTTMeta:
+        order_insertion_by = ['order']
 
     class Meta:
         default_related_name = 'categories'
-        ordering = ['title']
+        ordering = ['order']
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
 
@@ -98,7 +103,7 @@ class Product(models.Model):
         primary_key=True, default=uuid.uuid4, editable=False)
 
     title = models.CharField(
-        'название', max_length=254)
+        'название', max_length=508)
 
     article = models.CharField(
         'артикул', blank=True, max_length=254)
@@ -340,7 +345,7 @@ class Log(models.Model):
         auto_now_add=True, editable=False, null=False, blank=False)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
         verbose_name = 'лог'
         verbose_name_plural = 'логи'
 

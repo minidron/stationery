@@ -1,6 +1,8 @@
 from io import BytesIO
 import os
+import re
 
+from django.db import IntegrityError
 from django.utils import timezone
 
 from lxml import etree as ET
@@ -33,10 +35,12 @@ class ImportManager(object):
     """
     Импорт данных 1С CommerceML
     """
-    def __init__(self, file_path):
+    def __init__(self, file_path, logging=False):
         self.file_path = file_path
         filename = os.path.basename(file_path)
-        log = odinass_models.Log.objects.get(filename=filename)
+        if logging:
+            log = odinass_models.Log.objects.get(filename=filename)
+
         try:
             if 'import' in file_path:
                 self._parse({
@@ -85,10 +89,16 @@ class ImportManager(object):
                         'func_name': 'import_rest',
                     },
                 })
-            log.status = odinass_models.StatusLog.FINISHED
-        except Exception:
-            log.status = odinass_models.StatusLog.FAILD
-        log.save()
+
+            if logging:
+                log.status = odinass_models.StatusLog.FINISHED
+        except Exception as e:
+            if logging:
+                log.status = odinass_models.StatusLog.FAILD
+            else:
+                raise e
+        if logging:
+            log.save()
 
     def _parse(self, tags):
         tree = ET.iterparse(self.file_path, events=('start', 'end'))
@@ -128,12 +138,21 @@ class ImportManager(object):
             else:
                 parent = None
 
+            defaults = {
+                'parent_id': (get_text(parent.find('Ид', node.nsmap))
+                              if parent is not None else None)}
+
+            title = get_text(item.find('Наименование', node.nsmap))
+            order_raw = re.match(r'^\d+\.?', title)
+            if order_raw:
+                title = title[order_raw.end():]
+                order = re.findall(r'\d+', order_raw.group())[0]
+                defaults['order'] = int(order)
+            defaults['title'] = title
+
             odinass_models.Category.objects.update_or_create(
                 id=get_text(item.find('Ид', node.nsmap)),
-                defaults={
-                    'title': get_text(item.find('Наименование', node.nsmap)),
-                    'parent_id': (get_text(parent.find('Ид', node.nsmap))
-                                  if parent is not None else None)})
+                defaults=defaults)
 
             stack = [(group, item)
                      for group in item.findall('Группы/Группа',
@@ -177,13 +196,11 @@ class ImportManager(object):
         """
         details = node.findall(
             'ЗначенияРеквизитов/ЗначениеРеквизита/Наименование', node.nsmap)
-
-        title = get_text(node.find('Наименование', node.nsmap))
+        node_title = [nd for nd in details
+                      if nd.text == 'Полное наименование'].pop()
+        title = get_text(node_title.getparent().find('Значение', node.nsmap))
         if not title:
-            node_title = [nd for nd in details
-                          if nd.text == 'Полное наименование'].pop()
-            title = get_text(
-                node_title.getparent().find('Значение', node.nsmap))
+            return
 
         id = get_text(node.find('Ид', node.nsmap))
         node_article = [nd for nd in details if nd.text == 'Код'].pop()
@@ -197,14 +214,21 @@ class ImportManager(object):
         for value in node.findall(property_value, node.nsmap):
             pv_id = get_text(value.find('Значение', node.nsmap))
             if pv_id:
-                instance.property_values.add(
-                    odinass_models.PropertyValue.objects.get(
-                        pk=pv_id,
-                        property_id=get_text(value.find('Ид', node.nsmap))))
+                try:
+                    instance.property_values.add(
+                        odinass_models.PropertyValue.objects.get(
+                            pk=pv_id,
+                            property_id=get_text(value.find('Ид', node.nsmap)))
+                    )
+                except odinass_models.PropertyValue.DoesNotExist:
+                    pass
 
         for group in node.findall('Группы/Ид', node.nsmap):
-            instance.categories.add(
-                odinass_models.Category.objects.get(pk=get_text(group)))
+            try:
+                instance.categories.add(
+                    odinass_models.Category.objects.get(pk=get_text(group)))
+            except odinass_models.Category.DoesNotExist:
+                pass
 
     def import_offer(self, node):
         """
@@ -246,13 +270,16 @@ class ImportManager(object):
                 currency = get_text(price.find('Валюта', node.nsmap))
                 cost = float(get_text(price.find('ЦенаЗаЕдиницу', node.nsmap)))
 
-                odinass_models.Price.objects.update_or_create(
-                    offer_id=id,
-                    price_type_id=price_type,
-                    defaults={
-                        'currency': currency,
-                        'price': cost,
-                    })
+                try:
+                    odinass_models.Price.objects.update_or_create(
+                        offer_id=id,
+                        price_type_id=price_type,
+                        defaults={
+                            'currency': currency,
+                            'price': cost,
+                        })
+                except IntegrityError:
+                    pass
 
     def import_rest(self, node):
         """
@@ -262,13 +289,16 @@ class ImportManager(object):
         for offer_id in offer_ids:
             for rest in node.findall('Остатки/Остаток', node.nsmap):
                 warehouse_id = get_text(rest.find('Склад/Ид', node.nsmap))
-                odinass_models.Rest.objects.update_or_create(
-                    offer_id=offer_id,
-                    warehouse_id=warehouse_id,
-                    defaults={
-                        'value': int(get_text(rest.find('Склад/Количество',
-                                                        node.nsmap))),
-                    })
+                try:
+                    odinass_models.Rest.objects.update_or_create(
+                        offer_id=offer_id,
+                        warehouse_id=warehouse_id,
+                        defaults={
+                            'value': int(float(get_text(
+                                rest.find('Склад/Количество', node.nsmap)))),
+                        })
+                except IntegrityError:
+                    pass
 
 
 class ExportManager(object):

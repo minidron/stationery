@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from mptt.admin import MPTTModelAdmin
+from mptt.admin import DraggableMPTTAdmin
 
 from odinass import models as odinass_models
 
 
 @admin.register(odinass_models.Category)
-class CategoryAdmin(MPTTModelAdmin):
+class CategoryAdmin(DraggableMPTTAdmin):
     readonly_fields = [
         'id',
         'title',
@@ -26,6 +26,7 @@ class CategoryAdmin(MPTTModelAdmin):
             'fields': (
                 'id',
                 'parent',
+                'order',
             ),
         }),
     )
