@@ -9,6 +9,7 @@ stationery/static/coffee/*/*.js
 stationery/static/scss/*.css
 stationery/static/scss/*/*.css
 
+/.ipynb_checkpoints/
 .idea
 /media/*
 /cover/
@@ -28,6 +29,7 @@ __pycache__/
 # Packages
 *.egg
 *.egg-info
+*.ipynb
 dist
 build
 eggs
