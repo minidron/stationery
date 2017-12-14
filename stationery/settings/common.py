@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'mptt',
     'adminsortable2',
     'ckeditor',
+    'sorl.thumbnail',
     'odinass',
     'pages',
 )

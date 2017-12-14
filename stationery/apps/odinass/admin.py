@@ -1,7 +1,12 @@
 from django.contrib import admin
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from mptt.admin import DraggableMPTTAdmin
+
+from sorl.thumbnail.admin import AdminImageMixin
+
+from lib.utils import l
 
 from odinass import models as odinass_models
 
@@ -73,8 +78,20 @@ class PropertyAdmin(admin.ModelAdmin):
 
 
 @admin.register(odinass_models.Product)
-class ProductAdmin(admin.ModelAdmin):
-    filter_horizontal = ('categories', )
+class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
+    list_display = [
+        'title',
+        'article',
+    ]
+
+    search_fields = [
+        'title',
+        'article',
+    ]
+
+    filter_horizontal = (
+        'categories',
+    )
 
     readonly_fields = [
         'article',
@@ -89,6 +106,7 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': (
                 'title',
                 'categories',
+                'image',
                 'field_offers',
                 'field_properties',
             ),
@@ -102,10 +120,12 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
     def field_offers(self, instance):
-        values = instance.offers.values_list('title', flat=True)
+        values = instance.offers.all()
         if not values:
             return ''
-        return mark_safe('<br />'.join(['&middot; %s' % v for v in values]))
+        return mark_safe('<br />'.join(
+            ['&middot; %s' % l(reverse('admin:odinass_offer_change',
+                                       args=[v.pk]), v) for v in values]))
     field_offers.short_description = 'предложения'
 
     def field_properties(self, instance):

@@ -199,13 +199,23 @@ class ImportManager(object):
         node_title = [nd for nd in details
                       if nd.text == 'Полное наименование'].pop()
         title = get_text(node_title.getparent().find('Значение', node.nsmap))
-        if not title:
+        if not title or len(title) <= 2:
             return
 
         id = get_text(node.find('Ид', node.nsmap))
         node_article = [nd for nd in details if nd.text == 'Код'].pop()
         article = get_text(
             node_article.getparent().find('Значение', node.nsmap))
+
+        groups = []
+        for group in node.findall('Группы/Ид', node.nsmap):
+            try:
+                groups.append(
+                    odinass_models.Category.objects.get(pk=get_text(group)))
+            except odinass_models.Category.DoesNotExist:
+                pass
+        if not groups:
+            return
 
         instance, created = odinass_models.Product.objects.update_or_create(
             id=id, defaults={'title': title, 'article': article})
@@ -223,28 +233,29 @@ class ImportManager(object):
                 except odinass_models.PropertyValue.DoesNotExist:
                     pass
 
-        for group in node.findall('Группы/Ид', node.nsmap):
-            try:
-                instance.categories.add(
-                    odinass_models.Category.objects.get(pk=get_text(group)))
-            except odinass_models.Category.DoesNotExist:
-                pass
+        for group in groups:
+            instance.categories.add(group)
 
     def import_offer(self, node):
         """
         Загрузка Предложений.
         """
         title = get_text(node.find('Наименование', node.nsmap))
-        if not title:
+        if not title or len(title) <= 2:
             return
 
         ids = get_text(node.find('Ид', node.nsmap)).split('#')
+        try:
+            product = odinass_models.Product.objects.get(pk=ids[0])
+        except odinass_models.Product.DoesNotExist:
+            return
+
         for id in ids:
             odinass_models.Offer.objects.update_or_create(
                 id=id,
                 defaults={
                     'title': title,
-                    'product_id': ids[0]})
+                    'product': product})
 
     def import_price_type(self, node):
         """

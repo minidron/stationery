@@ -1,11 +1,24 @@
 import uuid
 
 from django.db import models
+from django.db.models.signals import post_delete, pre_save
+from django.dispatch import receiver
 from django.urls import reverse
+
+from django_resized import ResizedImageField
 
 from mptt.models import MPTTModel, TreeForeignKey
 
+from sorl.thumbnail import delete as sorl_delete_image
+
 from odinass.utils import format_price
+
+
+def generate_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{name}.{ext}'.format(name=uuid.uuid4().hex, ext=ext)
+    return '{folder}/{file}'.format(folder=instance.image_folder,
+                                    file=filename)
 
 
 class Category(MPTTModel):
@@ -99,24 +112,26 @@ class Product(models.Model):
     """
     Товар
     """
+    image_folder = 'products'
+
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
-
     title = models.CharField(
         'название', max_length=508)
-
     article = models.CharField(
         'артикул', blank=True, max_length=254)
-
     categories = models.ManyToManyField(
         'odinass.Category',
         verbose_name='категории',
         blank=True)
-
     property_values = models.ManyToManyField(
         'odinass.PropertyValue',
         verbose_name='значения свойства',
         blank=True)
+    image = ResizedImageField(
+        'изображение',
+        size=[1024, 1024], upload_to=generate_upload_path, force_format='JPEG',
+        null=True, blank=True)
 
     class Meta:
         default_related_name = 'products'
@@ -351,3 +366,29 @@ class Log(models.Model):
 
     def __str__(self):
         return str(self.created)
+
+
+@receiver(pre_save, sender=Product, dispatch_uid='delete_old_thumb_on_save')
+def delete_old_thumb_on_save(sender, instance=None, **kwargs):
+    """
+    Удаляем изображение и его тамбнейлы, если изображение поменялось
+    """
+    if instance:
+        instance.full_clean()
+        try:
+            old_instance = sender.objects.get(pk=instance.pk)
+            if old_instance.image and old_instance.image is not instance.image:
+                sorl_delete_image(old_instance.image)
+        except sender.DoesNotExist:
+            pass
+
+
+@receiver(post_delete, sender=Product,
+          dispatch_uid='delete_old_thumb_on_delete')
+def delete_old_thumb_on_delete(sender, instance=None, **kwargs):
+    """
+    Удаляем изображение и его тамбнейлы, если удаляем instance
+    """
+    if instance:
+        instance.full_clean()
+        sorl_delete_image(instance.image)
