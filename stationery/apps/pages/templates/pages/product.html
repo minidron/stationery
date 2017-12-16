@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load static %}
+{% load static thumbnail %}
 
 {% block content %}
     <section class="s-cart">
@@ -22,7 +22,10 @@
                         <!--
                         <span class="rate"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> / <a href="#">13 Отзывов</a></span>
                         -->
-                        <img class="main-photo" src="{% static 'images/tov/step.jpg' %}" alt="">
+                        {% thumbnail object.product.image '350' as offer_image %}
+                            <img src="{{ offer_image.url }}" alt="{{ object.title }}" class="main-photo">
+                        {% empty %}
+                        {% endthumbnail %}
                         <div class="col-sm-10 col-sm-offset-1">
                             <!--
                             <div class="owl-carousel cart-prices">

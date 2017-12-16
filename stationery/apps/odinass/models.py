@@ -15,8 +15,8 @@ from odinass.utils import format_price
 
 
 def generate_upload_path(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = '{name}.{ext}'.format(name=uuid.uuid4().hex, ext=ext)
+    filename = '{name}.{ext}'.format(name=uuid.uuid4().hex,
+                                     ext=instance.image_format)
     return '{folder}/{file}'.format(folder=instance.image_folder,
                                     file=filename)
 
@@ -113,6 +113,7 @@ class Product(models.Model):
     Товар
     """
     image_folder = 'products'
+    image_format = 'jpg'
 
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load static %}
+{% load static thumbnail %}
 
 {% block content %}
 
@@ -92,7 +92,11 @@
                                     <a href="{{ offer.get_absolute_url }}" class="product">
                                         <div class="product-main">
                                             <div class="product-photo">
-                                                <img src="{% static 'images/nedeli/111.jpg' %}" alt="" class="product-item">
+                                                {% thumbnail offer.product.image '250x250' crop='center' as offer_image %}
+                                                    <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
+                                                {% empty %}
+                                                {% endthumbnail %}
+
                                                 <div class="product-preview">
                                                     <span class="button">Быстрый просмотр</span>
                                                 </div>
