@@ -1,7 +1,8 @@
-# from functools import reduce
-# import operator
+from functools import reduce
+import operator
 
-# from django.db.models import Q, Case, When, IntegerField
+from django.db.models import Q
+from django.db.models.functions import Concat
 
 import django_filters
 
@@ -12,13 +13,11 @@ from odinass.models import Offer
 
 class OfferTitleFilter(django_filters.Filter):
     def filter(self, qs, value):
-        # qs = qs.annotate(full_name=Offer('title', 'region__short_title'))
-        # bits = value.split(' ')
-        # offer_title = reduce(operator.and_,
-        #                      [Q(title__icontains=v) for v in bits])
-        # qs = qs.annotate(title_matches=Case(
-        #     When(offer_title, then=1), default=0, output_field=IntegerField()))  # NOQA
-        return qs.filter(title__icontains=value)
+        qs = qs.annotate(full_name=Concat('title', 'product__article'))
+        bits = value.split(' ')
+        full_name_clauses = reduce(operator.and_,
+                                   [Q(full_name__icontains=v) for v in bits])
+        return qs.filter(full_name_clauses)[:10]
 
 
 class SearchOfferFilter(django_filters.FilterSet):

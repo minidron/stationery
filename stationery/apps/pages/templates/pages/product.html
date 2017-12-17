@@ -25,6 +25,7 @@
                         {% thumbnail object.product.image '350' as offer_image %}
                             <img src="{{ offer_image.url }}" alt="{{ object.title }}" class="main-photo">
                         {% empty %}
+                            <img src="{% static 'images/placeholder.jpg' %}" alt="{{ object.title }}" class="main-photo">
                         {% endthumbnail %}
                         <div class="col-sm-10 col-sm-offset-1">
                             <!--

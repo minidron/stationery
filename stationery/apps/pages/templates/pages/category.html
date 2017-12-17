@@ -95,6 +95,7 @@
                                                 {% thumbnail offer.product.image '250x250' crop='center' as offer_image %}
                                                     <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
                                                 {% empty %}
+                                                    <img src="{% static 'images/placeholder.jpg' %}" alt="{{ offer.title }}" class="product-item">
                                                 {% endthumbnail %}
 
                                                 <div class="product-preview">
