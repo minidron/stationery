@@ -19,7 +19,7 @@ sys.path.insert(1, path('.'))
 ROOT_URLCONF = 'stationery.urls'
 WSGI_APPLICATION = 'stationery.wsgi.application'
 
-ALLOWED_HOSTS = ['www.site.ru']
+ALLOWED_HOSTS = ['kancmiropt.ru']
 
 ADMINS = [
     ('Pavel Alekin', 'minidron@yandex.ru')

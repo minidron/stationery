@@ -96,7 +96,7 @@ $(function() {
         max: parseInt(jQuery('#maxCost').data('price')),
         values: [parseInt(jQuery('#minCost').val()), parseInt(jQuery('#maxCost').val())],
         range: true,
-        
+
         stop: function(event, ui) {
             jQuery("input#minCost").val(jQuery("#slider").slider("values", 0));
             jQuery("input#maxCost").val(jQuery("#slider").slider("values", 1));

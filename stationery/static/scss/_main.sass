@@ -127,6 +127,8 @@ body
 						left: auto
 				&-list
 					position: absolute
+					box-shadow: 1px 1px 10px rgba(0, 0, 0, .4)
+					background-color: #fff
 					text-align: left
 					top: 49px
 					left: -9999px
@@ -154,12 +156,13 @@ body
 								&:hover
 									background-color: #595959
 						li
-							background-color: #3d3d3d
+							background-color: #fff
 							padding: 0
 							float: left
 							width: 33.33%
 							a
 								font-size: 14px
+								color: #3d3d3d
 								img
 									height: 80px
 									width: 80px
@@ -170,7 +173,9 @@ body
 									margin: 0
 									width: 70%
 							&:hover
-								background-color: #595959
+								a
+									color: $accent
+									font-weight: bold
 
 
   /*/////////////////////////
@@ -353,6 +358,8 @@ body
 							font-size: 1.4em
 							color: $accent
 							margin: 0 0 .1em
+							height: 3.2em
+							overflow: hidden
 							&-category
 								font-size: 1.2em
 								color: $accent
@@ -1114,3 +1121,7 @@ body
 				display: block
 		&-c
 			border-bottom: 1px solid $accent
+
+.product-text-name
+	height: 3.2em
+	overflow: hidden
