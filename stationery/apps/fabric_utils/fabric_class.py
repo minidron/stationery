@@ -387,8 +387,8 @@ class DjangoFabric(BaseFabric):
         media_path = os.path.join(self.get_remote_project_path(), 'media')
         lp = self.get_local_project_path()
         local('rsync --exclude "CACHE" -rlv -e ssh %s:%s %s' % (
-            env.host, media_path, lp))
-        local('sudo chown -R www-data:www-data{0}/media'.format(lp))
+            env.host_string, media_path, lp))
+        local('sudo chown -R www-data:www-data {0}/media'.format(lp))
         local('sudo chmod -R g+w %s/media' % lp)
 
     def fab_syncdb(self, local_db_name=None):
