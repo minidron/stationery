@@ -390,6 +390,6 @@ def delete_old_thumb_on_delete(sender, instance=None, **kwargs):
     """
     Удаляем изображение и его тамбнейлы, если удаляем instance
     """
-    if instance:
+    if instance and instance.image:
         instance.full_clean()
         sorl_delete_image(instance.image)
