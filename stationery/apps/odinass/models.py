@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.db.models import OuterRef, Prefetch, Subquery
 from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
@@ -61,8 +62,25 @@ class Category(MPTTModel):
 
     @property
     def offers(self):
-        return (Offer.objects.select_related('product')
-                             .filter(product__categories=self))
+        # цены для ретейла
+        price = Price.objects.filter(offer=OuterRef('pk'),
+                                     price_type__sales_type=SalesType.RETAIL)
+
+        # остатки по нужным складам
+        prefetch = Prefetch(
+            'rests', queryset=Rest.objects.filter(warehouse__is_selected=True,
+                                                  value__gt=0)
+                                          .order_by('warehouse__title'))
+
+        return (Offer.objects
+                     .select_related('product')
+                     .prefetch_related('prices', 'prices__price_type',
+                                       prefetch, 'rests__warehouse',
+                                       'product__property_values',
+                                       'product__property_values__property')
+                     .filter(product__categories=self)
+                     .annotate(
+                        retail_price=Subquery(price.values('price')[:1])))
 
 
 class Warehouse(models.Model):
@@ -74,6 +92,9 @@ class Warehouse(models.Model):
     title = models.CharField(
         'название',
         max_length=254, db_index=True)
+    is_selected = models.BooleanField(
+        'выбрано',
+        default=False)
 
     class Meta:
         default_related_name = 'warehouses'
@@ -83,6 +104,29 @@ class Warehouse(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Rest(models.Model):
+    """
+    Остаток
+    """
+    value = models.IntegerField(
+        'остаток',
+        default=0)
+    warehouse = models.ForeignKey(
+        'odinass.Warehouse',
+        verbose_name='склад')
+    offer = models.ForeignKey(
+        'odinass.Offer',
+        verbose_name='предложение')
+
+    class Meta:
+        default_related_name = 'rests'
+        verbose_name = 'остаток'
+        verbose_name_plural = 'остатки'
+
+    def __str__(self):
+        return str(self.value)
 
 
 class Property(models.Model):
@@ -237,29 +281,6 @@ class Price(models.Model):
         if self.price:
             price = '%s %s' % (self.price, self.currency)
         return price
-
-
-class Rest(models.Model):
-    """
-    Остаток
-    """
-    value = models.IntegerField(
-        'остаток',
-        default=0)
-    warehouse = models.ForeignKey(
-        'odinass.Warehouse',
-        verbose_name='склад')
-    offer = models.ForeignKey(
-        'odinass.Offer',
-        verbose_name='предложение')
-
-    class Meta:
-        default_related_name = 'rests'
-        verbose_name = 'остаток'
-        verbose_name_plural = 'остатки'
-
-    def __str__(self):
-        return str(self.value)
 
 
 class Offer(models.Model):

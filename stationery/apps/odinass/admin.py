@@ -39,6 +39,11 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
 @admin.register(odinass_models.Warehouse)
 class WarehouseAdmin(admin.ModelAdmin):
+    list_display = [
+        'title',
+        'is_selected',
+    ]
+
     readonly_fields = [
         'id',
         'title',

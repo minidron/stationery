@@ -22,11 +22,13 @@
                         <!--
                         <span class="rate"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> / <a href="#">13 Отзывов</a></span>
                         -->
-                        {% thumbnail object.product.image '350' as offer_image %}
-                            <img src="{{ offer_image.url }}" alt="{{ object.title }}" class="main-photo">
-                        {% empty %}
-                            <img src="{% static 'images/placeholder.jpg' %}" alt="{{ object.title }}" class="main-photo">
-                        {% endthumbnail %}
+                        <div class="main-photo">
+                            {% thumbnail object.product.image '350x400' upscale=False as offer_image %}
+                                <img src="{{ offer_image.url }}" alt="{{ object.title }}">
+                            {% empty %}
+                                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ object.title }}">
+                            {% endthumbnail %}
+                        </div>
                         <div class="col-sm-10 col-sm-offset-1">
                             <!--
                             <div class="owl-carousel cart-prices">

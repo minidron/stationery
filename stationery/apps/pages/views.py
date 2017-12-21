@@ -30,9 +30,7 @@ class CategoryView(DetailView):
         context = super().get_context_data(**kwargs)
         category = context['category']
 
-        offers = (Offer.objects
-                       .select_related('product')
-                       .filter(product__categories=category))
+        offers = category.offers
 
         prices = (Price.objects
                        .filter(offer__in=offers,
@@ -116,3 +114,14 @@ class ProductView(DetailView):
 class PageView(DetailView):
     model = Page
     template_name = 'pages/static.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        category = (Category.objects
+                            .get(pk='43ea0da8-ad21-11db-a2b2-00c09fa8f069'))
+
+        context.update({
+            'category': category,
+        })
+        return context
