@@ -2,6 +2,8 @@ $(function() {
 
   $('.carousel-sale').owlCarousel({
         loop: true,
+        autoplay:true,
+        autoplayTimeout:3000,
         items: 1,
         nav: false,
         smartSpeed: 700
@@ -46,7 +48,7 @@ $(function() {
     });
 
   $('.categories').owlCarousel({
-        loop: true,
+
         smartSpeed: 700,
         dots: false,
         navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
@@ -69,7 +71,7 @@ $(function() {
     });
 
     $('.cart-prices').owlCarousel({
-        loop: true,
+        loop: false,
         smartSpeed: 700,
         dots: false,
         navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
