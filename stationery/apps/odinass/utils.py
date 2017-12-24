@@ -1,6 +1,8 @@
-from io import BytesIO
 import os
 import re
+import traceback
+
+from io import BytesIO
 
 from django.db import IntegrityError
 from django.utils import timezone
@@ -95,6 +97,7 @@ class ImportManager(object):
         except Exception as e:
             if logging:
                 log.status = odinass_models.StatusLog.FAILD
+                log.traceback = traceback.format_exc()
             else:
                 raise e
         if logging:

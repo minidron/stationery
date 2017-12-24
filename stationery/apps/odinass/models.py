@@ -381,6 +381,10 @@ class Log(models.Model):
         'время создания',
         auto_now_add=True, editable=False, null=False, blank=False)
 
+    traceback = models.TextField(
+        'traceback',
+        blank=True)
+
     class Meta:
         ordering = ['-created']
         verbose_name = 'лог'
