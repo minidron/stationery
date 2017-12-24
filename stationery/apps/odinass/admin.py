@@ -87,6 +87,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     list_display = [
         'title',
         'article',
+        'created',
     ]
 
     search_fields = [
@@ -97,6 +98,10 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     filter_horizontal = (
         'categories',
     )
+
+    list_filter = [
+        'created',
+    ]
 
     readonly_fields = [
         'article',

@@ -176,6 +176,9 @@ class Product(models.Model):
         'изображение',
         size=[1024, 1024], upload_to=generate_upload_path, force_format='JPEG',
         null=True, blank=True)
+    created = models.DateField(
+        'дата создания',
+        auto_now_add=True, editable=False, null=False, blank=False)
 
     class Meta:
         default_related_name = 'products'
@@ -319,6 +322,11 @@ class Offer(models.Model):
     def features(self):
         return (PropertyValue.objects
                              .filter(product=self.product))
+
+    @property
+    def rest_list(self):
+        return (Rest.objects.filter(warehouse__is_selected=True, offer=self)
+                            .order_by('warehouse__title'))
 
 
 class ActionLog(object):

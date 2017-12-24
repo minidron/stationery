@@ -106,6 +106,7 @@
                                             </div>
                                             <div class="product-text">
                                                 <h2 class="product-text-name">{{ offer.title }}</h2>
+                                                <div class="article">Код: {{ offer.product.article }}</div>
                                                 {% if offer.product.property_values.all %}
                                                     <ul class="dad">
                                                         {% for prop in offer.product.property_values.all %}
@@ -134,11 +135,6 @@
                                                     <span>Нет в наличии</span>
                                                 {% endif %}
                                             </div>
-                                            <!--
-                                            <span class="product-details-price-old">
-                                                <b>720</b><small>руб.</small>
-                                            </span>
-                                            -->
                                             <span class="product-details-price">
                                                 <b>{{ offer.retail_price|price }}</b>
                                             </span>

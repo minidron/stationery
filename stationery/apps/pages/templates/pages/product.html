@@ -60,17 +60,11 @@
                     <div class="col-sm-4 cart-l">
                         <p class="cen">Цена: {{ object.price }}</p><hr>
                         <a href="#" class="button">В корзину</a>
-                        <a href="#" class="button">Заказать в 1 клик</a><hr>
-                        <!--
-                        <p class="dos"><i class="fa fa-check"></i>В наличии (1536 шт.)</p>
-                        -->
+                        <p class="dos">Остаток: {% for rest in offer.rest_list %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</p>
                         <p class="dos">Как получить товар?</p>
                         <p class="dos"><i class="fa fa-child"></i>самовывоз</p>
                         <p class="dos"><i class="fa fa-car"></i>доставка</p><hr>
                         <p>Код: {{ object.product.article }}</p>
-                        <p>Вес: 0.2</p>
-                        <p>Объем: 0.0008</p>
-                        <p>Партия / упаковка: 1/40/80</p>
                     </div>
                 </div>
             </div>
