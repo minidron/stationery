@@ -77,7 +77,7 @@ class CategoryView(DetailView):
                                 .filter(num_tags=len(filter_properties)))
 
         context.update({
-            'test_offers': offers,
+            'has_offers': offers,
             'offers': result,
             'properties': properties,
             'form_search': form_search,

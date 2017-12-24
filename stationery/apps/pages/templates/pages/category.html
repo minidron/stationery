@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="owl-carousel categories">
-                    {% for descendant in object.get_descendants %}
+                    {% for descendant in object.get_children %}
                     <li class="product-wrapper-filter">
                         <a href="{{ descendant.get_absolute_url }}" class="product">
                             <div class="product-photo">
@@ -34,7 +34,7 @@
                     {% endfor %}
                 </div>
 
-                {% if test_offers %}
+                {% if has_offers %}
                 <form action="" method="GET">
                     <div class="col-sm-3 filter">
                         <div class="filter-group">
