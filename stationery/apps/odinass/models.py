@@ -68,8 +68,7 @@ class Category(MPTTModel):
 
         # остатки по нужным складам
         prefetch = Prefetch(
-            'rests', queryset=Rest.objects.filter(warehouse__is_selected=True,
-                                                  value__gt=0)
+            'rests', queryset=Rest.objects.filter(warehouse__is_selected=True)
                                           .order_by('warehouse__title'))
 
         return (Offer.objects
