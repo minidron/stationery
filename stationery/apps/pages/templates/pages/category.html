@@ -19,7 +19,7 @@
                     </p>
                 </div>
 
-                <div class="owl-carousel categories">
+                <!--<div class="owl-carousel categories">
                     {% for descendant in object.get_children %}
                     <li class="product-wrapper-filter">
                         <a href="{{ descendant.get_absolute_url }}" class="product">
@@ -32,7 +32,77 @@
                         </a>
                     </li>
                     {% endfor %}
+                </div>-->
+                <div class="list-category">
+                      {% for descendant in object.get_children %}
+
+                  <div class="col-sm-4">
+
+                    <h2><a href="{{ descendant.get_absolute_url }}">{{ descendant.title }}</a></h2>
+                    {% for children in descendant.get_children %}
+                    <ul>
+                      <li><a href="{{ children.get_absolute_url }}">{{ children }}</a></li>
+
+                    </ul>
+                    {% endfor %}
+                  </div>
+
+              {% endfor %}
+
+              <div class="clearfix"></div>
+                <!--  <div class="col-sm-4">
+                    <h2>Заголовок</h2>
+                    <ul>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                    </ul>
+                  </div>
+                  <div class="col-sm-4">
+                    <h2>Заголовок</h2>
+                    <ul>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                      <li>Продукция</li>
+                    </ul>
+                  </div>
+                <div class="clearfix"></div>
+                <div class="col-sm-4">
+                  <h2>Заголовок</h2>
+                  <ul>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                  </ul>
                 </div>
+                <div class="col-sm-4">
+                  <h2>Заголовок</h2>
+                  <ul>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                  </ul>
+                </div>
+                <div class="col-sm-4">
+                  <h2>Заголовок</h2>
+                  <ul>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                    <li>Продукция</li>
+                  </ul>
+                </div>-->
+                </div>
+
 
                 {% if has_offers %}
                 <form action="" method="GET">
