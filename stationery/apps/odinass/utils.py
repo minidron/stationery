@@ -218,6 +218,11 @@ class ImportManager(object):
             except odinass_models.Category.DoesNotExist:
                 pass
         if not groups:
+            try:
+                product = odinass_models.Product.objects.get(id=id)
+                product.delete()
+            except odinass_models.Product.DoesNotExist:
+                pass
             return
 
         instance, created = odinass_models.Product.objects.update_or_create(
