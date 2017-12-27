@@ -2,15 +2,11 @@ import uuid
 
 from django.db import models
 from django.db.models import OuterRef, Prefetch, Subquery
-from django.db.models.signals import post_delete, pre_save
-from django.dispatch import receiver
 from django.urls import reverse
 
 from django_resized import ResizedImageField
 
 from mptt.models import MPTTModel, TreeForeignKey
-
-from sorl.thumbnail import delete as sorl_delete_image
 
 from odinass.utils import format_price
 
@@ -399,29 +395,3 @@ class Log(models.Model):
 
     def __str__(self):
         return str(self.created)
-
-
-@receiver(pre_save, sender=Product, dispatch_uid='delete_old_thumb_on_save')
-def delete_old_thumb_on_save(sender, instance=None, **kwargs):
-    """
-    Удаляем изображение и его тамбнейлы, если изображение поменялось
-    """
-    if instance:
-        instance.full_clean()
-        try:
-            old_instance = sender.objects.get(pk=instance.pk)
-            if old_instance.image and old_instance.image is not instance.image:
-                sorl_delete_image(old_instance.image)
-        except sender.DoesNotExist:
-            pass
-
-
-@receiver(post_delete, sender=Product,
-          dispatch_uid='delete_old_thumb_on_delete')
-def delete_old_thumb_on_delete(sender, instance=None, **kwargs):
-    """
-    Удаляем изображение и его тамбнейлы, если удаляем instance
-    """
-    if instance and instance.image:
-        instance.full_clean()
-        sorl_delete_image(instance.image)
