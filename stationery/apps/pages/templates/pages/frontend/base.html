@@ -1,0 +1,35 @@
+{% load static pipeline %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+
+    <title>{% block page_title %}{% endblock %}</title>
+
+    {% block styles %}
+        {% stylesheet 'libs' %}
+        {% stylesheet 'frontend' %}
+    {% endblock styles %}
+</head>
+
+<body class="{% spaceless %}{% block body_class %}{% endblock %}{% endspaceless %}">
+    <header class="header__section"></header>
+
+    <nav class="navbar__section"></nav>
+
+    <main class="main__section">
+        {% block content %}{% endblock content %}
+    </main>
+
+    <footer class="footer__section"></footer>
+
+    {% block scripts %}
+        {% javascript 'libs' %}
+        {% javascript 'frontend' %}
+    {% endblock scripts %}
+</body>
+</html>

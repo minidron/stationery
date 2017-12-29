@@ -7,7 +7,7 @@ from django.views.generic import RedirectView, TemplateView
 
 from rest_framework import routers
 
-from pages.views import IndexView
+from pages.views import IndexView, TestView
 
 from odinass.views import SearchOfferViewSet
 
@@ -18,6 +18,7 @@ router.register(r'search_offer', SearchOfferViewSet)
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
+    url(r'^test/$', TestView.as_view(), name='test'),
     url(r'^api/', include(router.urls, namespace='api')),
     url(r'^robots.txt$',
         TemplateView.as_view(

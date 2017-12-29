@@ -121,7 +121,10 @@ BOWER_INSTALLED_APPS = (
     'bootstrap#3.3',
     'devbridge-autocomplete#1.4',
     'font-awesome#4.7',
+    'include-media#1.4',
+    'include-media-export#1.0',
     'jquery-ui#1.12',
+    'normalize-css#7',
     'owl.carousel#2.2',
 )
 
@@ -154,6 +157,18 @@ PIPELINE = {
     'SASS_BINARY': 'sassc',
     'COFFEE_SCRIPT_ARGUMENTS': '-b',
     'STYLESHEETS': {
+        'libs': {
+            'source_filenames': (
+                'bower_components/normalize-css/normalize.css',
+            ),
+            'output_filename': 'frontend/css/libs.css',
+        },
+        'frontend': {
+            'source_filenames': (
+                'frontend/scss/style.scss',
+            ),
+            'output_filename': 'frontend/css/style.css',
+        },
         'styles': {
             'source_filenames': (
                 'scss/styles.scss',

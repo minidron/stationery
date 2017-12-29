@@ -7,6 +7,10 @@ from pages.models import Page
 from odinass.models import Category, Offer, Price, Property, SalesType
 
 
+class TestView(TemplateView):
+    template_name = 'pages/frontend/base.html'
+
+
 class IndexView(TemplateView):
     template_name = 'pages/index.html'
 
