@@ -177,6 +177,19 @@ PIPELINE = {
         },
     },
     'JAVASCRIPT': {
+        'libs': {
+            'source_filenames': (
+                'bower_components/jquery/dist/jquery.min.js',
+                'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
+            ),
+            'output_filename': 'frontend/js/libs.js',
+        },
+        'frontend': {
+            'source_filenames': (
+                'frontend/coffee/script.coffee',
+            ),
+            'output_filename': 'frontend/js/script.js',
+        },
         'scripts': {
             'source_filenames': (
                 'bower_components/jquery/dist/jquery.min.js',

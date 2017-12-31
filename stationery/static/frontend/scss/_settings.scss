@@ -1,0 +1,67 @@
+/* BASE
+============================================================================ */
+$base-font-size:       16px;
+$base-font-small-size: 14px;
+$base-line-height:     22px;
+$base-max-width:       1160px;
+$base-transition:      0.3s;
+/* ------------------------------------------------------------------------- */
+
+
+/* COLORS
+============================================================================ */
+$color-primary: #2C7FAE;
+$color-secondary: #283D4B;
+
+$color: (
+    'text': #333,
+
+    'link': (
+        'base': #0085CF,
+        'hover': #D32F2F,
+    ),
+
+    'header': (
+        'background': #FAFAFA,
+        'border': #E9EAEC,
+    ),
+
+    'nav': (
+        'text': mix($color-secondary, #FFF, 15%),
+        'background': $color-secondary,
+    ),
+
+    'content': (
+        'background': #F7F7F7,
+    ),
+);
+/* ------------------------------------------------------------------------- */
+
+
+/* BREAKPOINTS
+============================================================================ */
+$bp-phone:         480px;
+$bp-tablet:        768px;
+$bp-desktop:       980px;
+
+$breakpoints: (
+    'phone':         $bp-phone,
+    'tablet':        $bp-tablet,
+    'desktop':       $bp-desktop,
+);
+/* ------------------------------------------------------------------------- */
+
+
+/* FONTS
+============================================================================ */
+$fw-thin:    100;
+$fw-light:   300;
+$fw-regular: 400;
+$fw-medium:  500;
+$fw-bold:    700;
+$fw-black:   900;
+
+$fa-font-path: '../../bower_components/font-awesome/fonts';
+$ff-PT-Sans: 'PT Sans', Arial, "Helvetica Neue", Helvetica, sans-serif;
+$ff-Roboto: 'Roboto', Arial, "Helvetica Neue", Helvetica, sans-serif;
+/* ------------------------------------------------------------------------- */

@@ -10,6 +10,14 @@ from odinass.models import Category, Offer, Price, Property, SalesType
 class TestView(TemplateView):
     template_name = 'pages/frontend/base.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = Category.objects.filter(level=0)[1:4]
+        context.update({
+            'categories': categories,
+        })
+        return context
+
 
 class IndexView(TemplateView):
     template_name = 'pages/index.html'

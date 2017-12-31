@@ -1,0 +1,256 @@
+/* HTML
+============================================================================ */
+body {
+}
+
+.colored-line {
+    height: 4px;
+    background-image: repeating-linear-gradient(90deg,
+        #FF6B6B 0,
+        #FF6B6B 20px,
+        #FFE66D 20px,
+        #FFE66D 40px,
+        #1A535C 40px,
+        #1A535C 60px,
+        #4ECDC4 60px,
+        #4ECDC4 80px,
+        #F7FFF7 80px,
+        #F7FFF7 100px);
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* HEADER
+============================================================================ */
+.header__section {
+    .header-panel--wrapper {
+        border-bottom: 1px solid get($color, 'header', 'border');
+        background-color: #FFF;
+    }
+
+    .header-panel {
+        @include responsive-block;
+        height: 29px;
+    }
+
+    .header-container--wrapper {
+        background-color: get($color, 'header', 'background');
+    }
+
+    .header-container {
+        @include responsive-block;
+        display: flex;
+        align-items: center;
+        flex-flow: row;
+        justify-content: center;
+        height: 80px;
+
+        @include media('<=phone') {
+            height: 120px;
+            align-items: stretch;
+            flex-flow: column;
+            justify-content: space-evenly;
+        }
+    }
+
+    .header-logo {
+        margin-right: 20px;
+
+        .header-logo--link {
+            display: inline-block;
+
+            img {
+                width: 224px;
+                height: 44px;
+                vertical-align: bottom;
+            }
+        }
+    }
+
+    .header-search--wrapper {
+        @include media('>phone') {
+            flex: 1;
+        }
+    }
+
+    .header-search {
+        @include center-block;
+        position: relative;
+        padding: 5px 20px;
+        max-width: 450px;
+        border-radius: 2px;
+        box-sizing: border-box;
+        box-shadow: 0 2px 2px 0 rgba(#000, 0.16),
+                    0 0 0 1px rgba(#000, 0.08);
+        background-color: #FFF;
+        transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+        @include media('<desktop') {
+            margin-right: 0;
+        }
+
+        #header-search {
+            @include placeholder(#AAA);
+            margin-right: 5px;
+            padding: 0;
+            height: 34px;
+            width: calc(100% - 25px);
+            border: 0 none;
+            outline: 0 none;
+            font: normal 16px/34px $ff-PT-Sans;
+            color: get($color, 'text');
+            background-color: #FFF;
+        }
+
+        .header-search--button {
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            border: 0 none;
+            outline: 0 none;
+            text-align: center;
+            color: get($color, 'link', 'base');
+            background-color: #FFF;
+            cursor: pointer;
+            transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+            &:before {
+                @include fa-icon;
+                content: $fa-var-search;
+                line-height: 20px;
+            }
+        }
+
+        &.focus {
+            box-shadow: 0 3px 8px 0 rgba(#000, 0.2),
+                        0 0 0 1px rgba(#000, 0.08);
+        }
+    }
+
+    .header-phone {
+        margin-left: 20px;
+        text-align: right;
+
+        @include media('<=tablet') {
+            display: none;
+        }
+
+        .header-phone--link {
+            font: bold 20px/1 $ff-PT-Sans;
+            text-decoration: none;
+            color: $color-primary;
+        }
+    }
+}
+
+.autocomplete-suggestions {
+    top: 44px;
+    right: 0;
+    left: 0;
+    width: auto !important;
+    box-sizing: border-box;
+    box-shadow: 0 3px 8px 0 rgba(#000, 0.2),
+                0 0 0 1px rgba(#000, 0.08);
+    background-color: #FFF;
+
+    .autocomplete-suggestion {
+        padding: 2px 20px;
+        cursor: pointer;
+
+        &.autocomplete-selected {
+            background: #F0F0F0;
+        }
+    }
+
+    strong {
+        font-weight: normal;
+        color: #3399FF;
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* NAV
+============================================================================ */
+.navbar__section {
+    background-color: get($color, 'nav', 'background');
+
+    .navbar-container {
+        @include responsive-block;
+        display: flex;
+        align-items: center;
+        flex-flow: row;
+    }
+
+    .navbar-menu {
+        @include clear-list;
+        flex: 1;
+        display: flex;
+        flex-flow: row;
+        justify-content: flex-start;
+
+        @include media('<=phone') {
+            display: none;
+        }
+
+        .navbar-menu--root-item {
+            margin-right: 40px;
+            font: $fw-medium 14px/50px $ff-Roboto;
+            text-transform: uppercase;
+            color: get($color, 'nav', 'text');
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .navbar-cart {
+        .navbar-cart--link {
+            display: inline-block;
+            width: 200px;
+            font: $fw-medium 14px/50px $ff-Roboto;
+            text-align: center;
+            text-decoration: none;
+            color: get($color, 'nav', 'text');
+            background-color: mix($color-secondary, #FFF, 90%);
+            transition: background-color $base-transition;
+
+            &:before {
+                @include fa-icon;
+                content: $fa-var-shopping-cart;
+                margin-right: 10px;
+                vertical-align: text-bottom;
+                font-size: 24px;
+                color: #FFF;
+            }
+
+            &:hover {
+                background-color: darken(mix($color-secondary, #FFF, 90%), 10%);
+            }
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* BREADCRUMBS
+============================================================================ */
+.breadcrumbs__section {
+    border-bottom: 1px solid get($color, 'header', 'border');
+    background-color: #FFF;
+
+    .breadcrumbs-container {
+        height: 45px;
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* MAIN
+============================================================================ */
+.main__section {
+    height: 500px;
+    background-color: get($color, 'content', 'background');
+}
+/* ------------------------------------------------------------------------- */
