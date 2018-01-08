@@ -12,13 +12,35 @@ $base-transition:      0.3s;
 ============================================================================ */
 $color-primary: #2C7FAE;
 $color-secondary: #283D4B;
+$color-accent: #D32F2F;
+
 
 $color: (
-    'text': #333,
+    'text': (
+        'base': #333,
+        'lighter': #666,
+        'light': #999,
+    ),
 
     'link': (
         'base': #0085CF,
         'hover': #D32F2F,
+    ),
+
+    'title': (
+        'base': #3F454B,
+    ),
+
+    'button': (
+        'normal': (
+            'text': #FFF,
+            'background': #0085CF,
+        ),
+
+        'cart': (
+            'text': #FFF,
+            'background': $color-accent,
+        ),
     ),
 
     'header': (

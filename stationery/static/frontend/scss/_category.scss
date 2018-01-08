@@ -1,0 +1,161 @@
+/* CATEGORY
+============================================================================ */
+.category-container {
+    display: flex;
+    align-items: flex-start;
+    flex-flow: row;
+
+    .category-filters {
+        margin-right: 20px;
+        width: 250px;
+    }
+
+    .category-filters--filters {
+        padding: 20px;
+    }
+
+    .category-filters--button {
+        .submit {
+            width: 100%;
+            height: 44px;
+            border: 0 none;
+            border-radius: 0 0 5px 5px;
+            font: $fw-medium 14px/44px $ff-Roboto;
+            text-transform: uppercase;
+            color: get($color, 'button', 'normal', 'text');
+            background-color: get($color, 'button', 'normal', 'background');
+            cursor: pointer;
+            transition: background-color $base-transition;
+
+            &:before {
+                @include fa-icon;
+                content: $fa-var-search;
+                margin-right: 5px;
+            }
+
+            &:hover {
+                background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
+            }
+        }
+    }
+
+    .category-content {
+        flex: 1;
+    }
+
+    .category-offers--item {
+        display: flex;
+        align-items: stretch;
+        flex-flow: row;
+        margin-bottom: 20px;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .offer-image {
+            padding: 20px;
+            width: 200px;
+            box-sizing: border-box;
+            text-align: center;
+
+            img {
+                vertical-align: bottom;
+                max-width: 160px;
+                max-height: 160px;
+            }
+        }
+
+        .offer-info {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid get($color, 'header', 'border');
+
+            .offer-info--title {
+                margin-top: 0;
+                margin-bottom: 10px;
+                font: $fw-regular 16px/20px $ff-PT-Sans;
+
+                .offer-info--title--link {
+                    text-decoration: none;
+                    color: get($color, 'link', 'base');
+
+                    &:hover {
+                        color: get($color, 'link', 'hover');
+                    }
+                }
+            }
+
+            .offer-info--offer-code {
+                font: $fw-regular 13px/20px $ff-PT-Sans;
+                color: get($color, 'text', 'light');
+            }
+
+            .offer-info--offer-properties {
+                margin-top: 10px;
+
+                .offer-info--offer-property {
+                    font: $fw-regular 14px/20px $ff-PT-Sans;
+                    color: get($color, 'text', 'lighter');
+                }
+            }
+        }
+
+        .offer-price {
+            padding: 20px;
+            width: 200px;
+            box-sizing: border-box;
+
+            .offer-price--price {
+                margin-bottom: 10px;
+                font: $fw-bold 20px/20px $ff-Roboto;
+                color: get($color, 'title', 'base');
+
+                &.has_price:after {
+                    @include fa-icon;
+                    content: $fa-var-rub;
+                    margin-left: 5px;
+                    font-size: 18px;
+                }
+            }
+
+            .offer-price--availability {
+                margin-bottom: 15px;
+                font: $fw-regular 14px/20px $ff-PT-Sans;
+                color: get($color, 'text', 'light');
+
+                & > span {
+                    margin-left: 5px;
+                }
+            }
+
+            .offer-price--cart {
+                .add-cart {
+                    display: block;
+                    height: 38px;
+                    border-radius: 5px;
+                    font: $fw-medium 12px/38px $ff-Roboto;
+                    text-align: center;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    color: get($color, 'button', 'cart', 'text');
+                    background-color: get($color, 'button', 'cart', 'background');
+                    cursor: pointer;
+                    transition: background-color $base-transition;
+
+                    &:after {
+                        @include fa-icon;
+                        content: $fa-var-shopping-cart;
+                        margin-left: 10px;
+                        font-size: 16px;
+                    }
+
+                    &:hover {
+                        background-color: darken(get($color, 'button', 'cart', 'background'), 10%);
+                    }
+                }
+            }
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */

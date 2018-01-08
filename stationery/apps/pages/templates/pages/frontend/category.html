@@ -1,0 +1,51 @@
+{% extends "pages/frontend/base.html" %}
+
+{% load static thumbnail pages_tag %}
+
+
+{% block content %}
+    <h1 class="main--title">{{ category.title }}</h1>
+    <div class="category-container">
+        <div class="category-filters rounded">
+            <div class="category-filters--filters">filters</div>
+            <div class="category-filters--button"><button class="submit" type="submit" name="search-offers">Найти</button></div>
+        </div>
+        <div class="category-content">
+            <div class="category-offers">
+                {% for offer in offers %}
+                    <div class="category-offers--item rounded clickable">
+                        <div class="offer-image">
+                            <a href="{{ offer.get_absolute_url }}">
+                                {% thumbnail offer.product.image '160x160' as offer_image %}
+                                    <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
+                                {% empty %}
+                                    <img src="{% static 'images/placeholder.jpg' %}" alt="{{ offer.title }}" class="product-item">
+                                {% endthumbnail %}
+                            </a>
+                        </div>
+                        <div class="offer-info">
+                            <h3 class="offer-info--title"><a class="offer-info--title--link" href="{{ offer.get_absolute_url }}">{{ offer.title }}</a></h3>
+                            <div class="offer-info--offer-code">Код: {{ offer.product.article }}</div>
+                            {% if offer.product.property_values.all %}
+                                <div class="offer-info--offer-properties">
+                                    {% for prop in offer.product.property_values.all %}
+                                        <div class="offer-info--offer-property">{{ prop.property }}: {{ prop }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="offer-price">
+                            <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price }}</div>
+                            <div class="offer-price--availability">
+                                Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
+                            </div>
+                            <div class="offer-price--cart">
+                                <a class="add-cart">В корзину</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
