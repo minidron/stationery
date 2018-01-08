@@ -126,6 +126,10 @@
 
                 & > span {
                     margin-left: 5px;
+
+                    span {
+                        cursor: help;
+                    }
                 }
             }
 
@@ -152,6 +156,86 @@
 
                     &:hover {
                         background-color: darken(get($color, 'button', 'cart', 'background'), 10%);
+                    }
+                }
+            }
+        }
+    }
+
+    .category-offers--paginator--wrapper {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .category-offers--paginator {
+        @include clear-list;
+        display: inline-block;
+
+        .category-offers--paginator--page {
+            display: inline-block;
+            border-right: 1px solid get($color, 'header', 'border');
+            font: $fw-regular 16px/40px $ff-PT-Sans;
+
+            &:last-of-type {
+                border-right: 0 none;
+            }
+
+            a {
+                display: block;
+                width: 40px;
+                height: 40px;
+                text-decoration: none;
+                color: get($color, 'text', 'base');
+
+                &:hover {
+                    color: get($color, 'link', 'hover');
+                }
+            }
+
+            span {
+                display: block;
+                width: 40px;
+                height: 40px;
+                color: #FFF;
+                background-color: #666;
+            }
+
+            &.previous-page {
+                a, span {
+                    &:before {
+                        @include fa-icon;
+                        content: $fa-var-angle-left;
+                        vertical-align: bottom;
+                        font-size: 22px;
+                        line-height: 40px;
+                    }
+                }
+
+                span {
+                    background-color: transparent;
+
+                    &:before {
+                        color: #CCC;
+                    }
+                }
+            }
+
+            &.next-page {
+                a, span {
+                    &:before {
+                        @include fa-icon;
+                        content: $fa-var-angle-right;
+                        vertical-align: bottom;
+                        font-size: 22px;
+                        line-height: 40px;
+                    }
+                }
+
+                span {
+                    background-color: transparent;
+
+                    &:before {
+                        color: #CCC;
                     }
                 }
             }
