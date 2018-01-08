@@ -11,7 +11,67 @@
     }
 
     .category-filters--filters {
+        ul {
+            @include clear-list;
+
+            li {
+                label {
+                    font: $fw-regular 14px/20px $ff-PT-Sans;
+                    color: get($color, 'text', 'base');
+                }
+            }
+        }
+
+        input[type='checkbox'] {
+            vertical-align: middle;
+        }
+
+        input[type='text'] {
+            margin: 0;
+            padding: 0 6px;
+            height: 28px;
+            border: 1px solid get($color, 'content', 'border');
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: $fw-regular 14px/28px $ff-PT-Sans;
+            color: get($color, 'text', 'base');
+        }
+
+        .offer-filter--price {
+            @include clearfix;
+
+            .offer-filter--price-min {
+                float: left;
+                width: 50%;
+                text-align: left;
+            }
+
+            .offer-filter--price-max {
+                float: right;
+                width: 50%;
+                text-align: right;
+            }
+
+            input {
+                width: 80px;
+            }
+        }
+    }
+
+    .offer-filter--wrapper {
         padding: 20px;
+        border-bottom: 1px solid get($color, 'header', 'border');
+
+        &:last-of-type {
+            border-bottom: 0 none;
+        }
+    }
+
+    .offer-filter--title {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font: $fw-medium 16px/20px $ff-Roboto;
+        color: get($color, 'title', 'base');
     }
 
     .category-filters--button {

@@ -7,8 +7,29 @@
     <h1 class="main--title">{{ category.title }}</h1>
     <div class="category-container">
         <div class="category-filters rounded">
-            <div class="category-filters--filters">filters</div>
-            <div class="category-filters--button"><button class="submit" type="submit" name="search-offers">Найти</button></div>
+            <form action="" method="GET">
+                <div class="category-filters--filters">
+                    <div class="offer-filter--wrapper">
+                        <h3 class="offer-filter--title">Цена</h3>
+                        <div class="offer-filter--price">
+                            <div class="offer-filter--price-min"><input type="text" name="minCost" value="{{ prices.price__min }}"></div>
+                            <div class="offer-filter--price-max"><input type="text" name="maxCost" value="{{ prices.price__max }}"></div>
+                        </div>
+                    </div>
+
+                    {% for field in form_search %}
+                        {% if field.name != 'minCost' and field.name != 'maxCost' %}
+                            <div class="offer-filter--wrapper">
+                                <h3 class="offer-filter--title">{{ field.label }}</h3>
+                                <div class="offer-filter--">
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="category-filters--button"><button class="submit" type="submit" name="search-offers">Найти</button></div>
+            </form>
         </div>
         <div class="category-content">
             <div class="category-offers">
@@ -35,7 +56,7 @@
                             {% endif %}
                         </div>
                         <div class="offer-price">
-                            <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price }}</div>
+                            <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
                             <div class="offer-price--availability">
                                 Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
                             </div>
