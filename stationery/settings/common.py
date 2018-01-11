@@ -125,6 +125,7 @@ BOWER_INSTALLED_APPS = (
     'include-media-export#1.0',
     'jquery-ui#1.12',
     'normalize-css#7',
+    'nouislider#10.1',
     'owl.carousel#2.2',
 )
 
@@ -160,6 +161,7 @@ PIPELINE = {
         'libs': {
             'source_filenames': (
                 'bower_components/normalize-css/normalize.css',
+                'bower_components/nouislider/distribute/nouislider.min.css',
             ),
             'output_filename': 'frontend/css/libs.css',
         },
@@ -181,6 +183,7 @@ PIPELINE = {
             'source_filenames': (
                 'bower_components/jquery/dist/jquery.min.js',
                 'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
+                'bower_components/nouislider/distribute/nouislider.min.js',
             ),
             'output_filename': 'frontend/js/libs.js',
         },

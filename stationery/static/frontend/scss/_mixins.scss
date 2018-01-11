@@ -80,4 +80,25 @@
       color: $color;
     }
 }
+
+@mixin col($selector, $col, $gap: 0) {
+    @include clearfix;
+    margin-left: -$gap;
+
+    #{$selector} {
+        float: left;
+        display: block;
+        padding-left: $gap;
+        width: 100%/$col;
+        box-sizing: border-box;
+
+        &:nth-child(#{$col}n+1) {
+            clear: both;
+        }
+
+        &:nth-last-child(-n+#{$col}) {
+            margin-bottom: 0;
+        }
+    }
+}
 /* ------------------------------------------------------------------------- */

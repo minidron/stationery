@@ -1,3 +1,48 @@
+/* SUBCATEGORY
+============================================================================ */
+.sub-categories-container {
+}
+
+.sub-categories--list {
+    @include clear-list;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin-bottom: 40px;
+    margin-left: -20px;
+
+    .sub-categories--item {
+        margin-top: 20px;
+        padding-left: 20px;
+        flex-shrink: 0;
+        flex-basis: calc(1/4 * 100%);
+        box-sizing: border-box;
+
+        &:nth-child(-n+4) {
+            margin-top: 0;
+        }
+
+        .sub-category {
+            height: 100%;
+
+            .sub-category--link {
+                display: flex;
+                align-items: center;
+                padding: 10px 35px 10px 20px;
+                height: 100%;
+                min-height: 60px;
+                box-sizing: border-box;
+                font: $fw-regular 14px/18px $ff-Roboto;
+                text-decoration: none;
+                color: get($color, 'text', 'base');
+            }
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
 /* CATEGORY
 ============================================================================ */
 .category-container {
@@ -55,6 +100,10 @@
             input {
                 width: 80px;
             }
+        }
+
+        #offer-filter--price-slider {
+            margin-top: 20px;
         }
     }
 

@@ -57,3 +57,34 @@ do ($=jQuery, window, document) ->
       onSelect: (suggestion) ->
           window.location.href = suggestion.data.link
   # ---------------------------------------------------------------------------
+
+
+  # PRICE SLIDER
+  # ---------------------------------------------------------------------------
+  $ ->
+    handlesSlider = document.getElementById('offer-filter--price-slider')
+    minPrice = document.getElementById('offer-filter--price-min')
+    maxPrice = document.getElementById('offer-filter--price-max')
+
+    noUiSlider.create handlesSlider,
+      connect: true
+      start: [
+        parseInt(minPrice.value)
+        parseInt(maxPrice.value)]
+      range:
+        'min': [parseInt(minPrice.dataset.price)]
+        'max': [parseInt(maxPrice.dataset.price)]
+
+    handlesSlider.noUiSlider.on 'update', (values, handle) ->
+      value = values[handle]
+      if handle
+        maxPrice.value = Math.round value
+      else
+        minPrice.value = Math.round value
+
+    minPrice.addEventListener 'change', () ->
+      handlesSlider.noUiSlider.set [this.value, null]
+
+    maxPrice.addEventListener 'change', () ->
+      handlesSlider.noUiSlider.set [null, this.value]
+  # ---------------------------------------------------------------------------

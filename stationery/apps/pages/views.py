@@ -55,7 +55,7 @@ class CategoryView(DetailView):
         context = super().get_context_data(**kwargs)
         category = context['category']
         offers = category.offers
-        prices = offers.aggregate(Min('price'), Max('price'))
+        prices = offers.aggregate(Min('retail_price'), Max('retail_price'))
 
         property_values = Prefetch(
             'property_values',

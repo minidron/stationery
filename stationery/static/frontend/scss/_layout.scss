@@ -33,6 +33,12 @@ body {
         }
     }
 }
+
+.noUi-base {
+    .noUi-connect {
+        background-color: $color-accent;
+    }
+}
 /* ------------------------------------------------------------------------- */
 
 
@@ -210,10 +216,19 @@ body {
         }
 
         .navbar-menu--root-item {
-            margin-right: 40px;
-            font: $fw-medium 14px/50px $ff-Roboto;
-            text-transform: uppercase;
-            color: get($color, 'nav', 'text');
+            margin-right: 30px;
+
+            a {
+                display: block;
+                font: $fw-medium 12px/50px $ff-Roboto;
+                text-decoration: none;
+                text-transform: uppercase;
+                color: get($color, 'nav', 'text');
+
+                &:hover {
+                    color: #FFF;
+                }
+            }
 
             &:last-of-type {
                 margin-right: 0;
