@@ -1,7 +1,7 @@
 import collections
 
 from django import forms
-from django.db.models import Count, Max, Min, Prefetch
+from django.db.models import Count, Max, Min, Prefetch, Q
 from django.views.generic import DetailView, ListView, TemplateView
 
 from pages.models import Page
@@ -63,6 +63,11 @@ class CategoryView(DetailView):
         # Фильтрация
         if form_search.is_valid():
             data = form_search.cleaned_data
+
+            if data.get('minCost') and data.get('maxCost'):
+                offers = offers.filter(
+                    Q(retail_price__gte=data['minCost']) &
+                    Q(retail_price__lte=data['maxCost']))
 
             filter_properties = []
             for param_key, param_value in data.items():

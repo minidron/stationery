@@ -16,8 +16,9 @@
         margin-top: 20px;
         padding-left: 20px;
         flex-shrink: 0;
-        flex-basis: calc(1/4 * 100%);
+        flex-basis: 25%;
         box-sizing: border-box;
+        max-width: 25%;
 
         &:nth-child(-n+4) {
             margin-top: 0;
