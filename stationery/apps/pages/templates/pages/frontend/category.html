@@ -3,6 +3,23 @@
 {% load static thumbnail pages_tag %}
 
 
+{% block breadcrumbs %}
+    <div class="breadcrumbs__section">
+        <div class="breadcrumbs-container">
+            <ul class="breadcrumbs">
+                {% for ancestor in category.get_ancestors %}
+                    <li class="breadcrumbs--item"><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a></li>
+                    <li class="breadcrumbs--item separator"></li>
+                {% endfor %}
+
+                <li class="breadcrumbs--item"><span>{{ category.title }}</span></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
+
 {% block content %}
     <h1 class="main--title">{{ category.title }}</h1>
 

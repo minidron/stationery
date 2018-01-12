@@ -63,6 +63,9 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
   $ ->
     handlesSlider = document.getElementById('offer-filter--price-slider')
+    if not handlesSlider
+      return
+
     minPrice = document.getElementById('offer-filter--price-min')
     maxPrice = document.getElementById('offer-filter--price-max')
 

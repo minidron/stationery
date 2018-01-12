@@ -9,34 +9,17 @@ from pages.models import Page
 from odinass.models import Category, Offer, Property, PropertyValue
 
 
-class TestView(TemplateView):
-    template_name = 'pages/frontend/base.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        categories = Category.objects.filter(level=0)[1:4]
-        context.update({
-            'categories': categories,
-        })
-        return context
-
-
 class IndexView(TemplateView):
-    template_name = 'pages/index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'hot': Offer.objects.all()[:8],
-        })
-        return context
-
-
-class CatalogView(TemplateView):
-    template_name = 'pages/catalog.html'
+    """
+    Главная страница.
+    """
+    template_name = 'pages/frontend/index.html'
 
 
 class CategoryView(DetailView):
+    """
+    Страница категории.
+    """
     model = Category
     paginate_by = 15
     allow_empty = ListView.allow_empty
@@ -152,21 +135,25 @@ class CategoryView(DetailView):
 
 
 class ProductView(DetailView):
+    """
+    Страница продукта.
+    """
     model = Offer
-    template_name = 'pages/product.html'
+    template_name = 'pages/frontend/product.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        obj = kwargs['object']
+        category = obj.product.categories.first()
+        category.offers.filter(pk=obj.pk)
+
+        context.update({
+            'category': category,
+            'offer': category.offers.get(pk=obj.pk),
+        })
+        return context
 
 
 class PageView(DetailView):
     model = Page
     template_name = 'pages/static.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        category = (Category.objects
-                            .get(pk='43ea0da8-ad21-11db-a2b2-00c09fa8f069'))
-
-        context.update({
-            'category': category,
-        })
-        return context

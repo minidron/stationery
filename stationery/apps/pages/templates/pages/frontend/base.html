@@ -62,18 +62,8 @@
 
     <div class="colored-line"></div>
 
-    <div class="breadcrumbs__section">
-        <div class="breadcrumbs-container">
-            <ul class="breadcrumbs">
-                {% for ancestor in category.get_ancestors %}
-                    <li class="breadcrumbs--item"><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a></li>
-                    <li class="breadcrumbs--item separator"></li>
-                {% endfor %}
-
-                <li class="breadcrumbs--item"><span>{{ category.title }}</span></li>
-            </ul>
-        </div>
-    </div>
+    {% block breadcrumbs %}
+    {% endblock %}
 
     <main class="main__section">
         <div class="main-container">

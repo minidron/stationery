@@ -42,7 +42,7 @@ class Category(MPTTModel):
         default=0, blank=False, null=False)
 
     class MPTTMeta:
-        order_insertion_by = ['order']
+        order_insertion_by = ['title']
 
     class Meta:
         default_related_name = 'categories'

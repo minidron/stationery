@@ -38,6 +38,35 @@ body {
     .noUi-connect {
         background-color: $color-accent;
     }
+
+    .noUi-handle {
+        border-radius: 10px;
+    }
+}
+
+.noUi-target {
+    border: 0 none;
+    border-radius: 3px;
+    background-color: get($color, 'header', 'border');
+}
+
+.noUi-horizontal {
+    height: 6px;
+
+    .noUi-handle {
+        top: -8px;
+        left: -10px;
+        width: 20px;
+        height: 20px;
+
+        &:focus {
+            outline: 0 none;
+        }
+
+        &:after, &:before {
+            content: none;
+        }
+    }
 }
 /* ------------------------------------------------------------------------- */
 
