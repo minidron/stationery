@@ -38,6 +38,9 @@ class CategoryView(DetailView):
         context = super().get_context_data(**kwargs)
         category = context['category']
         offers = category.offers
+        has_offers = True
+        if not offers:
+            has_offers = False
         prices = offers.aggregate(Min('retail_price'), Max('retail_price'))
 
         property_values = Prefetch(
@@ -90,6 +93,7 @@ class CategoryView(DetailView):
             })
 
         context.update({
+            'has_offers': has_offers,
             'prices': prices,
             'offers': offers,
             'form_search': form_search,

@@ -39,6 +39,7 @@
         </div>
     {% endif %}
 
+    {% if has_offers %}
     <div class="category-container">
         <div class="category-filters rounded">
             <form action="" method="GET">
@@ -147,4 +148,5 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
 {% endblock content %}
