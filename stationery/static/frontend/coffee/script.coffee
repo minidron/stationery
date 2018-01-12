@@ -51,7 +51,7 @@ do ($=jQuery, window, document) ->
           return suggestion.value
 
         pattern = '(' + escapeRegExChars(currentValue) + ')'
-        result = suggestion.value + '<div class="price">' + suggestion.data.price + '</div>'
+        result = '<div class="suggestion">' + suggestion.value + '</div><div class="price">' + suggestion.data.price + '</div>'
         result.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
 
       onSelect: (suggestion) ->

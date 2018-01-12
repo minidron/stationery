@@ -9,10 +9,10 @@
             <ul class="breadcrumbs">
                 {% for ancestor in category.get_ancestors %}
                     <li class="breadcrumbs--item"><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a></li>
-                    <li class="breadcrumbs--item separator"></li>
+                    {% if not forloop.last %}
+                        <li class="breadcrumbs--item separator"></li>
+                    {% endif %}
                 {% endfor %}
-
-                <li class="breadcrumbs--item"><span>{{ category.title }}</span></li>
             </ul>
         </div>
     </div>

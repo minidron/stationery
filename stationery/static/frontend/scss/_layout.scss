@@ -205,17 +205,41 @@ body {
     background-color: #FFF;
 
     .autocomplete-suggestion {
-        padding: 2px 20px;
+        display: flex;
+        align-items: flex-start;
+        flex-flow: row;
+        padding: 6px 20px;
+        border-bottom: 1px solid get($color, 'header', 'border');
+        font: normal 14px/20px $ff-PT-Sans;
+        color: get($color, 'text', 'lighter');
         cursor: pointer;
 
+        .suggestion {
+            flex: 1;
+        }
+
+        .price {
+            margin-left: 30px;
+            width: 80px;
+            font-size: 13px;
+            text-align: right;
+
+            &:after {
+                @include fa-icon;
+                content: $fa-var-rub;
+                margin-left: 5px;
+            }
+        }
+
         &.autocomplete-selected {
+            color: get($color, 'text', 'base');
             background: #F0F0F0;
         }
     }
 
     strong {
         font-weight: normal;
-        color: #3399FF;
+        color: get($color, 'link', 'base');
     }
 }
 /* ------------------------------------------------------------------------- */

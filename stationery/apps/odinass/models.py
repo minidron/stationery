@@ -312,7 +312,7 @@ class Offer(models.Model):
             price = price.first()
         else:
             return 'нет цены'
-        return '%s %s' % (format_price(price.price), price.currency)
+        return str(format_price(price.price))
 
     @property
     def features(self):
