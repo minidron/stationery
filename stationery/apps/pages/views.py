@@ -1,4 +1,7 @@
 import collections
+import operator
+
+from functools import reduce
 
 from django import forms
 from django.db.models import Count, Max, Min, Prefetch, Q
@@ -55,6 +58,7 @@ class CategoryView(DetailView):
                     .prefetch_related(property_values)
                     .order_by('title')
                     .distinct())
+        properties_ids = [str(property.pk) for property in properties]
 
         # Форма поиска
         form_search = self.get_search_form(properties)(
@@ -69,21 +73,12 @@ class CategoryView(DetailView):
                     Q(retail_price__gte=data['minCost']) &
                     Q(retail_price__lte=data['maxCost']))
 
-            filter_properties = []
-            for param_key, param_value in data.items():
-                if param_value and param_key not in ['minCost', 'maxCost']:
-                    if isinstance(param_value, list):
-                        filter_properties += param_value
-                    else:
-                        filter_properties.append(param_value)
-
-            if filter_properties:
-                offers = (
-                    offers.filter(
-                              product__property_values__in=filter_properties)
-                          .annotate(
-                              num_tags=Count('product__property_values'))
-                          .filter(num_tags=len(filter_properties)))
+            for param_key, param_values in data.items():
+                if param_key in properties_ids and param_values:
+                    filter = reduce(
+                        operator.or_,
+                        [Q(product__property_values=v) for v in param_values])
+                    offers = offers.filter(filter)
 
         # Пагинация
         page_size = self.get_paginate_by(offers)
