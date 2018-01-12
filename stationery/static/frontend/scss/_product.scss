@@ -1,0 +1,207 @@
+/* MAIN
+============================================================================ */
+.product_page {
+    .main__section {
+        .main--title {
+            margin-bottom: 0;
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* OFFER
+============================================================================ */
+.offer--wrapper {
+    .offer-code {
+        margin-bottom: 20px;
+        font: $fw-regular 13px/20px $ff-PT-Sans;
+        color: get($color, 'text', 'light');
+    }
+
+    .offer-container {
+        display: flex;
+        align-items: stretch;
+        flex-flow: row;
+
+        .offer-image {
+            padding: 20px;
+            width: 440px;
+            box-sizing: border-box;
+            text-align: center;
+
+            img {
+                vertical-align: bottom;
+                max-width: 400px;
+                max-height: 400px;
+            }
+        }
+
+
+        .offer-info {
+            flex: 1;
+            padding: 20px;
+            border-right: 1px solid get($color, 'header', 'border');
+            border-left: 1px solid get($color, 'header', 'border');
+
+            .offer-info--offer-properties {
+                .offer-properties--title {
+                    margin-top: 0;
+                    margin-bottom: 15px;
+                    font: $fw-medium 16px/20px $ff-Roboto;
+                    color: get($color, 'title', 'base');
+                }
+
+                .offer-info--offer-property {
+                    position: relative;
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    font: $fw-regular 14px/20px $ff-PT-Sans;
+                    color: get($color, 'text', 'lighter');
+                }
+
+                .offer-info--offer-property--name {
+                    display: inline-block;
+                    width: 60%;
+                    margin: 0 0 3px;
+                    vertical-align: top;
+                    background: inherit;
+
+                    span {
+                        position: relative;
+                        padding: 0 10px 0 0;
+                        background: #FFF;
+                        z-index: 2;
+                    }
+
+                    &:after {
+                        position: absolute;
+                        right: 5px;
+                        left: 0;
+                        height: 1px;
+                        margin: .85em 0 0;
+                        content: '';
+                        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAABCAAAAAA+i0toAAAAAnRSTlMA/1uRIrUAAAAMSURBVHheY7j1/z8ABY8C2UtBe8oAAAAASUVORK5CYII=) 0 0 repeat-x;
+                    }
+                }
+
+                .offer-info--offer-property--value {
+                    display: inline-block;
+                    width: 40%;
+                    margin: 0 0 3px;
+                    vertical-align: bottom;
+                    background: #FFF;
+
+                    span {
+                        position: relative;
+                        display: block;
+                        padding: 0 0 0 10px;
+                        background: inherit;
+                        z-index: 2;
+                    }
+                }
+            }
+        }
+
+        .offer-price {
+            padding: 20px;
+            width: 250px;
+            box-sizing: border-box;
+
+            .offer-price--price {
+                margin-bottom: 15px;
+                font: $fw-bold 20px/20px $ff-Roboto;
+                color: get($color, 'title', 'base');
+
+                &.has_price:after {
+                    @include fa-icon;
+                    content: $fa-var-rub;
+                    margin-left: 5px;
+                    font-size: 18px;
+                }
+            }
+
+            .offer-price--availability {
+                margin-bottom: 15px;
+                font: $fw-regular 14px/20px $ff-PT-Sans;
+                color: get($color, 'text', 'light');
+
+                .offer-price--offer-rest {
+                    position: relative;
+                    margin-top: 0;
+                    margin-bottom: 0;
+                }
+
+                .offer-price--offer-rest--name {
+                    display: inline-block;
+                    width: 80%;
+                    margin: 0 0 3px;
+                    vertical-align: top;
+                    background: inherit;
+
+                    span {
+                        position: relative;
+                        padding: 0 10px 0 0;
+                        background: #FFF;
+                        z-index: 2;
+                    }
+
+                    &:after {
+                        position: absolute;
+                        right: 5px;
+                        left: 0;
+                        height: 1px;
+                        margin: .85em 0 0;
+                        content: '';
+                        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAABCAAAAAA+i0toAAAAAnRSTlMA/1uRIrUAAAAMSURBVHheY7j1/z8ABY8C2UtBe8oAAAAASUVORK5CYII=) 0 0 repeat-x;
+                    }
+                }
+
+                .offer-price--offer-rest--value {
+                    display: inline-block;
+                    width: 20%;
+                    margin: 0 0 3px;
+                    vertical-align: bottom;
+                    text-align: right;
+                    background: #FFF;
+
+                    span {
+                        position: relative;
+                        display: inline-block;
+                        padding: 0 0 0 10px;
+                        background: inherit;
+                        z-index: 2;
+                    }
+                }
+            }
+
+            .offer-price--cart {
+                .add-cart {
+                    display: block;
+                    height: 38px;
+                    border-radius: 5px;
+                    font: $fw-medium 12px/38px $ff-Roboto;
+                    text-align: center;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    color: get($color, 'button', 'cart', 'text');
+                    background-color: get($color, 'button', 'cart', 'background');
+                    cursor: pointer;
+                    transition: background-color $base-transition;
+
+                    &:after {
+                        @include fa-icon;
+                        content: $fa-var-shopping-cart;
+                        margin-left: 10px;
+                        font-size: 16px;
+                    }
+
+                    &:hover {
+                        background-color: darken(get($color, 'button', 'cart', 'background'), 10%);
+                    }
+                }
+            }
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */

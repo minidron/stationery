@@ -42,7 +42,7 @@ class Category(MPTTModel):
         default=0, blank=False, null=False)
 
     class MPTTMeta:
-        order_insertion_by = ['order']
+        order_insertion_by = ['title']
 
     class Meta:
         default_related_name = 'categories'
@@ -312,7 +312,7 @@ class Offer(models.Model):
             price = price.first()
         else:
             return 'нет цены'
-        return '%s %s' % (format_price(price.price), price.currency)
+        return str(format_price(price.price))
 
     @property
     def features(self):

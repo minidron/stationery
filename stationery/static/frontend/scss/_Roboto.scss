@@ -1,0 +1,122 @@
+$font-family: 'Roboto';
+$font-path:   '../fonts/Roboto/';
+
+@font-face {
+    $font-name-safe: 'Roboto-Thin';
+    $font-name:      'Roboto Thin';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 100;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-ThinItalic';
+    $font-name:      'Roboto Thin Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 100;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-Light';
+    $font-name:      'Roboto Light';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 300;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-LightItalic';
+    $font-name:      'Roboto Light Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 300;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-Regular';
+    $font-name:      'Roboto Regular';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 400;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-Italic';
+    $font-name:      'Roboto Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 400;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-Medium';
+    $font-name:      'Roboto Medium';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 500;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-MediumItalic';
+    $font-name:      'Roboto Medium Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 500;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-Bold';
+    $font-name:      'Roboto Bold';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 700;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-BoldItalic';
+    $font-name:      'Roboto Bold Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 700;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-Black';
+    $font-name:      'Roboto Black';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 900;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'Roboto-BlackItalic';
+    $font-name:      'Roboto Black Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 900;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}

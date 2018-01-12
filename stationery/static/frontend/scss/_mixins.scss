@@ -1,0 +1,104 @@
+/* UTILS
+============================================================================ */
+@function get($map, $keys...) {
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+    @return $map;
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* LAYOUT
+============================================================================ */
+@mixin center-block($width: null) {
+    margin-right: auto;
+    margin-left: auto;
+
+    @if $width {
+        width: $width;
+    }
+}
+
+@mixin padding-block {
+    padding-right: 30px;
+    padding-left: 30px;
+
+    @include media('<=desktop') {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+}
+
+@mixin responsive-block {
+    @include center-block;
+    @include padding-block;
+    max-width: $base-max-width;
+    box-sizing: border-box;
+}
+
+@mixin full-width-block {
+    margin-right: -30px;
+    margin-left: -30px;
+
+    @include media('<=desktop') {
+        margin-right: -20px;
+        margin-left: -20px;
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* ELEMENTS
+============================================================================ */
+@mixin clear-list {
+    list-style: none outside none;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+@mixin clearfix {
+    &:after {
+        clear: both;
+        content: '';
+        display: table;
+    }
+}
+
+@mixin placeholder($color) {
+    &::-webkit-input-placeholder {
+      color: $color;
+    }
+    &::-moz-placeholder {
+      color: $color;
+    }
+    &:-ms-input-placeholder {
+      color: $color;
+    }
+    &:-moz-placeholder {
+      color: $color;
+    }
+}
+
+@mixin col($selector, $col, $gap: 0) {
+    @include clearfix;
+    margin-left: -$gap;
+
+    #{$selector} {
+        float: left;
+        display: block;
+        padding-left: $gap;
+        width: 100%/$col;
+        box-sizing: border-box;
+
+        &:nth-child(#{$col}n+1) {
+            clear: both;
+        }
+
+        &:nth-last-child(-n+#{$col}) {
+            margin-bottom: 0;
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */

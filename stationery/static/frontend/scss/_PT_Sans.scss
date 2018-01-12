@@ -1,0 +1,42 @@
+$font-family: 'PT Sans';
+$font-path:   '../fonts/PT_Sans/';
+
+@font-face {
+    $font-name-safe: 'PT_Sans-Regular';
+    $font-name:      'PT Sans Regular';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 400;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'PT_Sans-Italic';
+    $font-name:      'PT Sans Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 400;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'PT_Sans-Bold';
+    $font-name:      'PT Sans Bold';
+    font-family: $font-family;
+    font-style: normal;
+    font-weight: 700;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}
+
+@font-face {
+    $font-name-safe: 'PT_Sans-BoldItalic';
+    $font-name:      'PT Sans Bold Italic';
+    font-family: $font-family;
+    font-style: italic;
+    font-weight: 700;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}

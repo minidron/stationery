@@ -121,7 +121,11 @@ BOWER_INSTALLED_APPS = (
     'bootstrap#3.3',
     'devbridge-autocomplete#1.4',
     'font-awesome#4.7',
+    'include-media#1.4',
+    'include-media-export#1.0',
     'jquery-ui#1.12',
+    'normalize-css#7',
+    'nouislider#10.1',
     'owl.carousel#2.2',
 )
 
@@ -154,6 +158,19 @@ PIPELINE = {
     'SASS_BINARY': 'sassc',
     'COFFEE_SCRIPT_ARGUMENTS': '-b',
     'STYLESHEETS': {
+        'libs': {
+            'source_filenames': (
+                'bower_components/normalize-css/normalize.css',
+                'bower_components/nouislider/distribute/nouislider.min.css',
+            ),
+            'output_filename': 'frontend/css/libs.css',
+        },
+        'frontend': {
+            'source_filenames': (
+                'frontend/scss/style.scss',
+            ),
+            'output_filename': 'frontend/css/style.css',
+        },
         'styles': {
             'source_filenames': (
                 'scss/styles.scss',
@@ -162,6 +179,20 @@ PIPELINE = {
         },
     },
     'JAVASCRIPT': {
+        'libs': {
+            'source_filenames': (
+                'bower_components/jquery/dist/jquery.min.js',
+                'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
+                'bower_components/nouislider/distribute/nouislider.min.js',
+            ),
+            'output_filename': 'frontend/js/libs.js',
+        },
+        'frontend': {
+            'source_filenames': (
+                'frontend/coffee/script.coffee',
+            ),
+            'output_filename': 'frontend/js/script.js',
+        },
         'scripts': {
             'source_filenames': (
                 'bower_components/jquery/dist/jquery.min.js',

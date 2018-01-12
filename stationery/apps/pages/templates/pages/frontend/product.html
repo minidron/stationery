@@ -1,0 +1,70 @@
+{% extends "pages/frontend/base.html" %}
+
+{% load static thumbnail pages_tag %}
+
+
+{% block body_class %}product_page{% endblock %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs__section">
+        <div class="breadcrumbs-container">
+            <ul class="breadcrumbs">
+                {% for ancestor in category.get_ancestors %}
+                    <li class="breadcrumbs--item"><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a></li>
+                    <li class="breadcrumbs--item separator"></li>
+                {% endfor %}
+
+                <li class="breadcrumbs--item"><a href="{{ category.get_absolute_url }}">{{ offer.product.categories.first }}</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">{{ offer.title }}</h1>
+    <div class="offer--wrapper">
+        <div class="offer-code">Код: {{ offer.product.article }}</div>
+        <div class="offer-container rounded">
+            <div class="offer-image">
+                {% thumbnail offer.product.image '400x400' as offer_image %}
+                    <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
+                {% empty %}
+                    <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.title }}" class="product-item">
+                {% endthumbnail %}
+            </div>
+            <div class="offer-info">
+                {% if offer.product.property_values.all %}
+                    <div class="offer-info--offer-properties">
+                        <h3 class="offer-properties--title">Характеристики</h3>
+                        {% spaceless %}
+                        {% for prop in offer.product.property_values.all %}
+                            <dl class="offer-info--offer-property">
+                                <dt class="offer-info--offer-property--name"><span>{{ prop.property }}</span></dt>
+                                <dd class="offer-info--offer-property--value"><span>{{ prop }}</span></dd>
+                            </dl>
+                        {% endfor %}
+                        {% endspaceless %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="offer-price">
+                <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
+                <div class="offer-price--availability">
+                    {% spaceless %}
+                    {% for rest in offer.rests.all %}
+                        <dl class="offer-price--offer-rest">
+                            <dt class="offer-price--offer-rest--name"><span>{{ rest.warehouse }}</span></dt>
+                            <dd class="offer-price--offer-rest--value"><span>{{ rest }}</span></dd>
+                        </dl>
+                    {% endfor %}
+                    {% endspaceless %}
+                </div>
+                <div class="offer-price--cart">
+                    <a class="add-cart">В корзину</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
