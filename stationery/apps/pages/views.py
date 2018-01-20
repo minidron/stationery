@@ -4,12 +4,14 @@ import operator
 from functools import reduce
 
 from django import forms
-from django.db.models import Count, Max, Min, Prefetch, Q
+from django.db.models import Max, Min, Prefetch, Q
 from django.views.generic import DetailView, ListView, TemplateView
 
 from pages.models import Page
 
 from odinass.models import Category, Offer, Property, PropertyValue
+
+from orders.cart import Cart
 
 
 class IndexView(TemplateView):
@@ -17,6 +19,11 @@ class IndexView(TemplateView):
     Главная страница.
     """
     template_name = 'pages/frontend/index.html'
+
+    def get(self, request, *args, **kwargs):
+        import ipdb; ipdb.set_trace()
+        # Cart(request)
+        return super().get(request, *args, **kwargs)
 
 
 class CategoryView(DetailView):
