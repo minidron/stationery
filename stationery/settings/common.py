@@ -59,8 +59,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 LOGIN_URL = '/admin/login/'
-
-# SESSION_ENGINE = 'orders.session_backend'
 # -----------------------------------------------------------------------------
 
 

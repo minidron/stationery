@@ -1,93 +1,79 @@
 from django.conf import settings
-from django.contrib.auth.signals import user_logged_in
-from django.contrib.sessions.models import Session
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
-UserModel = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+User = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
-class Cart(models.Model):
+class OrderStatus(object):
     """
-    Корзина пользователя.
+    Статусы заказа.
     """
-    is_complete = models.BooleanField(
-        'завершено',
-        default=False)
+    NOT_CREATED = 1
+    INWORK = 2
+    CONFIRMED = 3
+    DELIVERY = 4
+    COMPLETED = 5
+    CANCELED = 6
+
+    CHOICES = (
+        (NOT_CREATED, 'не создан'),
+        (INWORK, 'в работе'),
+        (CONFIRMED, 'подтвержденный'),
+        (DELIVERY, 'доставка'),
+        (COMPLETED, 'завершенный'),
+        (CANCELED, 'аннулированный'),
+    )
+
+    CHOICES_MACHINE_NAME = {
+        NOT_CREATED: 'not_created',
+        INWORK: 'inwork',
+        CONFIRMED: 'confirmed',
+        DELIVERY: 'delivery',
+        COMPLETED: 'completed',
+        CANCELED: 'canceled',
+    }
+
+
+class OrderQuerySet(models.QuerySet):
+    def for_user(self, user):
+        return self.filter(user=user)
+
+
+class Order(models.Model):
+    """
+    Заказ пользователя.
+    """
+    user = models.ForeignKey(
+        User,
+        verbose_name='пользователь',
+        on_delete=models.CASCADE)
+    status = models.IntegerField(
+        'статус',
+        choices=OrderStatus.CHOICES, default=OrderStatus.NOT_CREATED,
+        db_index=True)
+    created = models.DateTimeField(
+        'дата создания',
+        editable=False, auto_now_add=True)
+    updated = models.DateTimeField(
+        'Дата изменения',
+        editable=False, auto_now=True)
+
+    objects = OrderQuerySet.as_manager()
 
     class Meta:
-        verbose_name = 'корзина'
-        verbose_name_plural = 'корзины'
+        default_related_name = 'orders'
+        verbose_name = 'заказ'
+        verbose_name_plural = 'заказы'
 
     def __str__(self):
         return str(self.pk)
 
-
-class Profile(models.Model):
-    """
-    Профиль пользователя.
-    """
-    user = models.OneToOneField(
-        UserModel,
-        on_delete=models.CASCADE)
-    cart = models.OneToOneField(
-        'orders.Cart',
-        verbose_name='корзина',
-        related_name='profile',
-        on_delete=models.SET_NULL, blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'профиль'
-        verbose_name_plural = 'профили'
-
-    def __str__(self):
-        return str(self.user)
-
-
-class UserSession(models.Model):
-    """
-    Ассоциация пользователя с сессией.
-    """
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL)
-    session = models.ForeignKey(
-        Session)
-
-    class Meta:
-        default_related_name = 'user_sessions'
-
-
-def user_logged_in_handler(sender, request, user, **kwargs):
-    """
-    При авторизации пользователя, ассоциируем его с сессией.
-    """
-    UserSession.objects.get_or_create(
-        user=user,
-        session_id=request.session.session_key,
-    )
-
-user_logged_in.connect(user_logged_in_handler)
-
-
-@receiver(post_save, sender=Cart)
-def create_cart(sender, instance, created, **kwargs):
-    if created:
-        instance.profile.cart = instance
-
-
-@receiver(post_save, sender=Cart)
-def save_cart_profile(sender, instance, created, **kwargs):
-    instance.profile.save()
-
-
-@receiver(post_save, sender=UserModel)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created or not getattr(instance, 'profile', None):
-        Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=UserModel)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    @classmethod
+    def get_cart(cls, user):
+        """
+        Получить корзину пользователя, если нет, то создать её.
+        """
+        cart, created = cls.objects.get_or_create(
+            user=user, status=OrderStatus.NOT_CREATED)
+        return cart
