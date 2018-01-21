@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
 
@@ -77,3 +79,64 @@ class Order(models.Model):
         cart, created = cls.objects.get_or_create(
             user=user, status=OrderStatus.NOT_CREATED)
         return cart
+
+    def add_item(self, offer_id):
+        try:
+            item = Item.objects.get(order=self, offer=offer_id)
+        except Item.DoesNotExist:
+            Item.objects.create(order=self, offer_id=offer_id)
+        else:
+            item.quantity += 1
+            item.save()
+
+    def update_item(self, offer_id, quantity):
+        try:
+            item = Item.objects.get(order=self, offer=offer_id)
+        except Item.DoesNotExist:
+            pass
+        else:
+            if quantity == 0:
+                item.delete()
+            else:
+                item.quantity = quantity
+                item.save()
+
+    def remove_item(self, offer_id):
+        try:
+            item = Item.objects.get(order=self, offer=offer_id)
+        except Item.DoesNotExist:
+            pass
+        else:
+            item.delete()
+
+
+class Item(models.Model):
+    """
+    Товар в заказе.
+    """
+    order = models.ForeignKey(
+        'orders.Order',
+        verbose_name='заказ',
+        on_delete=models.CASCADE)
+    offer = models.ForeignKey(
+        'odinass.Offer',
+        verbose_name='товар',
+        on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(
+        'количество',
+        default=1)
+    unit_price = models.DecimalField(
+        'цена за единицу',
+        max_digits=12, decimal_places=2)
+
+    class Meta:
+        default_related_name = 'items'
+        verbose_name = 'товар заказа'
+        verbose_name_plural = 'товары заказа'
+
+    def save(self, *args, **kwargs):
+        self.unit_price = self.get_unit_price()
+        super().save(*args, **kwargs)
+
+    def get_unit_price(self):
+        return Decimal('100.50')
