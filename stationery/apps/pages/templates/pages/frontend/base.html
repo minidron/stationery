@@ -19,7 +19,10 @@
 <body class="{% spaceless %}{% block body_class %}{% endblock %}{% endspaceless %}">
     <header class="header__section">
         <div class="header-panel--wrapper">
-            <div class="header-panel"></div>
+            <div class="header-panel">
+                <div class="header-slogan">Все для творчества, школы и офиса</div>
+                <div class="header-auth">{% if user.is_authenticated %}<span>{{ user.username }}</span>{% else %}<a href="{% url 'login' %}">Авторизация</a>{% endif %}</div>
+            </div>
         </div>
         <div class="header-container--wrapper">
             <div class="header-container">
@@ -54,9 +57,11 @@
                     </li>
                 {% endfor %}
             </ul>
-            <div class="navbar-cart">
-                <a class="navbar-cart--link" href="#fixme">Нет товаров</a>
-            </div>
+            {% if user.is_authenticated %}
+                <div class="navbar-cart">
+                    <a id="cart-full-price" class="navbar-cart--link" href="#fixme" data-cart-id="{{ cart.pk }}">Нет товаров</a>
+                </div>
+            {% endif %}
         </div>
     </nav>
 
@@ -76,7 +81,9 @@
 
     {% block scripts %}
         {% javascript 'libs' %}
+        {% javascript 'marionette' %}
+        {% javascript 'cart' %}
         {% javascript 'frontend' %}
-    {% endblock scripts %}
+    {% endblock %}
 </body>
 </html>

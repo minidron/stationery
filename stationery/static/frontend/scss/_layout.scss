@@ -19,7 +19,7 @@ body {
 }
 
 .rounded {
-    border-radius: 5px;
+    border-radius: $base-radius;
     box-shadow: 0 1px 2px 0 rgba(#000, 0.2),
                 0 2px 4px 0 rgba(#000, 0.05);
     background-color: #FFF;
@@ -81,7 +81,35 @@ body {
 
     .header-panel {
         @include responsive-block;
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        align-items: center;
         height: 29px;
+        font: normal 14px/1 $ff-PT-Sans;
+    }
+
+    .header-slogan {
+        color: get($color, 'text', 'light');
+    }
+
+    .header-auth {
+        color: get($color, 'title', 'base');
+
+        &:before {
+            @include fa-icon;
+            content: $fa-var-user;
+            margin-right: 5px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+
+            &:hover {
+                color: get($color, 'link', 'hover');
+            }
+        }
     }
 
     .header-container--wrapper {

@@ -119,15 +119,18 @@ STATICFILES_FINDERS += (
 BOWER_COMPONENTS_ROOT = path('static')
 
 BOWER_INSTALLED_APPS = (
+    'backbone#1.3',
     'bootstrap#3.3',
     'devbridge-autocomplete#1.4',
     'font-awesome#4.7',
     'include-media#1.4',
     'include-media-export#1.0',
     'jquery-ui#1.12',
+    'marionette#3.5',
     'normalize-css#7',
     'nouislider#10.1',
     'owl.carousel#2.2',
+    'underscore#1.8',
 )
 
 # './manage.py bower_install' - install bower apps
@@ -187,6 +190,22 @@ PIPELINE = {
                 'bower_components/nouislider/distribute/nouislider.min.js',
             ),
             'output_filename': 'frontend/js/libs.js',
+        },
+        'marionette': {
+            'source_filenames': (
+                'bower_components/underscore/underscore-min.js',
+                'bower_components/backbone/backbone-min.js',
+                'bower_components/backbone.radio/build/backbone.radio.min.js',
+                'bower_components/backbone.marionette/lib/backbone.marionette.min.js',  # NOQA
+            ),
+            'output_filename': 'frontend/js/marionette.js',
+        },
+        'cart': {
+            'source_filenames': (
+                'orders/frontend/coffee/cart/app.coffee',
+                'orders/frontend/coffee/cart/models.coffee',
+            ),
+            'output_filename': 'frontend/js/cart.js',
         },
         'frontend': {
             'source_filenames': (

@@ -16,3 +16,8 @@ class ItemAdmin(admin.ModelAdmin):
     Админка для товаров заказа.
     """
     raw_id_fields = ['offer']
+
+    list_display = [
+        'offer',
+        'quantity',
+    ]

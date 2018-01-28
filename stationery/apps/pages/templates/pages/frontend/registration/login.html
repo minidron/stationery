@@ -1,0 +1,26 @@
+{% extends "pages/frontend/base.html" %}
+
+{% block body_class %}registration_page{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">Авторизация</h1>
+
+    <div class="registration-form rounded">
+        <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ next|default:'/' }}">
+            <div class="field-row">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="field-row">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            {% if form.errors %}
+                <div class="error-row">Ваше имя пользователя и пароль не совпадают. Попробуйте еще раз.</div>
+            {% endif %}
+            <div class="submit-row"><button class="submit" type="submit">Войти</button></div>
+        </form>
+    </div>
+{% endblock %}

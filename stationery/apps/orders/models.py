@@ -109,6 +109,13 @@ class Order(models.Model):
         else:
             item.delete()
 
+    @property
+    def amount(self):
+        result = 0
+        for item in self.items.all():
+            result += item.total_price
+        return result
+
 
 class Item(models.Model):
     """
@@ -134,9 +141,16 @@ class Item(models.Model):
         verbose_name = 'товар заказа'
         verbose_name_plural = 'товары заказа'
 
+    def __str__(self):
+        return str(self.offer)
+
     def save(self, *args, **kwargs):
         self.unit_price = self.get_unit_price()
         super().save(*args, **kwargs)
 
     def get_unit_price(self):
         return Decimal('100.50')
+
+    @property
+    def total_price(self):
+        return self.unit_price * self.quantity

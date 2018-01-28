@@ -106,7 +106,7 @@
                                 Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
                             </div>
                             <div class="offer-price--cart">
-                                <a class="add-cart">В корзину</a>
+                                <a href="#" class="add-cart" data-offer-id="{{ offer.id }}">В корзину</a>
                             </div>
                         </div>
                     </div>
@@ -150,3 +150,9 @@
     </div>
     {% endif %}
 {% endblock content %}
+
+
+{% block scripts %}
+    {% csrf_token %}
+    {{ block.super }}
+{% endblock %}

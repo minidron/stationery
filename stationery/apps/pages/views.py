@@ -11,8 +11,6 @@ from pages.models import Page
 
 from odinass.models import Category, Offer, Property, PropertyValue
 
-from orders.models import Order
-
 
 class IndexView(TemplateView):
     """
@@ -21,9 +19,6 @@ class IndexView(TemplateView):
     template_name = 'pages/frontend/index.html'
 
     def get(self, request, *args, **kwargs):
-        user = request.user
-        if user:
-            cart = Order.get_cart(user)
         return super().get(request, *args, **kwargs)
 
 

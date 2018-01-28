@@ -27,6 +27,26 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
+  # Добавление в корзину
+  # ---------------------------------------------------------------------------
+  $ ->
+    $('a[data-offer-id]').click (e) ->
+      e.preventDefault()
+
+      $.ajax
+        type: 'POST'
+        url: '/api/orders/'
+        data: {
+          'offer': $(this).data('offerId')
+          'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+        }
+        success: (data, status) =>
+          console.log status
+        error: (data, status) =>
+          console.log status
+  # ---------------------------------------------------------------------------
+
+
   # AUTOCOMLETE
   # ---------------------------------------------------------------------------
   $ ->

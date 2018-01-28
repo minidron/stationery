@@ -1,0 +1,72 @@
+/* TITLE
+============================================================================ */
+.registration_page {
+    .main--title {
+        text-align: center;
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
+/* FORM
+============================================================================ */
+.registration-form {
+    @include center-block;
+    padding: 20px;
+    max-width: 320px;
+    box-sizing: border-box;
+
+    .field-row {
+        margin-bottom: 15px;
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font: $fw-medium 14px/18px $ff-Roboto;
+            color: get($color, 'title', 'base');
+        }
+
+        input[type='text'], input[type='password'] {
+            padding: 5px 10px;
+            height: 34px;
+            width: 100%;
+            border: 1px solid get($color, 'content', 'border');
+            outline: 0 none;
+            box-sizing: border-box;
+            font: normal 16px/34px $ff-PT-Sans;
+            color: get($color, 'text', 'base');
+            background-color: #FFF;
+
+            &:focus {
+                border-color: get($color, 'link', 'base');
+            }
+        }
+    }
+
+    .error-row {
+        font: normal 14px/18px $ff-PT-Sans;
+        color: red;
+    }
+
+    .submit-row {
+        margin-top: 20px;
+
+        .submit {
+            padding: 0 20px;
+            height: 44px;
+            border: 0 none;
+            border-radius: $base-radius;
+            font: $fw-medium 14px/44px $ff-Roboto;
+            text-transform: uppercase;
+            color: get($color, 'button', 'normal', 'text');
+            background-color: get($color, 'button', 'normal', 'background');
+            cursor: pointer;
+            transition: background-color $base-transition;
+
+            &:hover {
+                background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
+            }
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */
