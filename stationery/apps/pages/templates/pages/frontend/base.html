@@ -59,7 +59,7 @@
             </ul>
             {% if user.is_authenticated %}
                 <div class="navbar-cart">
-                    <a id="cart-full-price" class="navbar-cart--link" href="{% url 'cart' %}" data-cart-id="{{ cart.pk }}">{{ cart.amount|price }}</a>
+                    <a id="cart-full-price" class="navbar-cart--link" href="{% url 'cart' %}" data-cart-id="{{ cart.pk }}">{{ cart.amount|price|default:'0' }}</a>
                 </div>
             {% endif %}
         </div>
