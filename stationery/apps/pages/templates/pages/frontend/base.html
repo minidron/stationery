@@ -1,4 +1,4 @@
-{% load static pipeline %}
+{% load static pipeline pages_tag %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -59,7 +59,7 @@
             </ul>
             {% if user.is_authenticated %}
                 <div class="navbar-cart">
-                    <a id="cart-full-price" class="navbar-cart--link" href="#fixme" data-cart-id="{{ cart.pk }}">Нет товаров</a>
+                    <a id="cart-full-price" class="navbar-cart--link" href="{% url 'cart' %}" data-cart-id="{{ cart.pk }}">{{ cart.amount|price }}</a>
                 </div>
             {% endif %}
         </div>
@@ -81,8 +81,6 @@
 
     {% block scripts %}
         {% javascript 'libs' %}
-        {% javascript 'marionette' %}
-        {% javascript 'cart' %}
         {% javascript 'frontend' %}
     {% endblock %}
 </body>

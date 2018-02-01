@@ -337,6 +337,13 @@ body {
                 color: #FFF;
             }
 
+            &:after {
+                @include fa-icon;
+                content: $fa-var-rub;
+                margin-left: 5px;
+                font-size: 14px;
+            }
+
             &:hover {
                 background-color: darken(mix($color-secondary, #FFF, 90%), 10%);
             }

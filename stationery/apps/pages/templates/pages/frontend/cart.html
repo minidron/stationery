@@ -1,0 +1,34 @@
+{% extends "pages/frontend/base.html" %}
+
+{% load pages_tag %}
+
+
+{% block body_class %}cart_page{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">Заказ номер №{{ cart.pk }}</h1>
+    <div class="cart-container rounded">
+        <form method="POST">{% csrf_token %}
+            {% for item_form in form %}
+                <div class="cart--item">
+                    {% with item_form.instance.offer as offer %}
+                        <div class="cart--item-offer"><a class="cart--item-offer--link" href="{{ offer.get_absolute_url }}">{{ offer }}</a></div>
+                    {% endwith %}
+                    <div class="cart--item-quantity">{{ item_form.quantity }}</div>
+                    <div class="cart--item-unit_price">x {{ item_form.instance.unit_price|price }}</div>
+                    <div class="cart--item-total_price">= {{ item_form.instance.total_price|price }}</div>
+                </div>
+            {% endfor %}
+            <div class="cart-info">
+                <div class="cart-info--save">
+                    <button class="submit" type="submit" name="_save">Сохранить изменения</button>
+                </div>
+                <div class="cart-info--price">= {{ cart.amount|price }}</div>
+                <div class="cart-info--send">
+                    <button class="submit" type="submit" name="_submit">Оформить заказ</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

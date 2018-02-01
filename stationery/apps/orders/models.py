@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from django.conf import settings
 from django.db import models
 
@@ -149,7 +147,7 @@ class Item(models.Model):
         super().save(*args, **kwargs)
 
     def get_unit_price(self):
-        return Decimal('100.50')
+        return self.offer.price
 
     @property
     def total_price(self):

@@ -1,5 +1,9 @@
 do ($=jQuery, window, document) ->
 
+  toPrice = (value) ->
+    price = value.toFixed(2).replace /\B(?=(\d{3})+(?!\d))/g, ' '
+
+
   # Псевдо hover на поисковый блок
   # ---------------------------------------------------------------------------
   $ ->
@@ -27,11 +31,16 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
-  # Добавление в корзину
+  # ДОБАВЛЕНИЕ В КОРЗИНУ
   # ---------------------------------------------------------------------------
   $ ->
+    cart = $ '#cart-full-price'
+
     $('a[data-offer-id]').click (e) ->
       e.preventDefault()
+
+      el = $ @
+      price = parseFloat el.data 'offerPrice'
 
       $.ajax
         type: 'POST'
@@ -41,9 +50,31 @@ do ($=jQuery, window, document) ->
           'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
         }
         success: (data, status) =>
+          cart_price = parseFloat cart.text().replace /[^\d\.]+/g, ''
+          cart.text toPrice price + cart_price
           console.log status
         error: (data, status) =>
           console.log status
+  # ---------------------------------------------------------------------------
+
+
+  # КОРЗИНА ТОВАРОВ
+  # ---------------------------------------------------------------------------
+  $ ->
+    $('.cart--item-quantity input').on 'keyup change', (e) ->
+      el = $ @
+      txt = el.closest('.cart--item').find('.cart--item-unit_price').text()
+      price = parseFloat txt.replace /[^\d\.]+/g, ''
+      totalPrice = el.val() * price
+      el.closest('.cart--item').find('.cart--item-total_price').text "= #{toPrice(totalPrice)}"
+      $('.cart-info--price').trigger 'htmlchange'
+
+    $('.cart-info--price').on 'htmlchange', (e) ->
+      el = $ @
+      sum = 0
+      $.each $('.cart--item-total_price'), ->
+        sum += parseFloat $(this).text().replace /[^\d\.]+/g, ''
+      el.text "= #{toPrice(sum)}"
   # ---------------------------------------------------------------------------
 
 
