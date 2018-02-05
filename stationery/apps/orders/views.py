@@ -1,10 +1,13 @@
 from django.contrib.auth.views import LoginView
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from lib.email import create_email
 
 from orders.forms import ItemFormSet
 from orders.models import Order, OrderStatus
@@ -54,6 +57,25 @@ class CartView(FormView):
             if '_submit' in data:
                 form.order.status = OrderStatus.INWORK
                 form.order.save()
+                self.send_mail(form)
                 self.success_url = reverse('index')
         form.save()
         return super().form_valid(form)
+
+    def send_mail(self, form):
+        body_html = render_to_string(
+            'orders/mail_order.html',
+            {
+                'site': self.request.get_host(),
+                'order': form.order,
+                'items': form.order.items.all(),
+            }
+        )
+
+        email = create_email(
+            'Заказ с сайта',
+            body_html,
+            'info@kancmiropt.ru'
+        )
+
+        email.send()
