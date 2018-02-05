@@ -40,18 +40,18 @@ do ($=jQuery, window, document) ->
       e.preventDefault()
 
       el = $ @
-      price = parseFloat el.data 'offerPrice'
+      quantity = el.closest('.offer-price--cart').find('.quantity').val()
 
       $.ajax
         type: 'POST'
         url: '/api/orders/'
         data: {
           'offer': $(this).data('offerId')
+          'quantity': quantity
           'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
         }
         success: (data, status) =>
-          cart_price = parseFloat cart.text().replace /[^\d\.]+/g, ''
-          cart.text toPrice price + cart_price
+          cart.text toPrice data.amount
           console.log status
         error: (data, status) =>
           console.log status

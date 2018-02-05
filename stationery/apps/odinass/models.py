@@ -56,11 +56,14 @@ class Category(MPTTModel):
     def get_absolute_url(self):
         return reverse('pages:category', args=[str(self.id)])
 
-    @property
-    def offers(self):
-        # цены для ретейла
-        price = Price.objects.filter(offer=OuterRef('pk'),
-                                     price_type__sales_type=SalesType.RETAIL)
+    def offers(self, user=None):
+        price_params = {}
+        if user and hasattr(user, 'profile') and user.profile.price_type:
+            price_params['price_type'] = user.profile.price_type
+        else:
+            price_params['price_type__is_default'] = True
+
+        price = Price.objects.filter(offer=OuterRef('pk'), **price_params)
 
         # остатки по нужным складам
         prefetch = Prefetch(
@@ -209,24 +212,6 @@ class PropertyValue(models.Model):
         return self.title
 
 
-class SalesType(object):
-    """
-    Тип продажи
-    """
-    RETAIL = 1
-    WHOLESALE = 2
-
-    CHOICES = (
-        (RETAIL, 'розница'),
-        (WHOLESALE, 'оптовая продажа'),
-    )
-
-    CHOICES_MACHINE_NAME = {
-        RETAIL: 'retail',
-        WHOLESALE: 'wholesale',
-    }
-
-
 class PriceType(models.Model):
     """
     Тип цены
@@ -236,10 +221,9 @@ class PriceType(models.Model):
     title = models.CharField(
         'наименование',
         max_length=254)
-    sales_type = models.IntegerField(
-        'тип продажи',
-        choices=SalesType.CHOICES, db_index=True, blank=True, null=True,
-        unique=True)
+    is_default = models.BooleanField(
+        'по умолчанию',
+        db_index=True, default=False)
 
     class Meta:
         default_related_name = 'price_types'
@@ -249,6 +233,12 @@ class PriceType(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        price_type = PriceType.objects.filter(is_default=True)
+        if price_type and self.is_default:
+            self.is_default = False
+        super().save(*args, **kwargs)
 
 
 class Price(models.Model):
@@ -305,14 +295,18 @@ class Offer(models.Model):
     def get_absolute_url(self):
         return reverse('pages:product', args=[str(self.id)])
 
-    @property
-    def price(self):
-        price = self.prices.filter(price_type__sales_type=SalesType.RETAIL)
-        if len(price):
-            price = price.first()
+    def price(self, user=None):
+        price_params = {}
+        if user and hasattr(user, 'profile') and user.profile.price_type:
+            price_params['price_type'] = user.profile.price_type
         else:
-            return 'нет цены'
-        return str(format_price(price.price))
+            price_params['price_type__is_default'] = True
+
+        price = 0
+        qs = self.prices.get(**price_params)
+        if qs:
+            price = qs.price
+        return price
 
     @property
     def features(self):

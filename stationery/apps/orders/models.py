@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 User = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
@@ -78,14 +80,14 @@ class Order(models.Model):
             user=user, status=OrderStatus.NOT_CREATED)
         return cart
 
-    def add_item(self, offer_id):
+    def add_item(self, offer_id, quantity, user=None):
         try:
             item = Item.objects.get(order=self, offer=offer_id)
         except Item.DoesNotExist:
-            Item.objects.create(order=self, offer_id=offer_id)
+            item = Item(order=self, offer_id=offer_id, quantity=quantity)
         else:
-            item.quantity += 1
-            item.save()
+            item.quantity += quantity
+        item.save(user=user)
 
     def update_item(self, offer_id, quantity):
         try:
@@ -143,12 +145,42 @@ class Item(models.Model):
         return str(self.offer)
 
     def save(self, *args, **kwargs):
-        self.unit_price = self.get_unit_price()
+        user = kwargs.pop('user', None)
+        self.unit_price = self.get_unit_price(user)
         super().save(*args, **kwargs)
+        if self.quantity == 0:
+            self.delete()
 
-    def get_unit_price(self):
-        return self.offer.price
+    def get_unit_price(self, user=None):
+        return self.offer.price(user=user)
 
     @property
     def total_price(self):
         return self.unit_price * self.quantity
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User,
+        verbose_name='пользователь',
+        related_name='profile',
+        on_delete=models.CASCADE)
+    price_type = models.ForeignKey(
+        'odinass.PriceType',
+        verbose_name='тип цены',
+        db_index=True, blank=True, null=True)
+
+    class Meta:
+        default_related_name = 'profiles'
+        verbose_name = 'профиль'
+        verbose_name_plural = 'профили'
+
+    def __str__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()

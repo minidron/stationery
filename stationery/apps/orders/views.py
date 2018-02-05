@@ -20,8 +20,9 @@ class OrderAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         order = Order.get_cart(request.user)
-        order.add_item(request.POST['offer'])
-        return Response({'status': 'ok'}, status=status.HTTP_200_OK)
+        quantity = int(request.POST['quantity'])
+        order.add_item(request.POST['offer'], quantity, user=request.user)
+        return Response({'amount': order.amount}, status=status.HTTP_200_OK)
 
 
 class UserLoginView(LoginView):

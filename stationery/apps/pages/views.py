@@ -43,7 +43,7 @@ class CategoryView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = context['category']
-        offers = category.offers
+        offers = category.offers(user=self.request.user)
         has_offers = True
         if not offers:
             has_offers = False
@@ -152,11 +152,11 @@ class ProductView(DetailView):
         context = super().get_context_data(**kwargs)
         obj = kwargs['object']
         category = obj.product.categories.first()
-        category.offers.filter(pk=obj.pk)
+        category.offers(self.request.user).filter(pk=obj.pk)
 
         context.update({
             'category': category,
-            'offer': category.offers.get(pk=obj.pk),
+            'offer': category.offers(self.request.user).get(pk=obj.pk),
         })
         return context
 

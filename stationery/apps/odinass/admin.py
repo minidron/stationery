@@ -152,7 +152,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
 class PriceTypeAdmin(admin.ModelAdmin):
     list_display = [
         'title',
-        'sales_type',
+        'is_default',
     ]
 
 

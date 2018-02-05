@@ -269,6 +269,22 @@
                     }
                 }
             }
+
+            .offer-price--quantity {
+                margin-bottom: 10px;
+
+                .quantity {
+                    padding: 5px 10px;
+                    height: 24px;
+                    width: 40px;
+                    border: 1px solid get($color, 'content', 'border');
+                    outline: 0 none;
+                    box-sizing: border-box;
+                    font: normal 14px/24px $ff-PT-Sans;
+                    color: get($color, 'text', 'base');
+                    background-color: #FFF;
+                }
+            }
         }
     }
 
