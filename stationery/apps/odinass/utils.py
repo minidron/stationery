@@ -9,6 +9,8 @@ from django.utils import timezone
 
 from lxml import etree as ET
 
+from mptt.exceptions import InvalidMove
+
 from odinass import models as odinass_models
 
 
@@ -153,13 +155,19 @@ class ImportManager(object):
                 defaults['order'] = int(order)
             defaults['title'] = title
 
-            odinass_models.Category.objects.update_or_create(
-                id=get_text(item.find('Ид', node.nsmap)),
-                defaults=defaults)
+            error = 0
+            try:
+                odinass_models.Category.objects.update_or_create(
+                    id=get_text(item.find('Ид', node.nsmap)),
+                    defaults=defaults)
+            except InvalidMove:
+                error = 1
 
             stack = [(group, item)
                      for group in item.findall('Группы/Группа',
                                                node.nsmap)] + stack
+        if error:
+            self.import_groups(node)
 
     def import_warehouse(self, node):
         """
