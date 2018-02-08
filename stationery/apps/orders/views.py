@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
@@ -30,6 +30,10 @@ class OrderAPIView(APIView):
 
 class UserLoginView(LoginView):
     template_name = 'pages/frontend/registration/login.html'
+
+
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy('index')
 
 
 class CartView(FormView):

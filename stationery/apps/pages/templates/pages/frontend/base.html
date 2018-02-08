@@ -21,7 +21,7 @@
         <div class="header-panel--wrapper">
             <div class="header-panel">
                 <div class="header-slogan">Все для творчества, школы и офиса</div>
-                <div class="header-auth">{% if user.is_authenticated %}<span>{{ user.username }}</span>{% else %}<a href="{% url 'login' %}">Авторизация</a>{% endif %}</div>
+                <div class="header-auth">{% if user.is_authenticated %}<span>{{ user.username }}</span> | <a href="{% url 'logout' %}">Выйти</a>{% else %}<a href="{% url 'login' %}">Авторизация</a>{% endif %}</div>
             </div>
         </div>
         <div class="header-container--wrapper">

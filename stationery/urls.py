@@ -11,7 +11,7 @@ from pages.views import IndexView
 
 from odinass.views import SearchOfferViewSet
 
-from orders.views import CartView, OrderAPIView, UserLoginView
+from orders.views import CartView, OrderAPIView, UserLoginView, UserLogoutView
 
 
 router = routers.DefaultRouter()
@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^cart/$', CartView.as_view(), name='cart'),
     url(r'^login/$', UserLoginView.as_view(), name='login'),
+    url(r'^logout/$', UserLogoutView.as_view(), name='logout'),
     url(r'^api/orders/$', OrderAPIView.as_view()),
     url(r'^api/', include(router.urls, namespace='api')),
     url(r'^robots.txt$',
