@@ -8,8 +8,6 @@ from django_resized import ResizedImageField
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-from odinass.utils import format_price
-
 
 def generate_upload_path(instance, filename):
     filename = '{name}.{ext}'.format(name=uuid.uuid4().hex,
@@ -233,12 +231,6 @@ class PriceType(models.Model):
 
     def __str__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        price_type = PriceType.objects.filter(is_default=True)
-        if price_type and self.is_default:
-            self.is_default = False
-        super().save(*args, **kwargs)
 
 
 class Price(models.Model):
