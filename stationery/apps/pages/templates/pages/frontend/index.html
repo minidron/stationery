@@ -2,4 +2,16 @@
 
 
 {% block content %}
+    <div class="index-catalog__section">
+        <ul class="index-catalog">
+            {% for category in categories %}
+                <li class="index-catalog--category id-{{ category.pk }}">
+                    <a class="index-catalog--category-link" href="{{ category.get_absolute_url }}">
+                        <span class="link-title">{{ category }}</span>
+                        <div class="index-catalog--category-bg"></div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock content %}
