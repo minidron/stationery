@@ -16,7 +16,7 @@ class OfferTitleFilter(django_filters.Filter):
         qs = qs.annotate(full_name=Concat('title', 'product__article'))
         bits = value.split(' ')
         full_name_clauses = reduce(operator.and_,
-                                   [Q(full_name__icontains=v) for v in bits])
+                                   [Q(full_name__istartswith=v) for v in bits])
         return qs.filter(full_name_clauses)[:10]
 
 
