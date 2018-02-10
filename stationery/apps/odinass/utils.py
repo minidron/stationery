@@ -156,10 +156,15 @@ class ImportManager(object):
             defaults['title'] = title
 
             error = 0
+            id = get_text(item.find('Ид', node.nsmap))
             try:
-                odinass_models.Category.objects.update_or_create(
-                    id=get_text(item.find('Ид', node.nsmap)),
-                    defaults=defaults)
+                if not get_text(item.find('ПометкаУдаления',
+                                          node.nsmap)) == 'true':
+                    odinass_models.Category.objects.update_or_create(
+                        id=id,
+                        defaults=defaults)
+                else:
+                    odinass_models.Category.objects.filter(id=id).delete()
             except InvalidMove:
                 error = 1
 
@@ -176,8 +181,11 @@ class ImportManager(object):
         id = get_text(node.find('Ид', node.nsmap))
         title = get_text(node.find('Наименование', node.nsmap))
 
-        instance, created = odinass_models.Warehouse.objects.update_or_create(
-            id=id, defaults={'title': title})
+        if not get_text(node.find('ПометкаУдаления', node.nsmap)) == 'true':
+            instance, _ = odinass_models.Warehouse.objects.update_or_create(
+                id=id, defaults={'title': title})
+        else:
+            odinass_models.Warehouse.objects.filter(id=id).delete()
 
     def import_property(self, node):
         """
@@ -187,19 +195,27 @@ class ImportManager(object):
         value_type = get_text(node.find('ТипЗначений', node.nsmap))
         title = get_text(node.find('Наименование', node.nsmap))
 
-        instance, created = odinass_models.Property.objects.update_or_create(
-            id=id, defaults={'title': title, 'value_type': value_type})
+        if not get_text(node.find('ПометкаУдаления', node.nsmap)) == 'true':
+            instance, _ = odinass_models.Property.objects.update_or_create(
+                id=id, defaults={'title': title, 'value_type': value_type})
+        else:
+            odinass_models.Property.objects.filter(id=id).delete()
 
         value_type = 'ВариантыЗначений/%s' % value_type
         for value_option in node.findall(value_type, node.nsmap):
             v_id = get_text(value_option.find('ИдЗначения', node.nsmap))
             v_title = get_text(value_option.find('Значение', node.nsmap))
             if v_id:
-                odinass_models.PropertyValue.objects.update_or_create(
-                    id=v_id,
-                    defaults={
-                        'title': v_title,
-                        'property_id': id})
+                if not get_text(value_option.find('ПометкаУдаления',
+                                                  node.nsmap)) == 'true':
+                    odinass_models.PropertyValue.objects.update_or_create(
+                        id=v_id,
+                        defaults={
+                            'title': v_title,
+                            'property_id': id})
+                else:
+                    odinass_models.PropertyValue.objects.filter(
+                        id=v_id).delete()
 
     def import_product(self, node):
         """
@@ -226,31 +242,33 @@ class ImportManager(object):
             except odinass_models.Category.DoesNotExist:
                 pass
         if not groups:
-            try:
-                product = odinass_models.Product.objects.get(id=id)
-                product.delete()
-            except odinass_models.Product.DoesNotExist:
-                pass
+            odinass_models.Product.objects.filter(id=id).delete()
             return
 
-        instance, created = odinass_models.Product.objects.update_or_create(
-            id=id, defaults={'title': title, 'article': article})
+        instance = None
+        if not get_text(node.find('ПометкаУдаления', node.nsmap)) == 'true':
+            instance, _ = odinass_models.Product.objects.update_or_create(
+                id=id, defaults={'title': title, 'article': article})
+        else:
+            odinass_models.Product.objects.filter(id=id).delete()
 
-        property_value = 'ЗначенияСвойств/ЗначенияСвойства'
-        for value in node.findall(property_value, node.nsmap):
-            pv_id = get_text(value.find('Значение', node.nsmap))
-            if pv_id:
-                try:
-                    instance.property_values.add(
-                        odinass_models.PropertyValue.objects.get(
-                            pk=pv_id,
-                            property_id=get_text(value.find('Ид', node.nsmap)))
-                    )
-                except odinass_models.PropertyValue.DoesNotExist:
-                    pass
+        if instance:
+            property_value = 'ЗначенияСвойств/ЗначенияСвойства'
+            for value in node.findall(property_value, node.nsmap):
+                pv_id = get_text(value.find('Значение', node.nsmap))
+                if pv_id:
+                    try:
+                        instance.property_values.add(
+                            odinass_models.PropertyValue.objects.get(
+                                pk=pv_id,
+                                property_id=get_text(value.find('Ид',
+                                                                node.nsmap)))
+                        )
+                    except odinass_models.PropertyValue.DoesNotExist:
+                        pass
 
-        for group in groups:
-            instance.categories.add(group)
+            for group in groups:
+                instance.categories.add(group)
 
     def import_offer(self, node):
         """
@@ -267,21 +285,29 @@ class ImportManager(object):
             return
 
         for id in ids:
-            odinass_models.Offer.objects.update_or_create(
-                id=id,
-                defaults={
-                    'title': title,
-                    'product': product})
+            if not get_text(node.find('ПометкаУдаления',
+                                      node.nsmap)) == 'true':
+                odinass_models.Offer.objects.update_or_create(
+                    id=id,
+                    defaults={
+                        'title': title,
+                        'product': product})
+            else:
+                odinass_models.Offer.objects.filter(id=id).delete()
 
     def import_price_type(self, node):
         """
         Загрузка Типы Цен.
         """
-        odinass_models.PriceType.objects.update_or_create(
-            id=get_text(node.find('Ид', node.nsmap)),
-            defaults={
-                'title': get_text(node.find('Наименование', node.nsmap)),
-            })
+        id = get_text(node.find('Ид', node.nsmap))
+        if not get_text(node.find('ПометкаУдаления', node.nsmap)) == 'true':
+            odinass_models.PriceType.objects.update_or_create(
+                id=id,
+                defaults={
+                    'title': get_text(node.find('Наименование', node.nsmap)),
+                })
+        else:
+            odinass_models.PriceType.objects.filter(id=id).delete()
 
     def import_price(self, node):
         """
@@ -298,13 +324,18 @@ class ImportManager(object):
                 cost = float(get_text(price.find('ЦенаЗаЕдиницу', node.nsmap)))
 
                 try:
-                    odinass_models.Price.objects.update_or_create(
-                        offer_id=id,
-                        price_type_id=price_type,
-                        defaults={
-                            'currency': currency,
-                            'price': cost,
-                        })
+                    if not get_text(price.find('ПометкаУдаления',
+                                               node.nsmap)) == 'true':
+                        odinass_models.Price.objects.update_or_create(
+                            offer_id=id,
+                            price_type_id=price_type,
+                            defaults={
+                                'currency': currency,
+                                'price': cost,
+                            })
+                    else:
+                        odinass_models.Price.objects.filters(
+                            offer_id=id).delete()
                 except IntegrityError:
                     pass
 
@@ -317,13 +348,19 @@ class ImportManager(object):
             for rest in node.findall('Остатки/Остаток', node.nsmap):
                 warehouse_id = get_text(rest.find('Склад/Ид', node.nsmap))
                 try:
-                    odinass_models.Rest.objects.update_or_create(
-                        offer_id=offer_id,
-                        warehouse_id=warehouse_id,
-                        defaults={
-                            'value': int(float(get_text(
-                                rest.find('Склад/Количество', node.nsmap)))),
-                        })
+                    if not get_text(rest.find('ПометкаУдаления',
+                                              node.nsmap)) == 'true':
+                        odinass_models.Rest.objects.update_or_create(
+                            offer_id=offer_id,
+                            warehouse_id=warehouse_id,
+                            defaults={
+                                'value': int(float(get_text(
+                                    rest.find('Склад/Количество',
+                                              node.nsmap)))),
+                            })
+                    else:
+                        odinass_models.Rest.objects.filter(
+                            offer_id=offer_id).delete()
                 except IntegrityError:
                     pass
 
