@@ -12,7 +12,7 @@ MIDDLEWARE_CLASSES += (
 )
 
 RAVEN_CONFIG = {
-    'dsn': 'http://9fd1d4c4158d467ca1a98c64456761ac:369c2a99e989412b9d585b777ef837fb@sentry.kancmiropt.ru//2',  # NOQA
+    'dsn': 'http://9fd1d4c4158d467ca1a98c64456761ac:369c2a99e989412b9d585b777ef837fb@sentry.kancmiropt.ru/2',  # NOQA
 }
 
 LOGGING = {
