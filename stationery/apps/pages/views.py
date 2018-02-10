@@ -38,7 +38,6 @@ class CategoryView(DetailView):
     paginate_queryset = ListView.paginate_queryset
     paginator_class = ListView.paginator_class
     template_name = 'pages/frontend/category.html'
-    # template_name = 'pages/category.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

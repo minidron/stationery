@@ -10,3 +10,15 @@ register = template.Library()
 def price(value):
     if value:
         return format_price(value)
+
+
+@register.simple_tag(takes_context=True)
+def pagination_url(context, page):
+    request = context['request']
+    dict_ = request.GET.copy()
+
+    page_kwarg = context.get('page_kwarg')
+    if page_kwarg:
+        dict_[page_kwarg] = page
+
+    return dict_.urlencode()

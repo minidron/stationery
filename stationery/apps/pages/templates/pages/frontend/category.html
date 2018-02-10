@@ -122,7 +122,7 @@
                     <ul class="category-offers--paginator rounded">
                         <li class="category-offers--paginator--page previous-page">
                             {% if page_obj.has_previous %}
-                                <a href="?{{ page_kwarg }}={{ page_obj.previous_page_number }}"></a>
+                                <a href="?{% pagination_url page_obj.previous_page_number %}"></a>
                             {% else %}
                                 <span></span>
                             {% endif %}
@@ -133,14 +133,14 @@
                                 {% if page_obj.number == page_num %}
                                     <span>{{ page_num }}</span>
                                 {% else %}
-                                    <a href="?{{ page_kwarg }}={{ page_num }}">{{ page_num }}</a>
+                                    <a href="?{% pagination_url page_num %}">{{ page_num }}</a>
                                 {% endif %}
                             </li>
                         {% endfor %}
 
                         <li class="category-offers--paginator--page next-page">
                             {% if page_obj.has_next %}
-                                <a href="?{{ page_kwarg }}={{ page_obj.next_page_number }}"></a>
+                                <a href="?{% pagination_url page_obj.next_page_number %}"></a>
                             {% else %}
                                 <span></span>
                             {% endif %}
