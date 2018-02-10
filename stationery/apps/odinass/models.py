@@ -294,10 +294,12 @@ class Offer(models.Model):
         else:
             price_params['price_type__is_default'] = True
 
-        price = 0
-        qs = self.prices.get(**price_params)
-        if qs:
+        try:
+            qs = self.prices.get(**price_params)
             price = qs.price
+        except Price.DoesNotExist:
+            price = 0
+
         return price
 
     @property
