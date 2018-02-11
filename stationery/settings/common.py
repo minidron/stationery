@@ -130,6 +130,7 @@ BOWER_INSTALLED_APPS = (
     'normalize-css#7',
     'nouislider#10.1',
     'owl.carousel#2.2',
+    'swiper#4.1',
     'underscore#1.8',
 )
 
