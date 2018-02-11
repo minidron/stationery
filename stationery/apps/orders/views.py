@@ -79,7 +79,7 @@ class CartView(FormView):
         email = create_email(
             'Заказ с сайта',
             body_html,
-            'info@kancmiropt.ru'
+            'opt@kancmiropt.ru'
         )
 
         email.send()
