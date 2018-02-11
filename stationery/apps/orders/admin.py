@@ -5,11 +5,18 @@ from django.contrib.auth.models import User
 from orders.models import Item, Order, Profile
 
 
+class ItemInline(admin.TabularInline):
+    model = Item
+    extra = 0
+    raw_id_fields = ['offer']
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     """
     Админка для заказов.
     """
+    inlines = [ItemInline]
 
 
 @admin.register(Item)
