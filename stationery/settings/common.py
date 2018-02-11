@@ -167,6 +167,7 @@ PIPELINE = {
             'source_filenames': (
                 'bower_components/normalize-css/normalize.css',
                 'bower_components/nouislider/distribute/nouislider.min.css',
+                'bower_components/swiper/dist/css/swiper.min.css',
             ),
             'output_filename': 'frontend/css/libs.css',
         },
@@ -189,6 +190,7 @@ PIPELINE = {
                 'bower_components/jquery/dist/jquery.min.js',
                 'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
                 'bower_components/nouislider/distribute/nouislider.min.js',
+                'bower_components/swiper/dist/js/swiper.min.js',
             ),
             'output_filename': 'frontend/js/libs.js',
         },
