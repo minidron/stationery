@@ -79,3 +79,44 @@
     }
 }
 /* ------------------------------------------------------------------------- */
+/* slider -------------------------------------------*/
+.swiper-container {
+	width: 1200px;
+	height: 300px;
+  padding-bottom: 30px;
+}
+/* -------------------------------*/
+
+
+/* index product */
+
+.index-product h1{
+  font: $fw-bold 19px/22px $ff-Roboto;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: get($color, 'text', 'base');
+}
+
+/*----------------------------------------------*/
+
+/* about */
+.index-about h1{
+  display: block;
+  font: $fw-bold 19px/22px $ff-Roboto;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: get($color, 'text', 'base');
+}
+.index-about p{
+  display: block;
+  font: 15px/18px $ff-Roboto;
+
+  color: get($color, 'text', 'base');
+}
+.index-about a{
+  text-decoration: none;
+  padding: 5px;
+  background: #2C7FAE;
+  color: white;
+  font: 15px/18px $ff-Roboto;
+}
