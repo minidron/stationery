@@ -200,22 +200,18 @@ class ImportManager(object):
                 id=id, defaults={'title': title, 'value_type': value_type})
         else:
             odinass_models.Property.objects.filter(id=id).delete()
+            return
 
         value_type = 'ВариантыЗначений/%s' % value_type
         for value_option in node.findall(value_type, node.nsmap):
             v_id = get_text(value_option.find('ИдЗначения', node.nsmap))
             v_title = get_text(value_option.find('Значение', node.nsmap))
             if v_id:
-                if not get_text(value_option.find('ПометкаУдаления',
-                                                  node.nsmap)) == 'true':
-                    odinass_models.PropertyValue.objects.update_or_create(
-                        id=v_id,
-                        defaults={
-                            'title': v_title,
-                            'property_id': id})
-                else:
-                    odinass_models.PropertyValue.objects.filter(
-                        id=v_id).delete()
+                odinass_models.PropertyValue.objects.update_or_create(
+                    id=v_id,
+                    defaults={
+                        'title': v_title,
+                        'property_id': id})
 
     def import_product(self, node):
         """
