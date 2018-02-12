@@ -90,27 +90,45 @@
 
 /* index product */
 
+
 .index-product h1{
   font: $fw-bold 19px/22px $ff-Roboto;
   text-decoration: none;
   text-transform: uppercase;
   color: get($color, 'text', 'base');
+  text-align: center;
+}
+
+.index-pr {
+  width: 250px;
+  height: 300px;
+  margin-top: 20px;
+  padding-left: 20px;
+  margin-left: 20px;
+  box-sizing: border-box;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+
 }
 
 /*----------------------------------------------*/
 
 /* about */
+.index-about {
+  margin-top: 50px;
+}
+
 .index-about h1{
   display: block;
   font: $fw-bold 19px/22px $ff-Roboto;
   text-decoration: none;
   text-transform: uppercase;
+  text-align: center;
   color: get($color, 'text', 'base');
 }
 .index-about p{
   display: block;
   font: 15px/18px $ff-Roboto;
-
   color: get($color, 'text', 'base');
 }
 .index-about a{
@@ -119,4 +137,11 @@
   background: #2C7FAE;
   color: white;
   font: 15px/18px $ff-Roboto;
+
+
+}
+
+.index-about img{
+  width:40%;
+
 }
