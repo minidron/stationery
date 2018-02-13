@@ -1,5 +1,4 @@
-/* HTML
-============================================================================ */
+///* HTML=================================================================== */
 body {
 }
 
@@ -419,4 +418,38 @@ body {
         color: get($color, 'title', 'base');
     }
 }
+
 /* ------------------------------------------------------------------------- */
+
+/* footer__section
+======================================================*/
+.footer__section{
+  background-color: #525252;
+  width: 100%;
+  height: 400px;
+
+
+        .footer-container {
+          @include responsive-block;
+          padding-top: 20px;
+          padding-bottom: 40px;
+          display: flex;
+
+
+              .footer-col{
+                color:#ADADAD;
+                width: 300px;
+
+              }
+
+                .footer-col h2{
+                  font: $fw-medium 18px/40px $ff-Roboto;
+                }
+
+                .footer-col span{
+                  display: -webkit-box;
+                  padding-top: 10px;
+                  font: $fw-regular 16px/28px $ff-Roboto;
+                }
+        }
+}

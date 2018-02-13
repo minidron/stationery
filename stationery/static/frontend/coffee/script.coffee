@@ -143,3 +143,8 @@ do ($=jQuery, window, document) ->
     maxPrice.addEventListener 'change', () ->
       handlesSlider.noUiSlider.set [null, this.value]
   # ---------------------------------------------------------------------------
+
+
+swiper = new Swiper('.swiper-container', navigation:
+  nextEl: '.swiper-button-next'
+  prevEl: '.swiper-button-prev')
