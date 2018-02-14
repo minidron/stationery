@@ -84,6 +84,8 @@ class PropertyAdmin(admin.ModelAdmin):
 
 @admin.register(odinass_models.Product)
 class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
+    list_per_page = 10
+
     list_display = [
         'title',
         'article',

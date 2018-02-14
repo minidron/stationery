@@ -1,7 +1,7 @@
 from functools import reduce
 import operator
 
-from django.db.models import Q
+from django.db.models import Q, Value
 from django.db.models.functions import Concat
 
 import django_filters
@@ -13,7 +13,8 @@ from odinass.models import Offer
 
 class OfferTitleFilter(django_filters.Filter):
     def filter(self, qs, value):
-        qs = qs.annotate(full_name=Concat('title', 'product__article'))
+        qs = qs.annotate(full_name=Concat('product__article', Value(' '),
+                                          'title'))
         bits = value.split(' ')
         full_name_clauses = reduce(
             operator.and_,
