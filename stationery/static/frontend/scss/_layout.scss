@@ -440,7 +440,12 @@ body {
                 color:#ADADAD;
                 width: 300px;
 
-              }
+                .footer-contact{
+                  font: $fw-medium 36px/40px $ff-Roboto;
+                  color:white;
+                }
+}
+
 
                 .footer-col h2{
                   font: $fw-medium 18px/40px $ff-Roboto;
