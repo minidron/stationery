@@ -91,6 +91,15 @@ body {
     .header-slogan {
         color: get($color, 'text', 'light');
     }
+    .header-menu li{
+      display: inline;
+      padding-left: 30px;
+
+      & a{
+        text-decoration: none;
+        color: get($color, 'text', 'light');
+      }
+    }
 
     .header-auth {
         color: get($color, 'title', 'base');
@@ -439,12 +448,17 @@ body {
               .footer-col{
                 color:#ADADAD;
                 width: 300px;
+              }
+                .footer-contact p{
+                  font: $fw-medium 22px/40px $ff-Roboto;
 
-                .footer-contact{
-                  font: $fw-medium 36px/40px $ff-Roboto;
-                  color:white;
+
+                  & a{
+                    text-decoration: none;
+                    color:white;
+                  }
                 }
-}
+
 
 
                 .footer-col h2{
@@ -455,6 +469,11 @@ body {
                   display: -webkit-box;
                   padding-top: 10px;
                   font: $fw-regular 16px/28px $ff-Roboto;
+
+                   & a{
+                     color:white;
+                     text-decoration: none;
+                   }
                 }
         }
 }
