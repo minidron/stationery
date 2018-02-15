@@ -77,6 +77,9 @@ class CategoryView(DetailView):
                     Q(retail_price__gte=data['minCost']) &
                     Q(retail_price__lte=data['maxCost']))
 
+            if data.get('has_rests'):
+                offers = offers.filter(rests_count__gt=0)
+
             for param_key, param_values in data.items():
                 if param_key in properties_ids and param_values:
                     filter = reduce(
@@ -110,6 +113,8 @@ class CategoryView(DetailView):
         fields.update({
             'minCost': forms.IntegerField(required=False),
             'maxCost': forms.IntegerField(required=False),
+            'has_rests': forms.BooleanField(label='Есть в наличии',
+                                            required=False),
         })
 
         for prop in properties:

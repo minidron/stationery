@@ -1,7 +1,9 @@
 import uuid
 
 from django.db import models
-from django.db.models import OuterRef, Prefetch, Subquery
+from django.db.models import Case, When
+from django.db.models import F, Sum, OuterRef, Prefetch, Subquery, Value
+from django.db.models import IntegerField
 from django.urls import reverse
 
 from django_resized import ResizedImageField
@@ -76,7 +78,13 @@ class Category(MPTTModel):
                                        'product__property_values__property')
                      .filter(product__categories=self)
                      .annotate(
-                        retail_price=Subquery(price.values('price')[:1])))
+                        retail_price=Subquery(price.values('price')[:1]),
+                        rests_count=Sum(Case(
+                            When(rests__warehouse__is_selected=True,
+                                 then=F('rests__value')),
+                            default=Value(0),
+                            output_field=IntegerField()
+                        ))))
 
 
 class Warehouse(models.Model):

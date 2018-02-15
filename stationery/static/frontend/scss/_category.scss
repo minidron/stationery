@@ -168,6 +168,19 @@
         flex: 1;
     }
 
+    .category-filters--has-rest {
+        margin-bottom: 20px;
+
+        label {
+            font: $fw-regular 14px/20px $ff-PT-Sans;
+            color: get($color, 'text', 'base');
+        }
+
+        input[type='checkbox'] {
+            vertical-align: middle;
+        }
+    }
+
     .category-offers--item {
         display: flex;
         align-items: stretch;
