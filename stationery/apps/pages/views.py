@@ -69,6 +69,8 @@ class CategoryView(DetailView):
         # Фильтрация
         if form_search.is_valid():
             data = form_search.cleaned_data
+            if data:
+                context['is_filtered'] = True
 
             if data.get('minCost') and data.get('maxCost'):
                 offers = offers.filter(

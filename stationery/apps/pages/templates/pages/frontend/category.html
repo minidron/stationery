@@ -42,7 +42,7 @@
     {% if has_offers %}
     <div class="category-container">
         <div class="category-filters rounded">
-            <form action="" method="GET">
+            <form id="offer-filter" action="" method="GET">
                 <div class="category-filters--filters">
                     <div class="offer-filter--wrapper">
                         <h3 class="offer-filter--title">Цена</h3>
@@ -73,6 +73,9 @@
                         {% endif %}
                     {% endfor %}
                 </div>
+                {% if is_filtered %}
+                    <div class="category-filters--reset"><a href="#" class="reset">Сбросить фильтры</a></div>
+                {% endif %}
                 <div class="category-filters--button"><button class="submit" type="submit">Найти</button></div>
             </form>
         </div>

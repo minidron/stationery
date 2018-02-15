@@ -145,6 +145,17 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
+  # FILTERS FORM
+  # ---------------------------------------------------------------------------
+  $ ->
+    form = $ '#offer-filter'
+
+    $('.reset', form).on 'click', (e) ->
+      e.preventDefault()
+      window.location = '//' + location.host + location.pathname
+
+  # ---------------------------------------------------------------------------
+
 swiper = new Swiper('.swiper-container', navigation:
   nextEl: '.swiper-button-next'
   prevEl: '.swiper-button-prev')
