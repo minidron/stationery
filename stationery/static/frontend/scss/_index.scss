@@ -102,14 +102,13 @@
       -ms-flex-align: center;
       -webkit-align-items: center;
       align-items: center;*/
-    } 
+    }
 /* -------------------------------*/
 
 
 /* index product */
 
-
-.index-product h1{
+.index-product__section h1{
   font: $fw-bold 19px/22px $ff-Roboto;
   text-decoration: none;
   text-transform: uppercase;
@@ -117,41 +116,69 @@
   text-align: center;
 }
 
-.index-pr {
-  width: 250px;
-  height: 300px;
-  margin-top: 20px;
-  padding-left: 20px;
-  margin-left: 20px;
-  box-sizing: border-box;
-  display: -webkit-inline-flex;
-  display: inline-flex;
+.index-product{
+  display: flex;
+  height: auto;
+  flex-wrap: wrap;
 
+
+}
+
+
+.index-pr {
+  width: 20%;
+  margin-left: 40px;
+  margin-top: 15px;
+
+    & img{
+      width: 150px;
+      height: 150px;
+      padding-left: 30px;
+      padding-top: 10px;
+    }
+    & span{
+      display: -webkit-box;
+    }
 }
 
 /*----------------------------------------------*/
 
 /* about */
+
+
 .index-about {
   margin-top: 50px;
+    display: flex;
 }
 
-.index-about h1{
+.about-picture{
+  width:80%;
+}
+.about-text{
+  width:60%;
+}
+.about-company{
+  padding-left: 60px;
+}
+.index-about__section h1{
   display: block;
   font: $fw-bold 19px/22px $ff-Roboto;
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
   color: get($color, 'text', 'base');
+  padding-top: 30px;
 }
 .index-about p{
   display: block;
   font: 15px/18px $ff-Roboto;
   color: get($color, 'text', 'base');
+  padding-bottom: 15px;
+  padding-top: 0;
 }
 .index-about a{
   text-decoration: none;
-  padding: 5px;
+  padding: 10px;
   background: #2C7FAE;
   color: white;
   font: 15px/18px $ff-Roboto;
@@ -160,6 +187,6 @@
 }
 
 .index-about img{
-  width:40%;
+  width:95%;
 
 }

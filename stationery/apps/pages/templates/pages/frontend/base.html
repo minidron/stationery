@@ -22,6 +22,13 @@
         <div class="header-panel--wrapper">
             <div class="header-panel">
                 <div class="header-slogan">Все для творчества, школы и офиса</div>
+                <div class="header-menu">
+                  <li><a href="#">О компании</a></li>
+                  <li><a href="#">Контакты</a></li>
+                  <li><a href="#">Физ.лицам</a></li>
+                  <li><a href="#">Юр.лицам</a></li>
+                  <li><a href="#">Оптовикам</a></li>
+              </div>
                 <div class="header-auth">{% if user.is_authenticated %}<span>{{ user.username }}</span> | <a href="{% url 'logout' %}">Выйти</a>{% else %}<a href="{% url 'login' %}">Авторизация</a>{% endif %}</div>
             </div>
         </div>
@@ -87,26 +94,28 @@
       <div class="footer-container">
         <div class="footer-col">
           <h2>Помощь покупателю</h2>
-              <span>Как сделать заказ</span>
-              <span>Как зарегистрироваться</span>
-              <span>Оплата </span>
-              <span>Доставка</span>
+              <span><a href="#">Как сделать заказ</a></span>
+              <span><a href="#">Как зарегистрироваться</a></span>
+              <span><a href="#">Оплата</a> </span>
+              <span><a href="#">Доставка</a></span>
         </div>
         <div class="footer-col">
           <h2>Информация для покупателей</h2>
-          <span>Политика конфеденциальности</span>
-          <span>Оптовикам</span>
-
+          <span><a href="#">Политика конфеденциальности</a></span>
+          <span><a href="#">Оптовикам</a></span>
+          <span><a href="#">Физ.лицам</a></span>
         </div>
-        <div class="footer-col">
+        <div class="footer-col about-company">
           <h2>О компании</h2>
-          <span>Контакты</span>
-          <span>О нас</span>
-
+          <span><a href="#">Контакты</a></span>
+          <span><a href="#">О нас</a></span>
         </div>
         <div class="footer-col">
-          <h2>Связаться с нами</h2>
-          
+            <h2>Связаться с нами</h2>
+            <div class="footer-contact">
+              <p><a href="mailto:info@kancmiropt.ru">Info@kancmiropt.ru</a></p>
+              <p><a href="tel:+74967128194">8 (4967) 12-81-94</a></p>
+          </div>
         </div>
 
       </div>
