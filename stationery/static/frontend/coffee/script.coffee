@@ -156,6 +156,14 @@ do ($=jQuery, window, document) ->
 
   # ---------------------------------------------------------------------------
 
+
+#-----index slider---------
 swiper = new Swiper('.swiper-container', navigation:
   nextEl: '.swiper-button-next'
-  prevEl: '.swiper-button-prev')
+  prevEl: '.swiper-button-prev'
+  pagination: el: '.swiper-pagination'
+  clickable: true
+  renderBullet: (index, className) ->
+    '<span class="' + className + '">' + index + 1 + '</span>')
+
+  #--------------------------
