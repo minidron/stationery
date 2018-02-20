@@ -51,7 +51,7 @@ class CategoryView(DetailView):
         property_values = Prefetch(
             'property_values',
             queryset=(PropertyValue.objects
-                                   .filter(products__categories=category)
+                                   .filter(products__category=category)
                                    .distinct()))
 
         properties = (
@@ -157,7 +157,7 @@ class ProductView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = kwargs['object']
-        category = obj.product.categories.first()
+        category = obj.product.category
         category.offers(self.request.user).filter(pk=obj.pk)
 
         context.update({

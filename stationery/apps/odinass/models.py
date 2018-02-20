@@ -76,7 +76,7 @@ class Category(MPTTModel):
                                        prefetch, 'rests__warehouse',
                                        'product__property_values',
                                        'product__property_values__property')
-                     .filter(product__categories=self)
+                     .filter(product__category=self)
                      .annotate(
                         retail_price=Subquery(price.values('price')[:1]),
                         rests_count=Sum(Case(
@@ -169,10 +169,10 @@ class Product(models.Model):
         'название', max_length=508)
     article = models.CharField(
         'артикул', blank=True, max_length=254)
-    categories = models.ManyToManyField(
+    category = models.ForeignKey(
         'odinass.Category',
-        verbose_name='категории',
-        blank=True)
+        verbose_name='категория',
+        blank=True, null=True)
     property_values = models.ManyToManyField(
         'odinass.PropertyValue',
         verbose_name='значения свойства',

@@ -97,17 +97,13 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
         'article',
     ]
 
-    filter_horizontal = (
-        'categories',
-    )
-
     list_filter = [
         'created',
     ]
 
     readonly_fields = [
         'article',
-        'categories',
+        'category',
         'field_offers',
         'field_properties',
         'id',
@@ -117,7 +113,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
         (None, {
             'fields': (
                 'title',
-                'categories',
+                'category',
                 'image',
                 'field_offers',
                 'field_properties',

@@ -264,7 +264,8 @@ class ImportManager(object):
                         pass
 
             for group in groups:
-                instance.categories.add(group)
+                instance.category = group
+                instance.save()
 
     def import_offer(self, node):
         """
