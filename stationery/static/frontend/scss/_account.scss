@@ -1,0 +1,72 @@
+/* HISTORY
+============================================================================ */
+.history-container {
+    padding: 20px;
+    box-sizing: border-box;
+
+    .history--list {
+        @include clear-list;
+        font: $fw-regular 16px/20px $ff-PT-Sans;
+        color: get($color, 'text', 'base');
+
+        .history--item {
+            margin-bottom: 10px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+        }
+
+        .history--item--link {
+            text-decoration: none;
+            color: get($color, 'link', 'base');
+
+            &:hover {
+                color: get($color, 'link', 'hover');
+            }
+        }
+    }
+
+    .history-order--status {
+        margin-bottom: 30px;
+        font: $fw-regular 16px/20px $ff-PT-Sans;
+        color: get($color, 'text', 'base');
+    }
+
+    .history-order--table {
+        margin: 0;
+        width: 100%;
+        border-collapse: collapse;
+        font: $fw-regular 16px/20px $ff-PT-Sans;
+        color: get($color, 'text', 'base');
+
+        tbody {
+            font-size: 14px;
+        }
+
+        tr {
+            border-bottom: 1px solid get($color, 'content', 'border');
+        }
+
+        td, th {
+            padding: 4px 10px 4px 5px;
+            text-align: left;
+        }
+
+        a {
+            text-decoration: none;
+            color: get($color, 'link', 'base');
+
+            &:hover {
+                color: get($color, 'link', 'hover');
+            }
+        }
+    }
+
+    .history-order--amount {
+        margin-top: 30px;
+        font: $fw-regular 16px/20px $ff-PT-Sans;
+        color: get($color, 'text', 'base');
+    }
+}
+/* ------------------------------------------------------------------------- */

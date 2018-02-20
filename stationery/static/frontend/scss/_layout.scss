@@ -91,14 +91,27 @@ body {
     .header-slogan {
         color: get($color, 'text', 'light');
     }
-    .header-menu li{
-      display: inline;
-      padding-left: 30px;
 
-      & a{
-        text-decoration: none;
-        color: get($color, 'text', 'light');
-      }
+    .header-menu {
+        @include clear-list;
+
+        .header-menu--item {
+            margin-right: 20px;
+            display: inline-block;
+
+            a {
+                text-decoration: none;
+                color: get($color, 'title', 'base');
+
+                &:hover {
+                    color: get($color, 'link', 'hover');
+                }
+            }
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
     }
 
     .header-auth {

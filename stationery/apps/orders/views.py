@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import DetailView, FormView, ListView
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -63,6 +63,11 @@ class CartView(FormView):
                 form.order.save()
                 self.send_mail(form)
                 self.success_url = reverse('index')
+
+            if '_reset' in data:
+                form.order.items.all().delete()
+                form.order.save()
+                self.success_url = reverse('index')
         form.save()
         return super().form_valid(form)
 
@@ -83,3 +88,15 @@ class CartView(FormView):
         )
 
         email.send()
+
+
+class HistoryListView(ListView):
+    model = Order
+    template_name = 'pages/frontend/history.html'
+    ordering = ['-created']
+    queryset = Order.objects.exclude(status=OrderStatus.NOT_CREATED)
+
+
+class HistoryDetailView(DetailView):
+    model = Order
+    template_name = 'pages/frontend/history_detail.html'

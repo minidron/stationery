@@ -7,7 +7,7 @@
 
 
 {% block content %}
-    <h1 class="main--title">Заказ номер №{{ cart.pk }}</h1>
+    <h1 class="main--title">Ваша корзина</h1>
     <div class="cart-container rounded">
         <form method="POST">{% csrf_token %}
             {% for item_form in form %}
@@ -23,8 +23,9 @@
             <div class="cart-info">
                 <div class="cart-info--save">
                     <button class="submit" type="submit" name="_save">Сохранить изменения</button>
+                    <button class="reset" type="submit" name="_reset">Очистить корзину</button>
                 </div>
-                <div class="cart-info--price">= {{ cart.amount|price }}</div>
+                <div class="cart-info--price">= {{ cart.amount|default:'0'|price }}</div>
                 <div class="cart-info--send">
                     <button class="submit" type="submit" name="_submit">Оформить заказ</button>
                 </div>

@@ -154,6 +154,9 @@ do ($=jQuery, window, document) ->
       e.preventDefault()
       window.location = '//' + location.host + location.pathname
 
+    $('#id_has_rests', form).on 'change', (e) ->
+      form.submit()
+
   # ---------------------------------------------------------------------------
 
 

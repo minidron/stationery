@@ -36,14 +36,16 @@
         <div class="header-panel--wrapper">
             <div class="header-panel">
                 <div class="header-slogan">Все для творчества, школы и офиса</div>
-                <div class="header-menu">
-                  <li><a href="#">О компании</a></li>
-                  <li><a href="#">Контакты</a></li>
-                  <li><a href="#">Физ.лицам</a></li>
-                  <li><a href="#">Юр.лицам</a></li>
-                  <li><a href="#">Оптовикам</a></li>
-              </div>
-                <div class="header-auth">{% if user.is_authenticated %}<span>{{ user.username }}</span> | <a href="{% url 'logout' %}">Выйти</a>{% else %}<a href="{% url 'login' %}">Авторизация</a>{% endif %}</div>
+
+                <ul class="header-menu">
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'о-компании' %}">О компании</a></li>
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></li>
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'физ-лицам' %}">Физ.лицам</a></li>
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'юрлицам' %}">Юр.лицам</a></li>
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></li>
+                </ul>
+
+                <div class="header-auth">{% if user.is_authenticated %}<a href="{% url 'account:history' %}">{{ user.username }}</a> | <a href="{% url 'account:logout' %}">Выйти</a>{% else %}<a href="{% url 'account:login' %}">Авторизация</a>{% endif %}</div>
             </div>
         </div>
         <div class="header-container--wrapper">
@@ -81,7 +83,7 @@
             </ul>
             {% if user.is_authenticated %}
                 <div class="navbar-cart">
-                    <a id="cart-full-price" class="navbar-cart--link" href="{% url 'cart' %}" data-cart-id="{{ cart.pk }}">{{ cart.amount|price|default:'0' }}</a>
+                    <a id="cart-full-price" class="navbar-cart--link" href="{% url 'account:cart' %}" data-cart-id="{{ cart.pk }}">{{ cart.amount|price|default:'0' }}</a>
                 </div>
             {% endif %}
         </div>

@@ -83,189 +83,186 @@
 
 /* slider -------------------------------------------*/
 .swiper-container {
-      width: 100%;
-      height: 100%;
-      padding-bottom: 30px;
-      background-color: white;
-    }
-    .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      }
+    width: 100%;
+    height: 100%;
+    padding-bottom: 30px;
+    background-color: white;
+}
 
-      .slide-bg {
-      position: absolute;
-      width: 500px;
-      height: auto;
-      bottom: 110px;
-      background-color: #2C7FAE;
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+}
 
-      & h1{
-        font: $fw-bold 26px/22px $ff-Roboto; 
+.slide-bg {
+    position: absolute;
+    width: 500px;
+    height: auto;
+    bottom: 110px;
+    background-color: #2C7FAE;
+
+    & h1{
+        font: $fw-bold 26px/22px $ff-Roboto;
         color: white;
         padding-top:10px;
-
-      } 
-      & p {
-      padding-left: 20px;
-      padding-right: 20px;
-      color: white;
-      font: 18px/22px $ff-Roboto;
       }
 
-      & h3{
+    & p {
+        padding-left: 20px;
+        padding-right: 20px;
+        color: white;
+        font: 18px/22px $ff-Roboto;
+    }
+
+    & h3{
         font: $fw-bold 26px/22px $ff-Roboto;
         color: #D32F2F;
-      }
-      
     }
+}
 
-    .swiper-pagination-bullet {
-      width: 20px;
-      height: 20px;
-      text-align: center;
-      line-height: 20px;
-      font-size: 12px;
-      color:#000;
-      opacity: 1;
-      background: rgba(0,0,0,0.2);
-    }
-    .swiper-pagination-bullet-active {
-      color:#fff;
-      background: #007aff;
-    }
+.swiper-pagination-bullet {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    color:#000;
+    opacity: 1;
+    background: rgba(0,0,0,0.2);
+}
+
+.swiper-pagination-bullet-active {
+    color:#fff;
+    background: #007aff;
+}
 /* -------------------------------*/
 
 
 /* index product */
 
 .index-product__section h1{
-  font: $fw-bold 19px/22px $ff-Roboto;
-  text-decoration: none;
-  text-transform: uppercase;
-  color: get($color, 'text', 'base');
-  text-align: center;
+    font: $fw-bold 19px/22px $ff-Roboto;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: get($color, 'text', 'base');
+    text-align: center;
 }
 
 .index-product{
-  display: flex;
-  height: auto;
-  flex-wrap: wrap;
-
-
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
 }
 
 
 .index-pr {
-  width: 20%;
-  margin-left: 40px;
-  margin-top: 15px;
+    width: 20%;
+    margin-left: 40px;
+    margin-top: 15px;
 
     .product-description{
-      text-align: center;
-      padding-bottom: 20px;
-
-      & a{
-      text-decoration:none;
-      color: #0085CF;
-
-      &:hover { 
-        color: #D32F2F;
-        }
-      }
-
-      & h4{
-        font: $fw-bold 16px/22px $ff-Roboto; 
-      }
-      & h5{
-        font: $fw-bold 14px/22px $ff-Roboto;
-      }
-      & p{
-        font:12px/22px $ff-Roboto;
-        color: get($color, 'text', 'base');
-      }
-      & .more{
-        text-decoration:none;
-        display: block;
-        width: 100px;
-        margin-left:60px;
-        height: 38px;
-        border-radius: 5px;
-        font: 500 12px/38px "Roboto", Arial, "Helvetica Neue", Helvetica, sans-serif;
         text-align: center;
-        text-decoration: none;
-        text-transform: uppercase;
-        color: #FFF;
-        background-color: #D32F2F;
-        cursor: pointer;
-        transition: background-color 0.3s;
+        padding-bottom: 20px;
 
+        & a{
+            text-decoration:none;
+            color: #0085CF;
 
-
-        &:hover{
-        background-color: #ab2424;
-        color: white;
+            &:hover {
+                color: #D32F2F;
+            }
         }
-      }
+
+        & h4{
+            font: $fw-bold 16px/22px $ff-Roboto;
+        }
+
+        & h5{
+            font: $fw-bold 14px/22px $ff-Roboto;
+        }
+
+        & p{
+            font:12px/22px $ff-Roboto;
+            color: get($color, 'text', 'base');
+        }
+
+        & .more{
+            text-decoration:none;
+            display: block;
+            width: 100px;
+            margin-left:60px;
+            height: 38px;
+            border-radius: 5px;
+            font: 500 12px/38px "Roboto", Arial, "Helvetica Neue", Helvetica, sans-serif;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            color: #FFF;
+            background-color: #D32F2F;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover{
+                background-color: #ab2424;
+                color: white;
+            }
+        }
     }
 
     & img{
-      width: 150px;
-      height: 150px;
-      padding-left: 30px;
-      padding-top: 10px;
+        width: 150px;
+        height: 150px;
+        padding-left: 30px;
+        padding-top: 10px;
     }
+
     & span{
-      display: -webkit-box;
+        display: -webkit-box;
     }
 }
-
 /*----------------------------------------------*/
 
+
 /* about */
-
-
 .index-about {
-  margin-top: 50px;
+    margin-top: 50px;
     display: flex;
 }
 
 .about-picture{
-  width:80%;
+    width:80%;
 }
 .about-text{
-  width:60%;
+    width:60%;
 }
 .about-company{
-  padding-left: 60px;
+    padding-left: 60px;
 }
 .index-about__section h1{
-  display: block;
-  font: $fw-bold 19px/22px $ff-Roboto;
-  text-decoration: none;
-  text-transform: uppercase;
-  text-align: center;
-  color: get($color, 'text', 'base');
-  padding-top: 30px;
+    display: block;
+    font: $fw-bold 19px/22px $ff-Roboto;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    color: get($color, 'text', 'base');
+    padding-top: 30px;
 }
 .index-about p{
-  display: block;
-  font: 15px/18px $ff-Roboto;
-  color: get($color, 'text', 'base');
-  padding-bottom: 15px;
-  padding-top: 0;
+    display: block;
+    font: 15px/18px $ff-Roboto;
+    color: get($color, 'text', 'base');
+    padding-bottom: 15px;
+    padding-top: 0;
 }
 .index-about a{
-  text-decoration: none;
-  padding: 10px;
-  background: #2C7FAE;
-  color: white;
-  font: 15px/18px $ff-Roboto;
-
-
+    text-decoration: none;
+    padding: 10px;
+    background: #2C7FAE;
+    color: white;
+    font: 15px/18px $ff-Roboto;
 }
 
 .index-about img{
-  width:95%;
-
+    width:95%;
 }
+/*----------------------------------------------*/

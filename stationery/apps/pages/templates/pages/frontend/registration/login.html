@@ -7,7 +7,7 @@
     <h1 class="main--title">Авторизация</h1>
 
     <div class="registration-form rounded">
-        <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+        <form method="POST">{% csrf_token %}
             <input type="hidden" name="next" value="{{ next|default:'/' }}">
             <div class="field-row">
                 {{ form.username.label_tag }}

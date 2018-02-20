@@ -169,4 +169,4 @@ class ProductView(DetailView):
 
 class PageView(DetailView):
     model = Page
-    template_name = 'pages/static.html'
+    template_name = 'pages/frontend/static.html'

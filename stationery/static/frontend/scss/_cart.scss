@@ -98,6 +98,26 @@
                     background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
                 }
             }
+
+            .reset {
+                display: inline-block;
+                padding: 0 15px;
+                height: 38px;
+                border: 0 none;
+                border-radius: 5px;
+                font: $fw-medium 12px/38px $ff-Roboto;
+                text-align: center;
+                text-decoration: none;
+                text-transform: uppercase;
+                color: get($color, 'button', 'normal', 'text');
+                background-color: get($color, 'button', 'normal', 'background');
+                cursor: pointer;
+                transition: background-color $base-transition;
+
+                &:hover {
+                    background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
+                }
+            }
         }
 
         .cart-info--price {

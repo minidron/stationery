@@ -172,11 +172,12 @@
         margin-bottom: 20px;
 
         label {
-            font: $fw-regular 14px/20px $ff-PT-Sans;
+            font: $fw-regular 16px/1 $ff-PT-Sans;
             color: get($color, 'text', 'base');
         }
 
         input[type='checkbox'] {
+            margin-right: 3px;
             vertical-align: middle;
         }
     }

@@ -1,0 +1,48 @@
+{% extends "pages/frontend/base.html" %}
+
+{% load pages_tag %}
+
+
+{% block body_class %}history_page{% endblock %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs__section">
+        <div class="breadcrumbs-container">
+            <ul class="breadcrumbs">
+                <li class="breadcrumbs--item"><a href="{% url 'account:history' %}">Мои заказы</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">Заказ от {{ order.created|date:'d.m.Y' }}</h1>
+    <div class="history-container rounded">
+        <div class="history-order--status">Статус заказа: {{ order.get_status_display }}</div>
+        <table class="history-order--table">
+            <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Итого</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.offer.product.article }}</td>
+                        <td><a href="{{ item.offer.get_absolute_url }}">{{ item }}</a></td>
+                        <td>{{ item.unit_price|price }} руб.</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.total_price|price }} руб.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="history-order--amount">Полная стоимость: <strong>{{ order.amount|price }} руб.</strong></div>
+    </div>
+{% endblock %}
