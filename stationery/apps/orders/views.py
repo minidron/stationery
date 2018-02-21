@@ -78,6 +78,7 @@ class CartView(FormView):
                 'site': self.request.get_host(),
                 'order': form.order,
                 'items': form.order.items.all(),
+                'request': self.request,
             }
         )
 
@@ -93,8 +94,14 @@ class CartView(FormView):
 class HistoryListView(ListView):
     model = Order
     template_name = 'pages/frontend/history.html'
-    ordering = ['-created']
-    queryset = Order.objects.exclude(status=OrderStatus.NOT_CREATED)
+
+    def get_queryset(self):
+        request = self.request
+        qs = (Order.objects
+                   .filter(user=request.user)
+                   .exclude(status=OrderStatus.NOT_CREATED)
+                   .order_by('-created'))
+        return qs
 
 
 class HistoryDetailView(DetailView):
