@@ -9,12 +9,13 @@
     <div class="swiper-wrapper">
         <!-- Slides -->
         <div class="swiper-slide">
-          <a href="#"><img src="/static/frontend/images/sl1.jpg" alt=""></a>
+          <a href="#"><img src="/static/frontend/images/sl1.jpg" alt="">
           <div class="slide-bg">
         		<h1>Папки с файлами БЮРОКРАТ</h1>
         		<p>При покупке от двух пачек Эконом А4 (1000шт), Код: 00092018</p>
         		<h3>Cкидка 5%!</h3>
         	</div>
+        </a>
         </div>
         <div class="swiper-slide"><a href="#">
         	<img src="/static/frontend/images/sl2.jpg" alt=""></a>
@@ -158,7 +159,7 @@
            Всем своим клиентам мы стараемся предложить минимально низкие цены и максимально высокое качество товара и обслуживания.
             Мы работаем как с розничными так и с оптовыми покупателями. С условиями сотрудничества вы можете ознакомиться на нашем
             сайте Будем рады видеть вас в числе наших постоянных покупателей!</p>
-          <a href="#" class="button-about">Узнать больше</a>
+          <a href="{% url 'pages:static' 'о-компании' %}" class="button-about">Узнать больше</a>
         </div>
       </div>
     </div>

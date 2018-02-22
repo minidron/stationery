@@ -118,13 +118,13 @@
         <div class="footer-col">
           <h2>Информация для покупателей</h2>
           <span><a href="#">Политика конфеденциальности</a></span>
-          <span><a href="#">Оптовикам</a></span>
-          <span><a href="#">Физ.лицам</a></span>
+          <span><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></span>
+          <span><a href="{% url 'pages:static' 'физ-лицам' %}">Физ.лицам</a></span>
         </div>
         <div class="footer-col about-company">
           <h2>О компании</h2>
-          <span><a href="#">Контакты</a></span>
-          <span><a href="#">О нас</a></span>
+          <span><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></span>
+          <span><a href="{% url 'pages:static' 'о-компании' %}">О нас</a></span>
         </div>
         <div class="footer-col">
             <h2>Связаться с нами</h2>
