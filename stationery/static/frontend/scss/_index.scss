@@ -81,6 +81,151 @@
 /* ------------------------------------------------------------------------- */
 
 
+/* FAVORITE
+============================================================================ */
+.index-offers__section {
+    display: flex;
+    flex-flow: row wrap;
+    margin-left: -20px;
+
+    .category-offers--item {
+        display: flex;
+        align-items: stretch;
+        flex-flow: column;
+        margin-bottom: 20px;
+        margin-left: 20px;
+        width: calc(25% - 20px);
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .offer-image {
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+
+            img {
+                vertical-align: bottom;
+                max-width: 160px;
+                max-height: 160px;
+            }
+        }
+
+        .offer-info {
+            flex: 1;
+            padding: 0 20px;
+            border-right: 1px solid get($color, 'header', 'border');
+
+            .offer-info--title {
+                margin-top: 0;
+                margin-bottom: 10px;
+                font: $fw-regular 16px/20px $ff-PT-Sans;
+
+                .offer-info--title--link {
+                    text-decoration: none;
+                    color: get($color, 'link', 'base');
+
+                    &:hover {
+                        color: get($color, 'link', 'hover');
+                    }
+                }
+            }
+
+            .offer-info--offer-code {
+                font: $fw-regular 13px/20px $ff-PT-Sans;
+                color: get($color, 'text', 'light');
+            }
+
+            .offer-info--offer-properties {
+                margin-top: 10px;
+
+                .offer-info--offer-property {
+                    font: $fw-regular 14px/20px $ff-PT-Sans;
+                    color: get($color, 'text', 'lighter');
+                }
+            }
+        }
+
+        .offer-price {
+            padding: 20px;
+            box-sizing: border-box;
+
+            .offer-price--price {
+                margin-bottom: 10px;
+                font: $fw-bold 20px/20px $ff-Roboto;
+                color: get($color, 'title', 'base');
+
+                &.has_price:after {
+                    @include fa-icon;
+                    content: $fa-var-rub;
+                    margin-left: 5px;
+                    font-size: 18px;
+                }
+            }
+
+            .offer-price--availability {
+                margin-bottom: 15px;
+                font: $fw-regular 14px/20px $ff-PT-Sans;
+                color: get($color, 'text', 'light');
+
+                & > span {
+                    margin-left: 5px;
+
+                    span {
+                        cursor: help;
+                    }
+                }
+            }
+
+            .offer-price--cart {
+                .add-cart {
+                    display: block;
+                    height: 38px;
+                    border-radius: 5px;
+                    font: $fw-medium 12px/38px $ff-Roboto;
+                    text-align: center;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    color: get($color, 'button', 'cart', 'text');
+                    background-color: get($color, 'button', 'cart', 'background');
+                    cursor: pointer;
+                    transition: background-color $base-transition;
+
+                    &:after {
+                        @include fa-icon;
+                        content: $fa-var-shopping-cart;
+                        margin-left: 10px;
+                        font-size: 16px;
+                    }
+
+                    &:hover {
+                        background-color: darken(get($color, 'button', 'cart', 'background'), 10%);
+                    }
+                }
+            }
+
+            .offer-price--quantity {
+                margin-bottom: 10px;
+
+                .quantity {
+                    padding: 5px 10px;
+                    height: 24px;
+                    width: 40px;
+                    border: 1px solid get($color, 'content', 'border');
+                    outline: 0 none;
+                    box-sizing: border-box;
+                    font: normal 14px/24px $ff-PT-Sans;
+                    color: get($color, 'text', 'base');
+                    background-color: #FFF;
+                }
+            }
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */
+
+
 /* slider -------------------------------------------*/
 .index-slider{
     padding-bottom: 30px;
@@ -141,89 +286,6 @@
 /* -------------------------------*/
 
 
-/* index product */
-
-.index-product__section h1{
-    font: $fw-bold 19px/22px $ff-Roboto;
-    text-decoration: none;
-    text-transform: uppercase;
-    color: get($color, 'text', 'base');
-    text-align: center;
-}
-
-.index-product{
-    display: flex;
-    height: auto;
-    flex-wrap: wrap;
-}
-
-
-.index-pr {
-    width: 20%;
-    margin-left: 40px;
-    margin-top: 15px;
-
-    .product-description{
-        text-align: center;
-        padding-bottom: 20px;
-
-        & a{
-            text-decoration:none;
-            color: #0085CF;
-
-            &:hover {
-                color: #D32F2F;
-            }
-        }
-
-        & h4{
-            font: $fw-bold 16px/22px $ff-Roboto;
-        }
-
-        & h5{
-            font: $fw-bold 14px/22px $ff-Roboto;
-        }
-
-        & p{
-            font:12px/22px $ff-Roboto;
-            color: get($color, 'text', 'base');
-        }
-
-        & .more{
-            text-decoration:none;
-            display: block;
-            width: 100px;
-            margin-left:60px;
-            height: 38px;
-            border-radius: 5px;
-            font: 500 12px/38px "Roboto", Arial, "Helvetica Neue", Helvetica, sans-serif;
-            text-align: center;
-            text-decoration: none;
-            text-transform: uppercase;
-            color: #FFF;
-            background-color: #D32F2F;
-            cursor: pointer;
-            transition: background-color 0.3s;
-
-            &:hover{
-                background-color: #ab2424;
-                color: white;
-            }
-        }
-    }
-
-    & img{
-        width: 150px;
-        height: 150px;
-        padding-left: 30px;
-        padding-top: 10px;
-    }
-
-    & span{
-        display: -webkit-box;
-    }
-}
-/*----------------------------------------------*/
 
 
 /* about */

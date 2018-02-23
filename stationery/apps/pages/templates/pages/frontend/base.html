@@ -38,11 +38,11 @@
                 <div class="header-slogan">Все для творчества, школы и офиса</div>
 
                 <ul class="header-menu">
-                    <li class="header-menu--item"><a href="{% url 'pages:static' 'о-компании' %}">О компании</a></li>
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'о-компании' %}">Почему мы?</a></li>
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'доставка' %}">Доставка</a></li>
+                    <li class="header-menu--item"><a href="{% url 'pages:static' 'покупателям' %}">Информация для покупателей</a></li>
+                    <li class="header-menu--item bold"><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></li>
                     <li class="header-menu--item"><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></li>
-                    <li class="header-menu--item"><a href="{% url 'pages:static' 'физ-лицам' %}">Физ.лицам</a></li>
-                    <li class="header-menu--item"><a href="{% url 'pages:static' 'юрлицам' %}">Юр.лицам</a></li>
-                    <li class="header-menu--item"><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></li>
                 </ul>
 
                 <div class="header-auth">{% if user.is_authenticated %}<a href="{% url 'account:history' %}">{{ user.username }}</a> | <a href="{% url 'account:logout' %}">Выйти</a>{% else %}<a href="{% url 'account:login' %}">Авторизация</a>{% endif %}</div>
@@ -138,6 +138,7 @@
     </footer>
 
     {% block scripts %}
+        {% csrf_token %}
         {% javascript 'libs' %}
         {% javascript 'frontend' %}
     {% endblock %}

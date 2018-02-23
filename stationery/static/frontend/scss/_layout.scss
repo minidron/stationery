@@ -85,7 +85,7 @@ body {
         justify-content: space-between;
         align-items: center;
         height: 29px;
-        font: normal 14px/1 $ff-PT-Sans;
+        font: $fw-regular 14px/1 $ff-PT-Sans;
     }
 
     .header-slogan {
@@ -110,6 +110,14 @@ body {
 
             &:last-of-type {
                 margin-right: 0;
+            }
+
+            &.bold {
+                font-weight: $fw-bold;
+
+                a {
+                    text-decoration: underline;
+                }
             }
         }
     }
@@ -425,12 +433,13 @@ body {
 /* MAIN
 ============================================================================ */
 .main__section {
-    background-color: get($color, 'content', 'background');
+    background-color: #FFB74D;
 
     .main-container {
         @include responsive-block;
         padding-top: 20px;
         padding-bottom: 40px;
+        background-color: get($color, 'content', 'background');
     }
 
     .main--title {
@@ -446,7 +455,7 @@ body {
 /* footer__section
 ======================================================*/
 .footer__section{
-  background-color: #525252;
+  background-color: get($color, 'nav', 'background');
   width: 100%;
   height: 400px;
 

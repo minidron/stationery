@@ -1,6 +1,7 @@
 <h2>Заказ номер {{ order.pk }}</h2>
 
 <p>Пользователь: {{ request.user }}</p>
+<p>{{ request.user.profile.company }} {{ request.user.profile.inn }}</p>
 
 <table border="1">
     <thead>

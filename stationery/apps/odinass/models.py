@@ -57,34 +57,7 @@ class Category(MPTTModel):
         return reverse('pages:category', args=[str(self.id)])
 
     def offers(self, user=None):
-        price_params = {}
-        if user and hasattr(user, 'profile') and user.profile.price_type:
-            price_params['price_type'] = user.profile.price_type
-        else:
-            price_params['price_type__is_default'] = True
-
-        price = Price.objects.filter(offer=OuterRef('pk'), **price_params)
-
-        # остатки по нужным складам
-        prefetch = Prefetch(
-            'rests', queryset=Rest.objects.filter(warehouse__is_selected=True)
-                                          .order_by('warehouse__title'))
-
-        return (Offer.objects
-                     .select_related('product')
-                     .prefetch_related('prices', 'prices__price_type',
-                                       prefetch, 'rests__warehouse',
-                                       'product__property_values',
-                                       'product__property_values__property')
-                     .filter(product__category=self)
-                     .annotate(
-                        retail_price=Subquery(price.values('price')[:1]),
-                        rests_count=Sum(Case(
-                            When(rests__warehouse__is_selected=True,
-                                 then=F('rests__value')),
-                            default=Value(0),
-                            output_field=IntegerField()
-                        ))))
+        return Offer.objects.offers(user=user, category=self)
 
 
 class Warehouse(models.Model):
@@ -184,6 +157,9 @@ class Product(models.Model):
     created = models.DateField(
         'дата создания',
         auto_now_add=True, editable=False, null=False, blank=False)
+    is_favorite = models.BooleanField(
+        'избранный',
+        db_index=True, default=False)
 
     class Meta:
         default_related_name = 'products'
@@ -210,7 +186,7 @@ class PropertyValue(models.Model):
 
     class Meta:
         default_related_name = 'property_values'
-        ordering = ['title']
+        ordering = ['property__title', 'title']
         verbose_name = 'значение свойства'
         verbose_name_plural = 'значения свойства'
 
@@ -271,6 +247,42 @@ class Price(models.Model):
         return price
 
 
+class OfferQuerySet(models.QuerySet):
+    def offers(self, user=None, category=None):
+        price_params = {}
+        if user and hasattr(user, 'profile') and user.profile.price_type:
+            price_params['price_type'] = user.profile.price_type
+        else:
+            price_params['price_type__is_default'] = True
+
+        price = Price.objects.filter(offer=OuterRef('pk'), **price_params)
+
+        # остатки по нужным складам
+        prefetch = Prefetch(
+            'rests', queryset=Rest.objects.filter(warehouse__is_selected=True)
+                                          .order_by('warehouse__title'))
+
+        offer_params = {}
+        if category:
+            offer_params['product__category'] = category
+
+        return (Offer.objects
+                     .select_related('product')
+                     .prefetch_related('prices', 'prices__price_type',
+                                       prefetch, 'rests__warehouse',
+                                       'product__property_values',
+                                       'product__property_values__property')
+                     .filter(**offer_params)
+                     .annotate(
+                        retail_price=Subquery(price.values('price')[:1]),
+                        rests_count=Sum(Case(
+                            When(rests__warehouse__is_selected=True,
+                                 then=F('rests__value')),
+                            default=Value(0),
+                            output_field=IntegerField()
+                        ))))
+
+
 class Offer(models.Model):
     """
     Предложение
@@ -282,6 +294,8 @@ class Offer(models.Model):
     product = models.ForeignKey(
         'odinass.Product',
         verbose_name='товар')
+
+    objects = OfferQuerySet.as_manager()
 
     class Meta:
         default_related_name = 'offers'

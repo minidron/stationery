@@ -115,6 +115,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
                 'title',
                 'category',
                 'image',
+                'is_favorite',
                 'field_offers',
                 'field_properties',
             ),

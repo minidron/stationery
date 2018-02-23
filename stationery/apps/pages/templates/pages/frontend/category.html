@@ -160,9 +160,3 @@
     </form>
     {% endif %}
 {% endblock content %}
-
-
-{% block scripts %}
-    {% csrf_token %}
-    {{ block.super }}
-{% endblock %}

@@ -169,6 +169,12 @@ class Profile(models.Model):
         'odinass.PriceType',
         verbose_name='тип цены',
         db_index=True, blank=True, null=True)
+    company = models.CharField(
+        'компания',
+        max_length=254, blank=True)
+    inn = models.CharField(
+        'ИНН',
+        max_length=254, blank=True)
 
     class Meta:
         default_related_name = 'profiles'
