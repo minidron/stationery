@@ -166,6 +166,7 @@ swiper = new Swiper('.swiper-container', navigation:
   prevEl: '.swiper-button-prev'
   pagination: el: '.swiper-pagination'
   clickable: true
+  loop: true
   renderBullet: (index, className) ->
     '<span class="' + className + '">' + index + 1 + '</span>')
 
