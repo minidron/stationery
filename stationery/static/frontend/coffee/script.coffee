@@ -161,13 +161,16 @@ do ($=jQuery, window, document) ->
 
 
 #-----index slider---------
-swiper = new Swiper('.swiper-container', navigation:
+swiper = new Swiper '.swiper-container', 
+navigation:
   nextEl: '.swiper-button-next'
   prevEl: '.swiper-button-prev'
-  pagination: el: '.swiper-pagination'
-  clickable: true
-  loop: true
-  renderBullet: (index, className) ->
-    '<span class="' + className + '">' + index + 1 + '</span>')
+ pagination: 
+  el: '.swiper-pagination'
+ clickable: true
+ loop: true
+ autoplay: delay: 4000
+ renderBullet: (index, className) ->
+    '<span class="' + className + '">' + index + 1 + '</span>'
 
   #--------------------------

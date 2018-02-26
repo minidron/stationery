@@ -299,6 +299,33 @@ body {
         color: get($color, 'link', 'base');
     }
 }
+
+ @include media('<=phone') {
+    /*----------base----------------*/
+
+    .header__section{
+
+        .header-panel{
+        height:100px;
+        flex-flow:column;
+        }
+        
+
+        .header-menu{
+        flex-flow:column;
+
+            .header-menu--item{
+            padding:3px;
+            margin-left:40px;
+            }
+        }
+        .header-auth{
+            padding-bottom:3px;
+        }
+        }
+/*--------------------------------*/
+}
+
 /* ------------------------------------------------------------------------- */
 
 

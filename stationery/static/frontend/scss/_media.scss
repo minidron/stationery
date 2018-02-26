@@ -1,29 +1,7 @@
 
 @media screen and (min-device-width : 320px) and (max-device-width : 480px){
 
-/*----------base----------------*/
 
-	.header__section{
-
-		.header-panel{
-		height:100px;
-		flex-flow:column;
-		}
-		
-
-		.header-menu{
-		flex-flow:column;
-
-			.header-menu--item{
-			padding:3px;
-			margin-left:40px;
-			}
-		}
-		.header-auth{
-			padding-bottom:3px;
-		}
-		}
-/*--------------------------------*/
 
 /*---------------index-------------*/
 	.swiper-container{
@@ -84,9 +62,26 @@
 
 	 .index-offers__section{
 	 	display: inherit;
+	 	margin-left: -10px;
 
 	 		.category-offers--item{
 	 		width:90%;
+
+	 			.offer-info{
+	 			text-align: center;
+	 			} 
+	 		}
+	 		.offer-price{ 
+
+	 		.offer-price--price{
+	 			padding-left: 30%;
+	 			}
+	 		.offer-price--availability{
+	 			padding-left: 25%;
+	 			}
+	 		.offer-price--quantity{
+	 			margin-left: 40%;
+	 		}
 	 		}
 	 }
 /*--------------------*/
@@ -125,8 +120,13 @@
   	.category-offers--item{
   		display: inherit;
 
+  		.offer-info{
+  			text-align: center;
+  		}
+
   		.offer-price{
   		width: 100%;
+  		text-align: center;
   		}
   	}
   }
@@ -191,6 +191,13 @@
 
 	 .category-offers--item{
 	 	width: calc(50% - 20px);
+
+	 		.offer-info{
+	 			text-align: center;
+	 		}
+	 		.offer-price{
+	 			text-align: center;
+	 		}
 	 }
 	 }
 
