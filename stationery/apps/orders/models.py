@@ -203,7 +203,7 @@ class GroupSettings(models.Model):
         verbose_name_plural = 'настройки групп'
 
     def __str__(self):
-        return self.group
+        return self.group.name
 
 
 @receiver(post_save, sender=User)
