@@ -4,6 +4,30 @@ do ($=jQuery, window, document) ->
     price = value.toFixed(2).replace /\B(?=(\d{3})+(?!\d))/g, ' '
 
 
+  $.fn.extend animateCss: (animationName, callback) ->
+    animationEnd = ((el) ->
+      animations = 
+        animation: 'animationend'
+        OAnimation: 'oAnimationEnd'
+        MozAnimation: 'mozAnimationEnd'
+        WebkitAnimation: 'webkitAnimationEnd'
+
+      for t of animations
+        if el.style[t] != undefined
+          return animations[t]
+      return
+
+    )(document.createElement('div'))
+
+    @removeClass 'hidden'
+    @addClass('animated ' + animationName).one animationEnd, ->
+      $(this).removeClass 'animated ' + animationName
+      if typeof callback == 'function'
+        callback()
+      return
+    this
+
+
   # Псевдо hover на поисковый блок
   # ---------------------------------------------------------------------------
   $ ->
@@ -52,6 +76,9 @@ do ($=jQuery, window, document) ->
         }
         success: (data, status) =>
           cart.text toPrice data.amount
+          $('.offer-in-cart').animateCss 'zoomInUp', ->
+            $('.offer-in-cart').animateCss 'fadeOut', ->
+              $('.offer-in-cart').addClass 'hidden'
           console.log status
         error: (data, status) =>
           console.log status

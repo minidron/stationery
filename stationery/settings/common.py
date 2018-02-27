@@ -119,6 +119,7 @@ STATICFILES_FINDERS += (
 BOWER_COMPONENTS_ROOT = path('static')
 
 BOWER_INSTALLED_APPS = (
+    'animate.css#3.5',
     'backbone#1.3',
     'bootstrap#3.3',
     'devbridge-autocomplete#1.4',
@@ -168,6 +169,7 @@ PIPELINE = {
                 'bower_components/normalize-css/normalize.css',
                 'bower_components/nouislider/distribute/nouislider.min.css',
                 'bower_components/swiper/dist/css/swiper.min.css',
+                'bower_components/animate.css/animate.min.css',
             ),
             'output_filename': 'frontend/css/libs.css',
         },
