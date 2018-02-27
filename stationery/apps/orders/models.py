@@ -138,6 +138,7 @@ class Item(models.Model):
 
     class Meta:
         default_related_name = 'items'
+        ordering = ['offer__title']
         verbose_name = 'товар заказа'
         verbose_name_plural = 'товары заказа'
 

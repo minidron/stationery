@@ -433,13 +433,12 @@ body {
 /* MAIN
 ============================================================================ */
 .main__section {
-    background-color: #FFB74D;
+    background-color: get($color, 'content', 'background');
 
     .main-container {
         @include responsive-block;
         padding-top: 20px;
         padding-bottom: 40px;
-        background-color: get($color, 'content', 'background');
     }
 
     .main--title {
