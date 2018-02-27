@@ -40,6 +40,13 @@ class ProfileAdmin(admin.ModelAdmin):
     """
 
 
+@admin.register(GroupSettings)
+class GroupSettingsAdmin(admin.ModelAdmin):
+    """
+    Админка для настроек групп.
+    """
+
+
 class ProfileInline(admin.StackedInline):
     can_delete = False
     fk_name = 'user'
