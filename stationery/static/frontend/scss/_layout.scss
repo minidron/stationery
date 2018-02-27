@@ -67,6 +67,16 @@ body {
         }
     }
 }
+
+.block-title--wrapper {
+    .block-title {
+        margin-top: 0;
+        margin-bottom: 10px;
+        text-align: center;
+        font: $fw-medium 22px/1.4 $ff-Roboto;
+        color: get($color, 'title', 'base');
+    }
+}
 /* ------------------------------------------------------------------------- */
 
 
@@ -116,7 +126,7 @@ body {
                 font-weight: $fw-bold;
 
                 a {
-                    text-decoration: underline;
+                    color: get($color, 'link', 'hover');
                 }
             }
         }
@@ -477,6 +487,7 @@ body {
 }
 
 /* ------------------------------------------------------------------------- */
+
 
 /* footer__section
 ======================================================*/

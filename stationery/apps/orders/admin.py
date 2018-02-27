@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 
 from orders.models import Item, Order, Profile
 
@@ -48,6 +49,31 @@ class ProfileInline(admin.StackedInline):
 
 class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline, )
+
+    list_display = [
+        'username',
+        'email',
+        'field_company',
+        'first_name',
+        'last_name',
+        'field_inn',
+        'field_price_type',
+    ]
+
+    def field_company(self, instance):
+        company = instance.profile.company
+        return mark_safe(company if company else '')
+    field_company.short_description = 'Компания'
+
+    def field_inn(self, instance):
+        inn = instance.profile.inn
+        return mark_safe(inn if inn else '')
+    field_inn.short_description = 'ИНН'
+
+    def field_price_type(self, instance):
+        price_type = instance.profile.price_type
+        return mark_safe(price_type if price_type else '')
+    field_price_type.short_description = 'Тип цены'
 
     def get_inline_instances(self, request, obj=None):
         if not obj:

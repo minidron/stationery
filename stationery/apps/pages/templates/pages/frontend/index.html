@@ -71,41 +71,44 @@
     </div>
 
     <div class="index-offers__section">
-        {% for offer in favorite_offers %}
-            <div class="category-offers--item rounded clickable">
-                <div class="offer-image">
-                    <a href="{{ offer.get_absolute_url }}">
-                        {% thumbnail offer.product.image '160x160' as offer_image %}
-                            <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
-                        {% empty %}
-                            <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.title }}" class="product-item">
-                        {% endthumbnail %}
-                    </a>
-                </div>
-                <div class="offer-info">
-                    <h3 class="offer-info--title"><a class="offer-info--title--link" href="{{ offer.get_absolute_url }}">{{ offer.title }}</a></h3>
-                    <div class="offer-info--offer-code">Код: {{ offer.product.article }}</div>
-                </div>
-                <div class="offer-price">
-                    <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
-                    <div class="offer-price--availability">
-                        Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
+        <div class="block-title--wrapper"><h2 class="block-title">Новинки</h2></div>
+        <div class="index-offers--wrapper">
+            {% for offer in favorite_offers %}
+                <div class="category-offers--item rounded clickable">
+                    <div class="offer-image">
+                        <a href="{{ offer.get_absolute_url }}">
+                            {% thumbnail offer.product.image '160x160' as offer_image %}
+                                <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
+                            {% empty %}
+                                <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.title }}" class="product-item">
+                            {% endthumbnail %}
+                        </a>
                     </div>
-                    <div class="offer-price--cart">
-                        <div class="offer-price--quantity">
-                            <input class="quantity" type="text" value="1">
+                    <div class="offer-info">
+                        <h3 class="offer-info--title"><a class="offer-info--title--link" href="{{ offer.get_absolute_url }}">{{ offer.title }}</a></h3>
+                        <div class="offer-info--offer-code">Код: {{ offer.product.article }}</div>
+                    </div>
+                    <div class="offer-price">
+                        <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
+                        <div class="offer-price--availability">
+                            Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
                         </div>
-                        <a href="#" class="add-cart" data-offer-id="{{ offer.id }}" data-offer-price="{{ offer.retail_price }}">В корзину</a>
+                        <div class="offer-price--cart">
+                            <div class="offer-price--quantity">
+                                <input class="quantity" type="text" value="1">
+                            </div>
+                            <a href="#" class="add-cart" data-offer-id="{{ offer.id }}" data-offer-price="{{ offer.retail_price }}">В корзину</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 
 
     <!-- about container -->
     <div class="index-about__section">
-      <h1>О нас</h1>
+      <div class="block-title--wrapper"><h2 class="block-title">О нас</h2></div>
       <div class="index-about">
 
         <div class="about-picture">

@@ -1,6 +1,8 @@
 /* CATEGORY
 ============================================================================ */
 .index-catalog__section {
+    margin-bottom: 20px;
+
     .index-catalog {
         @include clear-list;
         display: flex;
@@ -83,10 +85,11 @@
 
 /* FAVORITE
 ============================================================================ */
-.index-offers__section {
+.index-offers--wrapper {
     display: flex;
     flex-flow: row wrap;
     margin-left: -20px;
+    margin-bottom: 20px;
 
     .category-offers--item {
         display: flex;
@@ -211,7 +214,7 @@
                 .quantity {
                     padding: 5px 10px;
                     height: 24px;
-                    width: 40px;
+                    width: 60px;
                     border: 1px solid get($color, 'content', 'border');
                     outline: 0 none;
                     box-sizing: border-box;
@@ -290,7 +293,6 @@
 
 /* about */
 .index-about {
-    margin-top: 50px;
     display: flex;
 }
 
