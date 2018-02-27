@@ -1,9 +1,9 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import User, Group
 from django.utils.safestring import mark_safe
 
-from orders.models import Item, Order, Profile
+from orders.models import Item, Order, Profile, GroupSettings
 
 
 class ItemInline(admin.TabularInline):
@@ -47,6 +47,13 @@ class ProfileInline(admin.StackedInline):
     verbose_name_plural = 'Настройки'
 
 
+class GroupSettingsInline(admin.StackedInline):
+    can_delete = False
+    fk_name = 'group'
+    model = GroupSettings
+    verbose_name_plural = 'Настройки'
+
+
 class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline, )
 
@@ -81,5 +88,17 @@ class CustomUserAdmin(UserAdmin):
         return super().get_inline_instances(request, obj)
 
 
+class CustomGroupAdmin(GroupAdmin):
+    inlines = (GroupSettingsInline, )
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super().get_inline_instances(request, obj)
+
+
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+
+admin.site.unregister(Group)
+admin.site.register(Group, CustomGroupAdmin)

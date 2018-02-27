@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+Group = 'auth.Group'
 User = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
@@ -186,8 +187,34 @@ class Profile(models.Model):
         return self.user.username
 
 
+class GroupSettings(models.Model):
+    group = models.OneToOneField(
+        Group,
+        verbose_name='группа',
+        related_name='settings',
+        on_delete=models.CASCADE)
+    email = models.EmailField(
+        'почта',
+        max_length=254, blank=True)
+
+    class Meta:
+        default_related_name = 'group_settings'
+        verbose_name = 'настройка групп'
+        verbose_name_plural = 'настройки групп'
+
+    def __str__(self):
+        return self.group
+
+
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+
+@receiver(post_save, sender=Group)
+def create_or_update_group_settings(sender, instance, created, **kwargs):
+    if created:
+        GroupSettings.objects.create(group=instance)
+    instance.settings.save()
