@@ -109,6 +109,7 @@
  		.category-filters{
  			width:100%;
  			margin-right: 0;
+ 			display: none;
  		}
 
  		.category-filters--has-rest{
@@ -119,6 +120,12 @@
  		}
   	.category-offers--item{
   		display: inherit;
+
+  		.offer-image{
+  			& img{
+  			margin-left: 30%;
+  			}
+  		}
 
   		.offer-info{
   			text-align: center;
