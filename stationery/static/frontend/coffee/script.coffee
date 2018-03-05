@@ -4,6 +4,8 @@ do ($=jQuery, window, document) ->
     price = value.toFixed(2).replace /\B(?=(\d{3})+(?!\d))/g, ' '
 
 
+  # JQ Plugin для animate Css
+  # ---------------------------------------------------------------------------
   $.fn.extend animateCss: (animationName, callback) ->
     animationEnd = ((el) ->
       animations = 
@@ -26,9 +28,43 @@ do ($=jQuery, window, document) ->
         callback()
       return
     this
+  # ---------------------------------------------------------------------------
 
 
-  # Псевдо hover на поисковый блок
+  # AUTOCOMLETE
+  # ---------------------------------------------------------------------------
+  $ ->
+    searchBlock = $ '.header-search'
+
+    escapeRegExChars = (value) ->
+      value.replace /[|\\{}()[\]^$+*?.]/g, "\\$&"
+      value.split(' ').filter((n) -> n != '').join '|'
+
+    $('#header-search').devbridgeAutocomplete
+      serviceUrl: '/api/search_offer/'
+      paramName: 'title'
+      minChars: 2
+      maxHeight: 'auto'
+      appendTo: searchBlock
+      transformResult: (response) ->
+        suggestions: $.map JSON.parse(response), (dataItem) ->
+          value: dataItem.title, data:
+            link: dataItem.url
+            price: dataItem.price_retail
+      formatResult: (suggestion, currentValue) ->
+        if not currentValue
+          return suggestion.value
+
+        pattern = '(' + escapeRegExChars(currentValue) + ')'
+        result = '<div class="suggestion">' + suggestion.value + '</div><div class="price">' + suggestion.data.price + '</div>'
+        result.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
+
+      onSelect: (suggestion) ->
+          window.location.href = suggestion.data.link
+  # ---------------------------------------------------------------------------
+
+
+  # ПСЕВДО HOVER НА ПОИСКОВЫЙ БЛОК
   # ---------------------------------------------------------------------------
   $ ->
     searchBlock = $ '.header-search'
@@ -96,45 +132,32 @@ do ($=jQuery, window, document) ->
       el.closest('.cart--item').find('.cart--item-total_price').text "= #{toPrice(totalPrice)}"
       $('.cart-info--price').trigger 'htmlchange'
 
+
     $('.cart-info--price').on 'htmlchange', (e) ->
       el = $ @
       sum = 0
       $.each $('.cart--item-total_price'), ->
         sum += parseFloat $(this).text().replace /[^\d\.]+/g, ''
       el.text "= #{toPrice(sum)}"
-  # ---------------------------------------------------------------------------
 
 
-  # AUTOCOMLETE
-  # ---------------------------------------------------------------------------
-  $ ->
-    searchBlock = $ '.header-search'
-
-    escapeRegExChars = (value) ->
-      value.replace /[|\\{}()[\]^$+*?.]/g, "\\$&"
-      value.split(' ').filter((n) -> n != '').join '|'
-
-    $('#header-search').devbridgeAutocomplete
-      serviceUrl: '/api/search_offer/'
-      paramName: 'title'
-      minChars: 2
-      maxHeight: 'auto'
-      appendTo: searchBlock
-      transformResult: (response) ->
-        suggestions: $.map JSON.parse(response), (dataItem) ->
-          value: dataItem.title, data:
-            link: dataItem.url
-            price: dataItem.price_retail
-      formatResult: (suggestion, currentValue) ->
-        if not currentValue
-          return suggestion.value
-
-        pattern = '(' + escapeRegExChars(currentValue) + ')'
-        result = '<div class="suggestion">' + suggestion.value + '</div><div class="price">' + suggestion.data.price + '</div>'
-        result.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
-
-      onSelect: (suggestion) ->
-          window.location.href = suggestion.data.link
+    $('.cart--item-delete--link').on 'click', (e) ->
+      el = $ @
+      $.ajax
+        type: 'DELETE'
+        url: '/api/orders/'
+        headers: {
+          'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+        }
+        data: {
+          'offer': el.data 'deleteOfferId'
+        }
+        success: (data, status) =>
+          el.closest('.cart--item').remove()
+          $('.cart-info--price').trigger 'htmlchange'
+          console.log status
+        error: (data, status) =>
+          console.log status
   # ---------------------------------------------------------------------------
 
 
@@ -169,6 +192,17 @@ do ($=jQuery, window, document) ->
 
     maxPrice.addEventListener 'change', () ->
       handlesSlider.noUiSlider.set [null, this.value]
+  # ---------------------------------------------------------------------------
+
+
+  # QUANTITY
+  # ---------------------------------------------------------------------------
+  $ ->
+    $('input.quantity').on 'click', ->
+      $(@).select()
+
+    $('.cart--item-quantity input').on 'click', ->
+      $(@).select()
   # ---------------------------------------------------------------------------
 
 

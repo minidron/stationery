@@ -27,6 +27,12 @@ class OrderAPIView(APIView):
         order.add_item(request.POST['offer'], quantity, user=request.user)
         return Response({'amount': order.amount}, status=status.HTTP_200_OK)
 
+    def delete(self, request, *args, **kwargs):
+        order = Order.get_cart(request.user)
+        offer = request.POST['offer']
+        order.remove_item(offer)
+        return Response({'amount': order.amount}, status=status.HTTP_200_OK)
+
 
 class UserLoginView(LoginView):
     template_name = 'pages/frontend/registration/login.html'

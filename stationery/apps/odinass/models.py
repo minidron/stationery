@@ -278,6 +278,7 @@ class OfferQuerySet(models.QuerySet):
                         rests_count=Sum(Case(
                             When(rests__warehouse__is_selected=True,
                                  then=F('rests__value')),
+                            When(rests__value__gte=0, then=F('rests__value')),
                             default=Value(0),
                             output_field=IntegerField()
                         ))))

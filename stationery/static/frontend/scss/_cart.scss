@@ -13,6 +13,11 @@
         flex: 1;
         font: $fw-regular 16px/20px $ff-PT-Sans;
 
+        .article {
+            margin-right: 5px;
+            font-size: 14px;
+        }
+
         .cart--item-offer--link {
             text-decoration: none;
             color: get($color, 'link', 'base');
@@ -63,6 +68,25 @@
             content: $fa-var-rub;
             margin-left: 5px;
             font-size: 12px;
+        }
+    }
+
+    .cart--item-delete {
+        margin-left: 30px;
+
+        .cart--item-delete--link {
+            text-decoration: none;
+            color: get($color, 'link', 'base');
+
+            &:hover {
+                color: get($color, 'link', 'hover');
+            }
+
+            &:after {
+                @include fa-icon;
+                content: $fa-var-trash;
+                font-size: 16px;
+            }
         }
     }
 
