@@ -221,29 +221,28 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
-#-----index slider---------
-swiper = new Swiper '.swiper-container', 
-navigation:
-  nextEl: '.swiper-button-next'
-  prevEl: '.swiper-button-prev'
- pagination: 
-  el: '.swiper-pagination'
- clickable: true
- loop: true
- autoplay: delay: 4000
- renderBullet: (index, className) ->
-    '<span class="' + className + '">' + index + 1 + '</span>'
+  # SLIDER
+  # ---------------------------------------------------------------------------
+  swiper = new Swiper '.swiper-container', 
+  navigation:
+    nextEl: '.swiper-button-next'
+    prevEl: '.swiper-button-prev'
+   pagination: 
+    el: '.swiper-pagination'
+   clickable: true
+   loop: true
+   autoplay: delay: 4000
+   renderBullet: (index, className) ->
+      '<span class="' + className + '">' + index + 1 + '</span>'
+  # ---------------------------------------------------------------------------
 
-  #--------------------------
 
-
-  #------------popup filter ----------------
-
-$('#box').popmenu
-  'background': '#fff'
-  'width': '90%'
-  'focusColor': '#c0392b'
-  'borderRadius': '0'
-  'border':'2px solid #0085CF'
-
-  #------------------------------------------
+  # POPUP FILTER
+  # ---------------------------------------------------------------------------
+  $('#box').popmenu
+    'background': '#fff'
+    'width': '90%'
+    'focusColor': '#c0392b'
+    'borderRadius': '0'
+    'border':'2px solid #0085CF'
+  # ---------------------------------------------------------------------------
