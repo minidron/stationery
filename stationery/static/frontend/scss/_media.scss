@@ -136,17 +136,18 @@
   		text-align: center;
   		}
   	}
-  	.desktop{
-  		display:none;
+  	.mobile-hide{
+  	display:none;
   	}
-  	.mobile{
-  		display: inherit;
-
-  		.pop_ctrl{
-  		color:#0085CF;
-  		text-align: center;
-  		font-size: 36px;
-  		}
+  	.slide-toggle{
+  	display: inherit;
+  	font-size: 26px;
+  	color: white;
+  	width:100%;
+  	text-align: center;
+  	padding-top: 5px;
+  	padding-bottom: 5px;
+  	background-color: #2C7FAE;
   	}
   }
 
