@@ -42,39 +42,88 @@
     {% if has_offers %}
     <form id="offer-filter" action="" method="GET">
     <div class="category-container">
-        <div class="category-filters rounded">
-            <div class="category-filters--filters">
-                <div class="offer-filter--wrapper">
-                    <h3 class="offer-filter--title">Цена</h3>
-                    <div class="offer-filter--price">
-                        <div class="offer-filter--price-min">
-                            <input id="offer-filter--price-min"
-                                   data-price="{{ prices.retail_price__min }}"
-                                   type="text" name="minCost"
-                                   value="{{ form_search.minCost.value|default:prices.retail_price__min }}">
-                        </div>
-                        <div class="offer-filter--price-max">
-                            <input id="offer-filter--price-max"
-                                   data-price="{{ prices.retail_price__max }}"
-                                   type="text" name="maxCost"
-                                   value="{{ form_search.maxCost.value|default:prices.retail_price__max }}"></div>
-                    </div>
-                    <div id="offer-filter--price-slider"></div>
-                </div>
-
-                {% for field in form_search %}
-                    {% if field.name != 'minCost' and field.name != 'maxCost' and field.name != 'has_rests' %}
-                        <div class="offer-filter--wrapper">
-                            <h3 class="offer-filter--title">{{ field.label }}</h3>
-                            <div class="offer-filter--">
-                                {{ field }}
+        <div class="desktop">
+        <div class="category-filters rounded" >
+                <div class="category-filters--filters">
+                    <div class="offer-filter--wrapper">
+                        <h3 class="offer-filter--title">Цена</h3>
+                        <div class="offer-filter--price">
+                            <div class="offer-filter--price-min">
+                                <input id="offer-filter--price-min"
+                                       data-price="{{ prices.retail_price__min }}"
+                                       type="text" name="minCost"
+                                       value="{{ form_search.minCost.value|default:prices.retail_price__min }}">
                             </div>
+                            <div class="offer-filter--price-max">
+                                <input id="offer-filter--price-max"
+                                       data-price="{{ prices.retail_price__max }}"
+                                       type="text" name="maxCost"
+                                       value="{{ form_search.maxCost.value|default:prices.retail_price__max }}"></div>
                         </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class="category-filters--button"><button class="submit" type="submit">Найти</button></div>
+                        <div id="offer-filter--price-slider"></div>
+                    </div>
+
+                    {% for field in form_search %}
+                        {% if field.name != 'minCost' and field.name != 'maxCost' and field.name != 'has_rests' %}
+                            <div class="offer-filter--wrapper">
+                                <h3 class="offer-filter--title">{{ field.label }}</h3>
+                                <div class="offer-filter--">
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                
         </div>
+            <div class="category-filters--button"><button class="submit" type="submit">Найти</button></div><!--</ul>-->
+        </div>
+        </div>
+    
+
+    <div class="mobile" >
+    <div class="category-filters" id="box">
+        <span class="pop_ctrl"><i class="fa fa-sliders"></i></span>
+            <ul id="demo_ul">
+                <div class="category-filters--filters">
+                    <div class="offer-filter--wrapper">
+                        <h3 class="offer-filter--title">Цена</h3>
+                        <div class="offer-filter--price">
+                            <div class="offer-filter--price-min">
+                                <input id="offer-filter--price-min"
+                                       data-price="{{ prices.retail_price__min }}"
+                                       type="text" name="minCost"
+                                       value="{{ form_search.minCost.value|default:prices.retail_price__min }}">
+                            </div>
+                            <div class="offer-filter--price-max">
+                                <input id="offer-filter--price-max"
+                                       data-price="{{ prices.retail_price__max }}"
+                                       type="text" name="maxCost"
+                                       value="{{ form_search.maxCost.value|default:prices.retail_price__max }}"></div>
+                        </div>
+                        <div id="offer-filter--price-slider"></div>
+                    </div>
+
+                    {% for field in form_search %}
+                        {% if field.name != 'minCost' and field.name != 'maxCost' and field.name != 'has_rests' %}
+                            <div class="offer-filter--wrapper">
+                                <h3 class="offer-filter--title">{{ field.label }}</h3>
+                                <div class="offer-filter--">
+                                    {{ field }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                
+        </div>
+            <div class="category-filters--button"><button class="submit" type="submit">Найти</button></div><!--</ul>-->
+        </div></div>
+
+
+        
+
+
+
+
         <div class="category-content">
             <div class="category-filters--has-rest">
                 <label for="id_has_rests">{{ form_search.has_rests }} Сортировать по наличию</label>
