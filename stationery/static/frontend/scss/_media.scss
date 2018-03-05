@@ -109,7 +109,7 @@
  		.category-filters{
  			width:100%;
  			margin-right: 0;
- 			display: none;
+ 			
  		}
 
  		.category-filters--has-rest{
@@ -134,6 +134,18 @@
   		.offer-price{
   		width: 100%;
   		text-align: center;
+  		}
+  	}
+  	.desktop{
+  		display:none;
+  	}
+  	.mobile{
+  		display: inherit;
+
+  		.pop_ctrl{
+  		color:#0085CF;
+  		text-align: center;
+  		font-size: 36px;
   		}
   	}
   }

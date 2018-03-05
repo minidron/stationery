@@ -239,6 +239,11 @@ navigation:
 
   #------------popup filter ----------------
 
-
+$('#box').popmenu
+  'background': '#fff'
+  'width': '90%'
+  'focusColor': '#c0392b'
+  'borderRadius': '0'
+  'border':'2px solid #0085CF'
 
   #------------------------------------------
