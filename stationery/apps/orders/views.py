@@ -1,3 +1,5 @@
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
@@ -32,6 +34,20 @@ class OrderAPIView(APIView):
         offer = request.POST['offer']
         order.remove_item(offer)
         return Response({'amount': order.amount}, status=status.HTTP_200_OK)
+
+
+class RegistrationView(FormView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('index')
+    template_name = 'pages/frontend/registration/registration.html'
+
+    def form_valid(self, form):
+        form.save()
+        username = form.cleaned_data.get('username')
+        raw_password = form.cleaned_data.get('password1')
+        user = authenticate(username=username, password=raw_password)
+        login(self.request, user)
+        return super().form_valid(form)
 
 
 class UserLoginView(LoginView):

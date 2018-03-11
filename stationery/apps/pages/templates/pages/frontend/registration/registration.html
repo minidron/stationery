@@ -1,0 +1,30 @@
+{% extends "pages/frontend/base.html" %}
+
+{% block body_class %}registration_page{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">Регистрация</h1>
+
+    <div class="registration-form rounded">
+        <form method="POST">{% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="field-row">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+            <div class="submit-row"><button class="submit" type="submit">Зарегистрироваться</button></div>
+        </form>
+    </div>
+{% endblock %}

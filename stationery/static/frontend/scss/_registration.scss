@@ -48,6 +48,13 @@
         color: red;
     }
 
+    .errorlist {
+        @include clear-list;
+        padding-top: 5px;
+        font: normal 14px/1.4 $ff-PT-Sans;
+        color: red;
+    }
+
     .submit-row {
         margin-top: 20px;
 
