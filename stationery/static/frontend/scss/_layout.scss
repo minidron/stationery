@@ -349,6 +349,22 @@ body {
         display: flex;
         align-items: center;
         flex-flow: row;
+
+            .slide-toggle{
+            display:none;
+            }
+
+        @include media('<=phone') {
+            display: inherit;
+
+
+                .slide-toggle{
+                    color: white;
+                    font-size: 26px;
+                    padding-top: 10px;
+                    display: inherit;
+                }
+        }
     }
 
     .navbar-menu {
@@ -359,7 +375,7 @@ body {
         justify-content: flex-start;
 
         @include media('<=phone') {
-            display: none;
+            display: inherit;
         }
 
         .navbar-menu--root-item {

@@ -74,7 +74,8 @@
 
     <nav class="navbar__section">
         <div class="navbar-container">
-            <ul class="navbar-menu">
+            <span class="slide-toggle"><i class="fa fa-bars"></i></i></span>
+            <ul class="navbar-menu mobile-hide">
                 {% for category in categories %}
                     <li class="navbar-menu--root-item">
                         <a href="{{ category.get_absolute_url }}">{{ category }}</a>
