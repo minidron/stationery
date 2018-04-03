@@ -59,8 +59,10 @@
                 <div class="header-search--wrapper">
                     <div class="header-search">
                         {% spaceless %}
-                            <input id="header-search" type="text" name="q" placeholder="Введите код или название товара..." autocomplete="off">
-                            <button class="header-search--button"></button>
+                            <form action="{% url 'pages:search' %}" method="GET">
+                                <input id="header-search" type="text" name="q" placeholder="Введите код или название товара..." autocomplete="off">
+                                <button class="header-search--button"></button>
+                            </form>
                         {% endspaceless %}
                     </div>
                 </div>

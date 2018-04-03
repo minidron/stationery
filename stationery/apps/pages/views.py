@@ -10,6 +10,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 from pages.models import Page
 
 from odinass.models import Category, Offer, Property, PropertyValue
+from odinass.serializers import SearchOfferFilter
 
 
 class IndexView(TemplateView):
@@ -177,5 +178,35 @@ class ProductView(DetailView):
 
 
 class PageView(DetailView):
+    """
+    Статичные страницы.
+    """
     model = Page
     template_name = 'pages/frontend/static.html'
+
+
+class SearchOfferView(ListView):
+    """
+    Поиск предложений по названию.
+    """
+    context_object_name = 'offers'
+    model = Offer
+    paginate_by = 20
+    template_name = 'pages/frontend/search.html'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.GET:
+            pks = SearchOfferFilter(self.request.GET).qs.values_list(
+                'pk', flat=True)
+            qs = Offer.objects.offers().filter(pk__in=pks)
+        else:
+            qs = qs.none()
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'page_kwarg': 'page',
+        })
+        return context

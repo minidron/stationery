@@ -24,9 +24,10 @@ class OfferTitleFilter(django_filters.Filter):
 
 class SearchOfferFilter(django_filters.FilterSet):
     title = OfferTitleFilter()
+    q = OfferTitleFilter()
 
     class Meta:
-        fields = ('title', )
+        fields = ('title', 'q')
         model = Offer
 
 

@@ -37,6 +37,9 @@ class OrderAPIView(APIView):
 
 
 class RegistrationView(FormView):
+    """
+    Форма регистрации.
+    """
     form_class = UserCreationForm
     success_url = reverse_lazy('index')
     template_name = 'pages/frontend/registration/registration.html'
@@ -51,14 +54,23 @@ class RegistrationView(FormView):
 
 
 class UserLoginView(LoginView):
+    """
+    Форма авторизации.
+    """
     template_name = 'pages/frontend/registration/login.html'
 
 
 class UserLogoutView(LogoutView):
+    """
+    Выход пользователя.
+    """
     next_page = reverse_lazy('index')
 
 
 class CartView(FormView):
+    """
+    Страница корзины.
+    """
     form_class = ItemFormSet
     success_url = reverse_lazy('cart')
     template_name = 'pages/frontend/cart.html'
@@ -114,6 +126,9 @@ class CartView(FormView):
 
 
 class HistoryListView(ListView):
+    """
+    Страница истории заказов.
+    """
     model = Order
     template_name = 'pages/frontend/history.html'
 
@@ -127,5 +142,8 @@ class HistoryListView(ListView):
 
 
 class HistoryDetailView(DetailView):
+    """
+    Подробный просмотр заказа.
+    """
     model = Order
     template_name = 'pages/frontend/history_detail.html'
