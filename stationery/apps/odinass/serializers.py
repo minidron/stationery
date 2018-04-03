@@ -22,9 +22,20 @@ class OfferTitleFilter(django_filters.Filter):
         return qs.filter(full_name_clauses)[:10]
 
 
+class OfferQFilter(django_filters.Filter):
+    def filter(self, qs, value):
+        qs = qs.annotate(full_name=Concat('product__article', Value(' '),
+                                          'title'))
+        bits = value.split(' ')
+        full_name_clauses = reduce(
+            operator.and_,
+            [Q(full_name__iregex=r'(^|\s)%s' % v) for v in bits])
+        return qs.filter(full_name_clauses)
+
+
 class SearchOfferFilter(django_filters.FilterSet):
     title = OfferTitleFilter()
-    q = OfferTitleFilter()
+    q = OfferQFilter()
 
     class Meta:
         fields = ('title', 'q')
