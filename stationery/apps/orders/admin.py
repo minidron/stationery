@@ -1,9 +1,12 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.utils.safestring import mark_safe
 
-from orders.models import Item, Order, Profile, GroupSettings
+from adminsortable2.admin import SortableAdminMixin
+
+from orders.models import GroupSettings, Item, Profile, Office, Order
 
 
 class ItemInline(admin.TabularInline):
@@ -102,6 +105,19 @@ class CustomGroupAdmin(GroupAdmin):
         if not obj:
             return list()
         return super().get_inline_instances(request, obj)
+
+
+class OfficeFormAdmin(forms.ModelForm):
+    class Meta:
+        fields = '__all__'
+        widgets = {
+            'coordinates': forms.TextInput(),
+        }
+
+
+@admin.register(Office)
+class OfficeAdmin(SortableAdminMixin, admin.ModelAdmin):
+    form = OfficeFormAdmin
 
 
 admin.site.unregister(User)

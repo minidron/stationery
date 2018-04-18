@@ -30,7 +30,7 @@ class OfferQFilter(django_filters.Filter):
         full_name_clauses = reduce(
             operator.and_,
             [Q(full_name__iregex=r'(^|\s)%s' % v) for v in bits])
-        return qs.filter(full_name_clauses)
+        return qs.filter(full_name_clauses)[:200]
 
 
 class SearchOfferFilter(django_filters.FilterSet):

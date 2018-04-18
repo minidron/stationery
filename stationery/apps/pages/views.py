@@ -12,6 +12,8 @@ from pages.models import Page
 from odinass.models import Category, Offer, Property, PropertyValue
 from odinass.serializers import SearchOfferFilter
 
+from orders.models import Office
+
 
 class IndexView(TemplateView):
     """
@@ -210,3 +212,11 @@ class SearchOfferView(ListView):
             'page_kwarg': 'page',
         })
         return context
+
+
+class OfficeListView(ListView):
+    """
+    Вью для списка модели `Офис`.
+    """
+    model = Office
+    template_name = 'pages/frontend/contact.html'

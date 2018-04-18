@@ -350,20 +350,19 @@ body {
         align-items: center;
         flex-flow: row;
 
-            .slide-toggle{
+        .slide-toggle {
             display:none;
-            }
+        }
 
         @include media('<=phone') {
             display: inherit;
 
-
-                .slide-toggle{
-                    color: white;
-                    font-size: 26px;
-                    padding-top: 10px;
-                    display: inherit;
-                }
+            .slide-toggle {
+                color: white;
+                font-size: 26px;
+                padding-top: 10px;
+                display: inherit;
+            }
         }
     }
 

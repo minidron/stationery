@@ -1,7 +1,9 @@
 from django.conf import settings
-from django.db import models
+from django.contrib.gis.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from orders.fields import YandexPointField
 
 
 Group = 'auth.Group'
@@ -218,3 +220,38 @@ def create_or_update_group_settings(sender, instance, created, **kwargs):
     if created:
         GroupSettings.objects.create(group=instance)
     instance.settings.save()
+
+
+class Office(models.Model):
+    """
+    Модель `Офис`.
+    """
+    title = models.CharField(
+        'название',
+        max_length=254)
+    address = models.TextField(
+        'адрес')
+    phone = models.CharField(
+        'телефон',
+        max_length=254, blank=True)
+    email = models.EmailField(
+        'телефон',
+        max_length=254, blank=True)
+    coordinates = YandexPointField(
+        'координаты',
+        blank=True, null=True)
+    order = models.PositiveIntegerField(
+        'порядок',
+        default=0)
+
+    class Meta:
+        verbose_name = 'офис'
+        verbose_name_plural = 'офисы'
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def yandexmap_coords(self):
+        return '[{0}, {1}]'.format(self.coordinates.y, self.coordinates.x)
