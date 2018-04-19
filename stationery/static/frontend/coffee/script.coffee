@@ -218,6 +218,9 @@ do ($=jQuery, window, document) ->
     $('#id_has_rests', form).on 'change', (e) ->
       form.submit()
 
+    $('#id_order', form).on 'change', (e) ->
+      form.submit()
+
   # ---------------------------------------------------------------------------
 
 

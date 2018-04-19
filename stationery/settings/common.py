@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'adminsortable2',
     'ckeditor',
     'sorl.thumbnail',
+    'dynamic_preferences',
     'odinass',
     'pages',
     'orders',
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dynamic_preferences.processors.global_preferences',
                 'pages.context_processors.menu',
             ],
         },
@@ -272,4 +274,16 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 # CELERY ----------------------------------------------------------------------
 CELERY_RESULT_BACKEND = 'rpc'
 CELERY_TRACK_STARTED = True
+# -----------------------------------------------------------------------------
+
+
+# DYNAMIC PREFERENCES ---------------------------------------------------------
+DYNAMIC_PREFERENCES = {
+    'ADMIN_ENABLE_CHANGELIST_FORM': False,
+    'ENABLE_CACHE': True,
+    'MANAGER_ATTRIBUTE': 'preferences',
+    'REGISTRY_MODULE': 'dynamic_preferences_registry',
+    'SECTION_KEY_SEPARATOR': '__',
+    'VALIDATE_NAMES': True,
+}
 # -----------------------------------------------------------------------------

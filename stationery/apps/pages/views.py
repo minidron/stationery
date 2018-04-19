@@ -59,6 +59,7 @@ class CategoryView(DetailView):
         if not offers:
             has_offers = False
         prices = offers.aggregate(Min('retail_price'), Max('retail_price'))
+        order = 'title'
 
         property_values = Prefetch(
             'property_values',
@@ -99,6 +100,15 @@ class CategoryView(DetailView):
                         [Q(product__property_values=v) for v in param_values])
                     offers = offers.filter(filter)
 
+            if data.get('order'):
+                if data.get('order') == 'aprice':
+                    order = 'retail_price'
+                elif data.get('order') == 'dprice':
+                    order = '-retail_price'
+
+        # Сортировка
+        offers = offers.order_by(order)
+
         # Пагинация
         page_size = self.get_paginate_by(offers)
         if page_size:
@@ -127,6 +137,12 @@ class CategoryView(DetailView):
             'maxCost': forms.IntegerField(required=False),
             'has_rests': forms.BooleanField(label='Есть в наличии',
                                             required=False),
+            'order': forms.ChoiceField(
+                label='Сортировка', required=False, choices=(
+                    ('', 'нет'),
+                    ('aprice', 'По возрастанию цены'),
+                    ('dprice', 'По убыванию цены'),
+                )),
         })
 
         for prop in properties:

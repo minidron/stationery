@@ -64,7 +64,7 @@
                 </div>
 
                 {% for field in form_search %}
-                    {% if field.name != 'minCost' and field.name != 'maxCost' and field.name != 'has_rests' %}
+                    {% if field.name != 'minCost' and field.name != 'maxCost' and field.name != 'has_rests' and field.name != 'order' %}
                         <div class="offer-filter--wrapper">
                             <h3 class="offer-filter--title">{{ field.label }}</h3>
                             <div class="offer-filter--">
@@ -78,6 +78,7 @@
         </div>
         <div class="category-content">
             <div class="category-filters--has-rest">
+                <label for="id_order">{{ form_search.order.label }} {{ form_search.order }}</label>
                 <label for="id_has_rests">{{ form_search.has_rests }} Сортировать по наличию</label>
                 {% if is_filtered %}
                     <div class="category-filters--reset"><a href="#" class="reset">Сбросить фильтры</a></div>
