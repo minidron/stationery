@@ -1,0 +1,27 @@
+/* OFFICE CONTAINER
+============================================================================ */
+.offce-container {
+    margin-bottom: 20px;
+    padding: 20px;
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .offce--title {
+        margin: 0 0 20px;
+        font: $fw-medium 16px/20px $ff-Roboto;
+        color: get($color, 'title', 'base');
+    }
+
+    .offce-contact {
+        font: $fw-regular 14px/20px $ff-PT-Sans;
+    }
+
+    .office-map {
+        .map {
+            height: 400px;
+        }
+    }
+}
+/* ------------------------------------------------------------------------- */

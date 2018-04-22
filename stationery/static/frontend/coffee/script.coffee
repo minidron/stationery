@@ -224,6 +224,37 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
+  # YANDEX OFFICES MAP
+  # ---------------------------------------------------------------------------
+  class InitOfficeMap
+    constructor: ->
+      maps = []
+
+      $('[data-coords]').each (i) ->
+        maps[i] = new ymaps.Map $('.map', this)[0],
+          center: $(this).data('coords')
+          zoom: 17
+          behaviors: [
+            'drag'
+            'dblClickZoom'
+            'multiTouch'
+          ]
+          controls: [
+            'fullscreenControl'
+            'geolocationControl'
+            'typeSelector'
+            'zoomControl'
+          ]
+
+        maps[i].placemark = new ymaps.Placemark $(this).data('coords')
+        maps[i].geoObjects.add maps[i].placemark
+
+  if $('[data-coords]').length
+    ymaps.ready InitOfficeMap
+
+  # ---------------------------------------------------------------------------
+
+
   # SLIDER
   # ---------------------------------------------------------------------------
   swiper = new Swiper '.swiper-container', 
@@ -240,7 +271,7 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
-# POPUP FILTER
+  # POPUP FILTER
   # ---------------------------------------------------------------------------
   $(document).ready ->
   $('.slide-toggle').click ->

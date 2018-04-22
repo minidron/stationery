@@ -235,7 +235,7 @@ class Office(models.Model):
         'телефон',
         max_length=254, blank=True)
     email = models.EmailField(
-        'телефон',
+        'email',
         max_length=254, blank=True)
     coordinates = YandexPointField(
         'координаты',

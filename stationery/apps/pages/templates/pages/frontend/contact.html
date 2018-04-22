@@ -5,4 +5,23 @@
 
 {% block content %}
     <h1 class="main--title">Наши контакты</h1>
+
+    {% for office in office_list %}
+        <div class="offce-container rounded">
+            <h3 class="offce--title">{{ office.title }}</h3>
+            <ul class="offce-contact">
+                <li class="offce-contact--phone">{{ office.phone }}</li>
+                <li class="offce-contact--email"><a href="mailto:{{ office.email }}">{{ office.email }}</a></li>
+                <li class="offce-contact--address">{{ office.address }}</li>
+            </ul>
+            {% if office.coordinates %}
+                <div class="office-map" data-coords="{{ office.yandexmap_coords }}"><div class="map"></div></div>
+            {% endif %}
+        </div>
+    {% endfor %}
 {% endblock content %}
+
+{% block scripts %}
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    {{ block.super }}
+{% endblock %}
