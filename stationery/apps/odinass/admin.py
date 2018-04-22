@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+from adminsortable2.admin import SortableAdminMixin
+
 from mptt.admin import DraggableMPTTAdmin
 
 from sorl.thumbnail.admin import AdminImageMixin
@@ -99,6 +101,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
 
     list_filter = [
         'created',
+        'is_favorite',
     ]
 
     readonly_fields = [
@@ -145,6 +148,20 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
             ['&middot; %s - %s' % (v['property__title'], v['title'])
              for v in values]))
     field_properties.short_description = 'свойства'
+
+
+@admin.register(odinass_models.ProductOrder)
+class ProductOrderAdmin(SortableAdminMixin, admin.ModelAdmin):
+    """
+    Админка для `Новинки`.
+    """
+    list_per_page = 100
+    list_filter = []
+    list_display_links = None
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(is_favorite=True)
 
 
 @admin.register(odinass_models.PriceType)

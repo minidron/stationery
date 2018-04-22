@@ -29,7 +29,8 @@ class IndexView(TemplateView):
         context.update({
             'favorite_offers': (Offer.objects
                                      .offers(user=self.request.user)
-                                     .filter(product__is_favorite=True)),
+                                     .filter(product__is_favorite=True)
+                                     .order_by('product__order')),
         })
         return context
 

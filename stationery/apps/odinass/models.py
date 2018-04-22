@@ -160,6 +160,9 @@ class Product(models.Model):
     is_favorite = models.BooleanField(
         'избранный',
         db_index=True, default=False)
+    order = models.PositiveIntegerField(
+        'порядок',
+        default=0)
 
     class Meta:
         default_related_name = 'products'
@@ -169,6 +172,17 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ProductOrder(Product):
+    """
+    Новинки.
+    """
+    class Meta:
+        proxy = True
+        ordering = ['order']
+        verbose_name = 'новинка'
+        verbose_name_plural = 'новинки'
 
 
 class PropertyValue(models.Model):
