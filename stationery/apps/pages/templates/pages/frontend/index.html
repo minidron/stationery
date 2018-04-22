@@ -4,84 +4,36 @@
 
 
 {% block content %}
-<div class="index-slider__section"> <!-- slider start-->
-  <div class="index-slider">
-    <div class="swiper-container" >
-    <!-- Additional required wrapper -->
-    <div class="swiper-wrapper">
-        <!-- Slides -->
-        <div class="swiper-slide">
-          <a href="http://kancmiropt.ru/%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3/e4d98da7-1a51-11e8-855b-4ccc6a067fb0/">
-            <img src="/static/frontend/images/sl4.jpg" alt="">
-          <div class="slide-bg c-bg-or">
-                <h1>СОБСТВЕННОЕ ПРОИЗВОДСТВО!!!</h1>
-                <p>(Пеналы, папки, и другая школьная галантерея)</p>
-                
+    <div class="index-slider__section">
+        <div class="index-slider">
+            <div class="swiper-container" >
+                <div class="swiper-wrapper">
+                    {% for slider in slider_list %}
+                    <div class="swiper-slide">
+                        <a href="{{ slider.url }}">
+                            <img src="{{ slider.image.url }}" alt="">
+                            {% if slider.content %}
+                                <div class="slide-bg" style="background-color: {{ slider.background }}">
+                                    <h1>{{ slider.title }}</h1>
+                                    {{ slider.content|linebreaks }}
+                                    {% if slider.discount %}
+                                        <h3>{{ slider.discount }}</h3>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </a>
+                    </div>
+                    {% endfor %}
+                    <div class="swiper-pagination"></div>
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
             </div>
-        </a>
         </div>
-        <div class="swiper-slide">
-          <a href="http://kancmiropt.ru/%D1%82%D0%BE%D0%B2%D0%B0%D1%80/ba52cf64-6e86-11e6-879b-002522e3f9cf/">
-          	<img src="/static/frontend/images/sl1.jpg" alt="">
-          <div class="slide-bg">
-        		<h1>Папки-файлы БЮРОКРАТ</h1>
-        		<p>При покупке от двух пачек Эконом А4 (100шт), Код: 00092018</p>
-        		<h3>Cкидка 5%!</h3>
-        	</div>
-        </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="http://kancmiropt.ru/%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3/dc611350-8ff9-11e4-b5d8-001e6702ee3e/">
-            <img src="/static/frontend/images/sl2.jpg" alt="">
-          <div class="slide-bg c-bg-ye">
-                <h1>Участники мастер-классов</h1>
-                <p>В день проведения мероприятия получают скидки на товары для творчества</p>
-                <h3>5%!</h3>
-            </div>
-        </a>
-        </div>
-        <div class="swiper-slide">
-          <!--<a href="http://kancmiropt.ru/%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3/4957ba41-ba57-11db-a2c6-00c09fa8f069/">-->
-            <img src="/static/frontend/images/sl5.jpg" alt="">
-          <div class="slide-bg c-bg-red">
-                
-            </div>
-        </a>
-        </div>
-        <div class="swiper-slide">
-          <!--<a href="http://kancmiropt.ru/%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3/4957ba41-ba57-11db-a2c6-00c09fa8f069/">-->
-            <img src="/static/frontend/images/sl6.jpg" alt="">
-          <div class="slide-bg c-bg-red">
-                
-            </div>
-        </a>
-        </div>
-        <div class="swiper-slide">
-          <a href="http://kancmiropt.ru/%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3/4957ba41-ba57-11db-a2c6-00c09fa8f069/">
-            <img src="/static/frontend/images/sl3.jpg" alt="">
-          <div class="slide-bg c-bg-red">
-                <h1>При покупке школьного ранца или рюкзака</h1>
-                <p>Скидка на канцтовары</p>
-                <h3>5% , или "спиннер" в подарок!</h3>
-            </div>
-        </a>
-        </div>
-        <div class="swiper-pagination"></div>
     </div>
-    <!-- If we need pagination -->
-    <div class="swiper-pagination"></div>
-
-    <!-- If we need navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-
-    <!-- If we need scrollbar -->
-    <div class="swiper-scrollbar"></div>
-</div>
-  </div>
-</div>
-
- <!-- slider end-->
 
     <div class="index-catalog__section">
         <ul class="index-catalog">

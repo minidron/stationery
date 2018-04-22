@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 
 from adminsortable2.admin import SortableAdminMixin
@@ -30,6 +31,15 @@ class BlogAdmin(admin.ModelAdmin):
     pass
 
 
+class SliderFormAdmin(forms.ModelForm):
+    class Meta:
+        fields = '__all__'
+
+        widgets = {
+            'background': forms.TextInput(attrs={'type': 'color'}),
+        }
+
+
 @admin.register(Slider)
 class SliderAdmin(SortableAdminMixin, admin.ModelAdmin):
-    pass
+    form = SliderFormAdmin

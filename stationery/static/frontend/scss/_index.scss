@@ -247,11 +247,9 @@
 
 .slide-bg {
     position: absolute;
+    top: 0;
+    bottom: 0;
     width: 500px;
-    height: auto;
-    bottom: 15px;
-    background-color: #2C7FAE;
-
 
     & h1{
         font: $fw-bold 26px/22px $ff-Roboto;

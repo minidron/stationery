@@ -7,7 +7,7 @@ from django import forms
 from django.db.models import Max, Min, Prefetch, Q
 from django.views.generic import DetailView, ListView, TemplateView
 
-from pages.models import Page
+from pages.models import Page, Slider
 
 from odinass.models import Category, Offer, Property, PropertyValue
 from odinass.serializers import SearchOfferFilter
@@ -31,6 +31,7 @@ class IndexView(TemplateView):
                                      .offers(user=self.request.user)
                                      .filter(product__is_favorite=True)
                                      .order_by('product__order')),
+            'slider_list': Slider.objects.all(),
         })
         return context
 

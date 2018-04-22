@@ -82,6 +82,14 @@ class Slider(models.Model):
     image = models.ImageField(
         'изображене',
         upload_to='slider/')
+    background = models.CharField(
+        'фон',
+        max_length=10, default='#2C7FAE')
+    content = models.TextField(
+        'текст', blank=True)
+    discount = models.CharField(
+        'скидка',
+        max_length=254, blank=True)
     url = models.CharField(
         'ссылка на страницу',
         max_length=254, blank=True)
