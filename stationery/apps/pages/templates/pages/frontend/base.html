@@ -124,10 +124,10 @@
               <span><a href="#">Как сделать заказ</a></span>
               <span><a href="#">Как зарегистрироваться</a></span>
               <span><a href="#">Оплата</a> </span>
-              <span><a href="#">Доставка</a></span>
+              <span><a href="{% url 'pages:static' 'Доставка' %}">Доставка</a></span>
         </div>
         <div class="footer-col">
-          <span><a href="#">Политика конфеденциальности</a></span>
+          <span><a href="{% url 'pages:static' 'политика-конфенденциальности' %}">Политика конфеденциальности</a></span>
           <span><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></span>
           <span><a href="{% url 'pages:static' 'физ-лицам' %}">Покупателям</a></span>
         </div>
