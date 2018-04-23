@@ -1,0 +1,16 @@
+{% extends "pages/frontend/base.html" %}
+
+{% load static thumbnail pages_tag %}
+
+
+{% block content %}
+    <h1 class="main--title">Мастер-классы по рукоделию и творчеству</h1>
+
+    {% for blog in blog_list %}
+        <div class="blog-container rounded">
+            <h3 class="blog--title">{{ blog.title }}</h3>
+            <div class="blog--date">{{ blog.created }}</div>
+            <div class="blog--body">{{ blog.content|safe|truncatewords_html:50 }} <a class="readmore" href="{{ blog.get_absolute_url }}">Подробнее</a></div>
+        </div>
+    {% endfor %}
+{% endblock content %}

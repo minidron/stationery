@@ -10,7 +10,7 @@
                 <div class="swiper-wrapper">
                     {% for slider in slider_list %}
                     <div class="swiper-slide">
-                        <a href="{{ slider.url }}">
+                        {% if slider.url %}<a href="{{ slider.url }}">{% endif %}
                             <img src="{{ slider.image.url }}" alt="">
                             {% if slider.content %}
                                 <div class="slide-bg" style="background-color: {{ slider.background }}">
@@ -21,7 +21,7 @@
                                     {% endif %}
                                 </div>
                             {% endif %}
-                        </a>
+                        {% if slider.url %}</a>{% endif %}
                     </div>
                     {% endfor %}
                     <div class="swiper-pagination"></div>

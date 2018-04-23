@@ -83,6 +83,9 @@
                         <a href="{{ category.get_absolute_url }}">{{ category }}</a>
                     </li>
                 {% endfor %}
+                <li class="navbar-menu--root-item">
+                    <a href="{% url 'pages:blog' %}">Мастер-классы</a>
+                </li>
             </ul>
             {% block navbar_cart %}
                 {% if user.is_authenticated %}

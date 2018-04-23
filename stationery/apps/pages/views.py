@@ -7,7 +7,7 @@ from django import forms
 from django.db.models import Max, Min, Prefetch, Q
 from django.views.generic import DetailView, ListView, TemplateView
 
-from pages.models import Page, Slider
+from pages.models import Blog, Page, Slider
 
 from odinass.models import Category, Offer, Property, PropertyValue
 from odinass.serializers import SearchOfferFilter
@@ -238,3 +238,19 @@ class OfficeListView(ListView):
     """
     model = Office
     template_name = 'pages/frontend/contact.html'
+
+
+class BlogListView(ListView):
+    """
+    Страница списка блога `Мастер-классы`.
+    """
+    model = Blog
+    template_name = 'pages/frontend/blog_list.html'
+
+
+class BlogDetailView(DetailView):
+    """
+    Страница просмотра записи блога `Мастер-классы`.
+    """
+    model = Blog
+    template_name = 'pages/frontend/blog.html'
