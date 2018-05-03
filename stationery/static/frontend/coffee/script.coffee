@@ -37,7 +37,7 @@ do ($=jQuery, window, document) ->
     searchBlock = $ '.header-search'
 
     escapeRegExChars = (value) ->
-      value.replace /[|\\{}()[\]^$+*?.]/g, "\\$&"
+      value = value.replace /[\\^$*+?.()|[\]{}]/g, '\\$&'
       value.split(' ').filter((n) -> n != '').join '|'
 
     $('#header-search').devbridgeAutocomplete

@@ -1,5 +1,7 @@
-from functools import reduce
 import operator
+import re
+
+from functools import reduce
 
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
@@ -11,6 +13,10 @@ from rest_framework import serializers
 from odinass.models import Offer
 
 
+def escape(s):
+    return re.sub(r'[(){}\[\].*?|^$\\+-]', r'\\\g<0>', s)
+
+
 class OfferTitleFilter(django_filters.Filter):
     def filter(self, qs, value):
         qs = qs.annotate(full_name=Concat('product__article', Value(' '),
@@ -18,7 +24,7 @@ class OfferTitleFilter(django_filters.Filter):
         bits = value.split(' ')
         full_name_clauses = reduce(
             operator.and_,
-            [Q(full_name__iregex=r'(^|\s)%s' % v) for v in bits])
+            [Q(full_name__iregex=r'(^|\s)%s' % escape(v)) for v in bits])
         return qs.filter(full_name_clauses)[:10]
 
 
@@ -29,7 +35,7 @@ class OfferQFilter(django_filters.Filter):
         bits = value.split(' ')
         full_name_clauses = reduce(
             operator.and_,
-            [Q(full_name__iregex=r'(^|\s)%s' % v) for v in bits])
+            [Q(full_name__iregex=r'(^|\s)%s' % escape(v)) for v in bits])
         return qs.filter(full_name_clauses)[:200]
 
 
