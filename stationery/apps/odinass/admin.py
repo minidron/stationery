@@ -92,6 +92,11 @@ class PropertyAdmin(admin.ModelAdmin):
     field_values.short_description = 'варианты значений'
 
 
+@admin.register(odinass_models.PropertyValue)
+class PropertyValueAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(odinass_models.Product)
 class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     list_per_page = 10
@@ -149,12 +154,18 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     field_offers.short_description = 'предложения'
 
     def field_properties(self, instance):
-        values = instance.property_values.values('title', 'property__title')
+        values = instance.property_values.all()
         if not values:
             return ''
-        return mark_safe('<br />'.join(
-            ['&middot; %s - %s' % (v['property__title'], v['title'])
-             for v in values]))
+        values_list = []
+        for value in values:
+            p_link = l(reverse('admin:odinass_property_change',
+                               args=[value.property.pk]), value.property)
+            v_link = l(reverse('admin:odinass_propertyvalue_change',
+                               args=[value.pk]), value)
+            link = '%s - %s' % (p_link, v_link)
+            values_list.append(link)
+        return mark_safe('<br />'.join(values_list))
     field_properties.short_description = 'свойства'
 
 
