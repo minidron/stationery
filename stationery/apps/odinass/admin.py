@@ -15,6 +15,10 @@ from odinass import models as odinass_models
 
 @admin.register(odinass_models.Category)
 class CategoryAdmin(DraggableMPTTAdmin):
+    search_fields = [
+        'title',
+    ]
+
     readonly_fields = [
         'id',
         'title',
@@ -54,6 +58,10 @@ class WarehouseAdmin(admin.ModelAdmin):
 
 @admin.register(odinass_models.Property)
 class PropertyAdmin(admin.ModelAdmin):
+    search_fields = [
+        'title',
+    ]
+
     readonly_fields = [
         'field_values',
         'id',
@@ -174,6 +182,10 @@ class PriceTypeAdmin(admin.ModelAdmin):
 
 @admin.register(odinass_models.Offer)
 class OfferAdmin(admin.ModelAdmin):
+    search_fields = [
+        'title',
+    ]
+
     readonly_fields = [
         'product',
         'field_prices',
