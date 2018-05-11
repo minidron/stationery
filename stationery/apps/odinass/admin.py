@@ -1,4 +1,6 @@
-from django.contrib import admin
+from django.conf.urls import url
+from django.contrib import admin, messages
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
@@ -153,18 +155,35 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
                                        args=[v.pk]), v) for v in values]))
     field_offers.short_description = 'предложения'
 
+    def get_urls(self):
+        info = self.model._meta.app_label, self.model._meta.model_name
+        urls = [
+            url(r'^(?P<pk>[0-9a-f-]+)/deleteproperty/(?P<property_pk>[0-9a-f-]+)/$',  # NOQA
+                self.admin_site.admin_view(self.delete_property_view),
+                name='%s_%s_deleteproperty' % info),
+        ]
+        urls.extend(super().get_urls())
+        return urls
+
+    def delete_property_view(self, request, **kwargs):
+        product = odinass_models.Product.objects.get(pk=kwargs['pk'])
+        property_value = odinass_models.PropertyValue.objects.get(
+            pk=kwargs['property_pk'])
+        product.property_values.remove(property_value)
+        messages.success(request, 'Свойство было успешно удалено.')
+        info = self.model._meta.app_label, self.model._meta.model_name
+        return redirect('admin:%s_%s_change' % info, kwargs['pk'])
+
     def field_properties(self, instance):
         values = instance.property_values.all()
         if not values:
             return ''
         values_list = []
         for value in values:
-            p_link = l(reverse('admin:odinass_property_change',
-                               args=[value.property.pk]), value.property)
-            v_link = l(reverse('admin:odinass_propertyvalue_change',
-                               args=[value.pk]), value)
-            link = '%s - %s' % (p_link, v_link)
-            values_list.append(link)
+            p_value = '%s - %s' % (value.property, value)
+            delete = l(reverse('admin:odinass_product_deleteproperty',
+                               args=[instance.pk, value.pk]), 'удалить')
+            values_list.append('%s %s' % (p_value, delete))
         return mark_safe('<br />'.join(values_list))
     field_properties.short_description = 'свойства'
 
