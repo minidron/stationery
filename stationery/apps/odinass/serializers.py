@@ -18,25 +18,29 @@ def escape(s):
 
 
 class OfferTitleFilter(django_filters.Filter):
+    """
+    Поиск для автокомплита.
+    """
+    max_result = 10
+
     def filter(self, qs, value):
         qs = qs.annotate(full_name=Concat('product__article', Value(' '),
                                           'title'))
         bits = value.split(' ')
-        full_name_clauses = reduce(
-            operator.and_,
-            [Q(full_name__iregex=r'(^|\s)%s' % escape(v)) for v in bits])
-        return qs.filter(full_name_clauses)[:10]
+        if len(bits) is 1 and bits[0].isdecimal():
+            full_name_clauses = Q(full_name__icontains=bits[0])
+        else:
+            full_name_clauses = reduce(
+                operator.and_,
+                [Q(full_name__iregex=r'(^|\s)%s' % escape(v)) for v in bits])
+        return qs.filter(full_name_clauses)[:self.max_result]
 
 
-class OfferQFilter(django_filters.Filter):
-    def filter(self, qs, value):
-        qs = qs.annotate(full_name=Concat('product__article', Value(' '),
-                                          'title'))
-        bits = value.split(' ')
-        full_name_clauses = reduce(
-            operator.and_,
-            [Q(full_name__iregex=r'(^|\s)%s' % escape(v)) for v in bits])
-        return qs.filter(full_name_clauses)[:200]
+class OfferQFilter(OfferTitleFilter):
+    """
+    Поиск для страницы поиска.
+    """
+    max_result = 200
 
 
 class SearchOfferFilter(django_filters.FilterSet):

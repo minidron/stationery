@@ -219,7 +219,7 @@ class SearchOfferView(ListView):
         if self.request.GET:
             pks = SearchOfferFilter(self.request.GET).qs.values_list(
                 'pk', flat=True)
-            qs = Offer.objects.offers().filter(pk__in=pks)
+            qs = Offer.objects.offers(self.request.user).filter(pk__in=pks)
         else:
             qs = qs.none()
         return qs
