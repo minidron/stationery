@@ -5,7 +5,7 @@ from orders.models import Order
 
 def menu(request):
     user = request.user
-    categories = Category.objects.root_nodes()
+    categories = Category.objects.root_nodes().filter(is_published=True)
 
     return {
         'categories': categories,

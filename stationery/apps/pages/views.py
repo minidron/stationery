@@ -5,6 +5,8 @@ from functools import reduce
 
 from django import forms
 from django.db.models import Max, Min, Prefetch, Q
+from django.http import Http404
+from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, TemplateView
 
 from pages.models import Blog, Page, Slider
@@ -52,6 +54,25 @@ class CategoryView(DetailView):
     paginate_queryset = ListView.paginate_queryset
     paginator_class = ListView.paginator_class
     template_name = 'pages/frontend/category.html'
+
+    def get_object(self, queryset=None):
+        """
+        Показываем 404, если категория или одна из родительских категорий не
+        опубликована.
+        """
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        qs = (queryset.filter(pk=pk)
+                      .get_ancestors(include_self=True)
+                      .filter(is_published=False))
+
+        if len(qs) > 0:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+
+        return super().get_object(queryset=queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

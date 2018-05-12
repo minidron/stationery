@@ -10,7 +10,7 @@ import django_filters
 
 from rest_framework import serializers
 
-from odinass.models import Offer
+from odinass.models import Category, Offer
 
 
 def escape(s):
@@ -33,7 +33,15 @@ class OfferTitleFilter(django_filters.Filter):
             full_name_clauses = reduce(
                 operator.and_,
                 [Q(full_name__iregex=r'(^|\s)%s' % escape(v)) for v in bits])
-        return qs.filter(full_name_clauses)[:self.max_result]
+
+        unpublished = Category.objects.get_queryset_descendants(
+            Category.objects.filter(is_published=False),
+            include_self=True)
+
+        qs = (qs.filter(full_name_clauses)
+                .exclude(product__category__in=unpublished))
+
+        return qs[:self.max_result]
 
 
 class OfferQFilter(OfferTitleFilter):
