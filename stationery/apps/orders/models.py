@@ -243,6 +243,9 @@ class Office(models.Model):
     order = models.PositiveIntegerField(
         'порядок',
         default=0)
+    is_published = models.BooleanField(
+        'опубликовано',
+        default=True)
 
     class Meta:
         verbose_name = 'офис'

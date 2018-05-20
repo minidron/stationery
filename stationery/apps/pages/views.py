@@ -260,6 +260,10 @@ class OfficeListView(ListView):
     model = Office
     template_name = 'pages/frontend/contact.html'
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(is_published=True)
+
 
 class BlogListView(ListView):
     """
