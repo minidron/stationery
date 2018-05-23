@@ -254,11 +254,18 @@ class ImportManager(object):
                 pv_id = get_text(value.find('Значение', node.nsmap))
                 if pv_id:
                     try:
+                        p_id = get_text(value.find('Ид', node.nsmap))
+                        pv_old = instance.property_values.filter(
+                            property_id=p_id)
+
+                        if pv_old:
+                            pv_old = list(pv_old.values_list('id', flat=True))
+                            instance.property_values.remove(*pv_old)
+
                         instance.property_values.add(
                             odinass_models.PropertyValue.objects.get(
                                 pk=pv_id,
-                                property_id=get_text(value.find('Ид',
-                                                                node.nsmap)))
+                                property_id=p_id)
                         )
                     except odinass_models.PropertyValue.DoesNotExist:
                         pass
