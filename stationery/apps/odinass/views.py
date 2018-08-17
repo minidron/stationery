@@ -156,5 +156,5 @@ class ExchangeView(View):
 
 class SearchOfferViewSet(ReadOnlyModelViewSet):
     filter_class = SearchOfferFilter
-    queryset = Offer.objects.all()
+    queryset = Offer.objects.select_related('product').all()
     serializer_class = SearchOfferSerializer

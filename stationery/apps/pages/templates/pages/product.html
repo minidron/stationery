@@ -14,19 +14,19 @@
                                 <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a> /
                             {% endfor %}
                             <a href="{{ object.product.categories.first.get_absolute_url }}">{{ object.product.categories.first }}</a> /
-                            <span class="active">{{ object.title }}</span>
+                            <span class="active">{{ object.full_title }}</span>
                         </p>
                     </div>
                     <div class="col-sm-8 cart">
-                        <h2 class="h2">{{ object.title }}</h2>
+                        <h2 class="h2">{{ object.full_title }}</h2>
                         <!--
                         <span class="rate"><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star active"></i><i class="fa fa-star"></i><i class="fa fa-star"></i> / <a href="#">13 Отзывов</a></span>
                         -->
                         <div class="main-photo">
                             {% thumbnail object.product.image '350x400' upscale=False as offer_image %}
-                                <img src="{{ offer_image.url }}" alt="{{ object.title }}">
+                                <img src="{{ offer_image.url }}" alt="{{ object.full_title }}">
                             {% empty %}
-                                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ object.title }}">
+                                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ object.full_title }}">
                             {% endthumbnail %}
                         </div>
                         <div class="col-sm-10 col-sm-offset-1">

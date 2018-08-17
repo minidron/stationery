@@ -25,7 +25,7 @@ class OfferTitleFilter(django_filters.Filter):
 
     def filter(self, qs, value):
         qs = qs.annotate(full_name=Concat('product__article', Value(' '),
-                                          'title'))
+                                          'product__title'))
         bits = value.split(' ')
         if len(bits) is 1 and bits[0].isdecimal():
             full_name_clauses = Q(full_name__icontains=bits[0])
@@ -62,8 +62,17 @@ class SearchOfferFilter(django_filters.FilterSet):
 
 class SearchOfferSerializer(serializers.ModelSerializer):
     url = serializers.CharField(source='get_absolute_url', read_only=True)
-    price_retail = serializers.CharField(source='price', read_only=True)
+    # price_retail = serializers.CharField(source='price', read_only=True)
+    price_retail = serializers.SerializerMethodField(read_only=True)
+    title = serializers.CharField(source='full_title', read_only=True)
 
     class Meta:
         fields = '__all__'
         model = Offer
+
+    def get_price_retail(self, obj):
+        request = self.context.get('request')
+        user = None
+        if request and hasattr(request, 'user'):
+            user = request.user
+        return obj.price(user=user)

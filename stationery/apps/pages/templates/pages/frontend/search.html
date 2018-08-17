@@ -15,14 +15,14 @@
                         <div class="offer-image">
                             <a href="{{ offer.get_absolute_url }}">
                                 {% thumbnail offer.product.image '160x160' as offer_image %}
-                                    <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
+                                    <img src="{{ offer_image.url }}" alt="{{ offer.full_title }}" class="product-item">
                                 {% empty %}
-                                    <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.title }}" class="product-item">
+                                    <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.full_title }}" class="product-item">
                                 {% endthumbnail %}
                             </a>
                         </div>
                         <div class="offer-info">
-                            <h3 class="offer-info--title"><a class="offer-info--title--link" href="{{ offer.get_absolute_url }}">{{ offer.title }}</a></h3>
+                            <h3 class="offer-info--title"><a class="offer-info--title--link" href="{{ offer.get_absolute_url }}">{{ offer.full_title }}</a></h3>
                             <div class="offer-info--offer-code">Код: {{ offer.product.article }}</div>
                             {% if offer.product.property_values.all %}
                                 <div class="offer-info--offer-properties">

@@ -319,7 +319,7 @@ class Offer(models.Model):
         verbose_name_plural = 'предложения'
 
     def __str__(self):
-        return self.title
+        return self.full_title
 
     def get_absolute_url(self):
         return reverse('pages:product', args=[str(self.id)])
@@ -348,6 +348,10 @@ class Offer(models.Model):
     def rest_list(self):
         return (Rest.objects.filter(warehouse__is_selected=True, offer=self)
                             .order_by('warehouse__title'))
+
+    @property
+    def full_title(self):
+        return self.product.title
 
 
 class ActionLog(object):

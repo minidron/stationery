@@ -165,9 +165,9 @@
                                         <div class="product-main">
                                             <div class="product-photo">
                                                 {% thumbnail offer.product.image '250x250' crop='center' as offer_image %}
-                                                    <img src="{{ offer_image.url }}" alt="{{ offer.title }}" class="product-item">
+                                                    <img src="{{ offer_image.url }}" alt="{{ offer.full_title }}" class="product-item">
                                                 {% empty %}
-                                                    <img src="{% static 'images/placeholder.jpg' %}" alt="{{ offer.title }}" class="product-item">
+                                                    <img src="{% static 'images/placeholder.jpg' %}" alt="{{ offer.full_title }}" class="product-item">
                                                 {% endthumbnail %}
 
                                                 <div class="product-preview">
@@ -175,7 +175,7 @@
                                                 </div>
                                             </div>
                                             <div class="product-text">
-                                                <h2 class="product-text-name">{{ offer.title }}</h2>
+                                                <h2 class="product-text-name">{{ offer.full_title }}</h2>
                                                 <div class="article">Код: {{ offer.product.article }}</div>
                                                 {% if offer.product.property_values.all %}
                                                     <ul class="dad">
