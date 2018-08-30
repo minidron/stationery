@@ -228,11 +228,15 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
   $ ->
     form = $ '#registration-form'
+    $('input, textarea', '.field-row-company ').prop 'required', false
+
     $('input[name=user_type]', form).on 'change', (e) ->
       if $(this).val() == '1'
         $('.field-row-company', form).addClass 'hide'
+        $('input, textarea', '.field-row-company ').prop 'required', false
       else if $(this).val() == '2'
         $('.field-row-company', form).removeClass 'hide'
+        $('input, textarea', '.field-row-company ').prop 'required', true
 
   # ---------------------------------------------------------------------------
 
