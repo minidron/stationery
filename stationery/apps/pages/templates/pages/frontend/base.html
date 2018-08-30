@@ -45,7 +45,7 @@
                     <li class="header-menu--item"><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></li>
                 </ul>
 
-                <div class="header-auth">{% if user.is_authenticated %}<a href="{% url 'account:history' %}">{{ user.username }}</a> | <a href="{% url 'account:logout' %}">Выйти</a>{% else %}<a href="{% url 'account:login' %}">Авторизация</a> | <a href="{% url 'account:registration' %}">Регистрация</a>{% endif %}</div>
+                <div class="header-auth">{% if user.is_authenticated %}<a href="{% url 'account:history' %}">{{ user.username }}</a> | <a href="{% url 'account:logout' %}">Выйти</a>{% else %}<a href="{% url 'account:login' %}">Войти</a> | <a href="{% url 'account:registration' %}">Регистрация</a>{% endif %}</div>
             </div>
         </div>
         <div class="header-container--wrapper">
@@ -121,15 +121,15 @@
     <footer class="footer__section">
       <div class="footer-container">
         <div class="footer-col">
-              <span><a href="#">Как сделать заказ</a></span>
-              <span><a href="#">Как зарегистрироваться</a></span>
-              <span><a href="#">Оплата</a> </span>
+              <span><a href="{% url 'pages:static' 'как-сделать-заказ' %}">Как сделать заказ</a></span>
+              <span><a href="{% url 'pages:static' 'как-зарегистрироваться' %}">Как зарегистрироваться</a></span>
+              <span><a href="{% url 'pages:static' 'оплата' %}">Оплата</a> </span>
               <span><a href="{% url 'pages:static' 'Доставка' %}">Доставка</a></span>
         </div>
         <div class="footer-col">
           <span><a href="{% url 'pages:static' 'политика-конфенденциальности' %}">Политика конфеденциальности</a></span>
           <span><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></span>
-          <span><a href="{% url 'pages:static' 'физ-лицам' %}">Покупателям</a></span>
+          <span><a href="{% url 'pages:static' 'покупателям' %}">Покупателям</a></span>
         </div>
         <div class="footer-col about-company">
           <span><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></span>
