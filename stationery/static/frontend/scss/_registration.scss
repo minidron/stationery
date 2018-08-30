@@ -13,7 +13,7 @@
 .registration-form {
     @include center-block;
     padding: 20px;
-    max-width: 320px;
+    max-width: 400px;
     box-sizing: border-box;
 
     .field-row {
@@ -24,9 +24,18 @@
             margin-bottom: 5px;
             font: $fw-medium 14px/18px $ff-Roboto;
             color: get($color, 'title', 'base');
+
+            &.required:after {
+                content: '*';
+                margin-left: 3px;
+                color: red;
+            }
         }
 
-        input[type='text'], input[type='password'] {
+        input[type='text'],
+        input[type='password'],
+        input[type='email'],
+        input[type='number'] {
             padding: 5px 10px;
             height: 34px;
             width: 100%;
@@ -40,6 +49,45 @@
             &:focus {
                 border-color: get($color, 'link', 'base');
             }
+        }
+
+        textarea {
+            padding: 5px 10px;
+            width: 100%;
+            border: 1px solid get($color, 'content', 'border');
+            outline: 0 none;
+            box-sizing: border-box;
+            font: normal 16px/34px $ff-PT-Sans;
+            color: get($color, 'text', 'base');
+            background-color: #FFF;
+
+            &:focus {
+                border-color: get($color, 'link', 'base');
+            }
+        }
+
+        #id_user_type {
+            @include clear-list;
+        }
+
+        #id_password1, #id_password2 {
+            max-width: 200px;
+        }
+
+        #id_phone {
+            max-width: 200px;
+        }
+
+        #id_inn {
+            max-width: 200px;
+        }
+
+        #id_company_address {
+            height: 80px;
+        }
+
+        &.hide {
+            display: none;
         }
     }
 

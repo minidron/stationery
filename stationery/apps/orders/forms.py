@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.utils.functional import cached_property
 
 from orders.models import Order, Item
@@ -74,3 +75,36 @@ class ItemFormSet(object):
         for form in self:
             if form.has_changed():
                 form.save()
+
+
+class RegistrationForm(UserCreationForm):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
+    phone = forms.CharField(
+        label='Телефон',
+        required=True)
+    email = forms.EmailField(
+        label='E-mail',
+        required=False)
+    user_type = forms.ChoiceField(
+        label='Тип пользователя',
+        required=True,
+        choices=((1, 'физическое лицо'), (2, 'юридическое лицо')),
+        widget=forms.RadioSelect())
+
+
+class CompanyRegistrationForm(forms.Form):
+    error_css_class = 'error'
+    required_css_class = 'required'
+
+    company_name = forms.CharField(
+        label='Наименование организации',
+        required=True)
+    inn = forms.IntegerField(
+        label='ИНН',
+        required=True, min_value=1000000000)
+    company_address = forms.CharField(
+        label='Юридический адрес',
+        required=True,
+        widget=forms.Textarea())

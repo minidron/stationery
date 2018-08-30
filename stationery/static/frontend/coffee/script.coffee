@@ -224,6 +224,19 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
+  # REGISTRATION FORM
+  # ---------------------------------------------------------------------------
+  $ ->
+    form = $ '#registration-form'
+    $('input[name=user_type]', form).on 'change', (e) ->
+      if $(this).val() == '1'
+        $('.field-row-company', form).addClass 'hide'
+      else if $(this).val() == '2'
+        $('.field-row-company', form).removeClass 'hide'
+
+  # ---------------------------------------------------------------------------
+
+
   # YANDEX OFFICES MAP
   # ---------------------------------------------------------------------------
   class InitOfficeMap

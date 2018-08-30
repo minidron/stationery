@@ -1,5 +1,5 @@
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 
 from lib.email import create_email
 
-from orders.forms import ItemFormSet
+from orders.forms import CompanyRegistrationForm, ItemFormSet, RegistrationForm
 from orders.models import Order, OrderStatus
 
 
@@ -40,14 +40,52 @@ class RegistrationView(FormView):
     """
     Форма регистрации.
     """
-    form_class = UserCreationForm
+    form_class = RegistrationForm
+    company_form = CompanyRegistrationForm
     success_url = reverse_lazy('index')
     template_name = 'pages/frontend/registration/registration.html'
 
-    def form_valid(self, form):
-        form.save()
-        username = form.cleaned_data.get('username')
-        raw_password = form.cleaned_data.get('password1')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'company_form': self.get_company_form(),
+        })
+        return context
+
+    def get_company_form(self, form_class=None):
+        return self.company_form(**self.get_form_kwargs())
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        company_form = self.get_company_form()
+        if form.is_valid():
+            if form.cleaned_data['user_type'] == '2':
+                if company_form.is_valid():
+                    return self.form_valid(form, company_form)
+            else:
+                return self.form_valid(form)
+        return self.form_invalid(form)
+
+    def form_valid(self, form, company_form=None):
+        user = form.save()
+
+        user_data = form.cleaned_data
+        user.email = user_data.get('email')
+        user.profile.phone = user_data.get('phone')
+
+        if company_form:
+            company_data = company_form.cleaned_data
+            user.profile.company = company_data.get('company_name')
+            user.profile.company_address = company_data.get('company_address')
+            user.profile.inn = company_data.get('inn')
+
+            group = Group.objects.get(name='Оптовик')
+            group.user_set.add(user)
+            user.profile.save()
+            user.save()
+
+        username = user_data.get('username')
+        raw_password = user_data.get('password1')
         user = authenticate(username=username, password=raw_password)
         login(self.request, user)
         return super().form_valid(form)

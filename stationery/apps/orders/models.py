@@ -176,8 +176,14 @@ class Profile(models.Model):
     company = models.CharField(
         'компания',
         max_length=254, blank=True)
+    company_address = models.TextField(
+        'юридический адрес',
+        blank=True)
     inn = models.CharField(
         'ИНН',
+        max_length=254, blank=True)
+    phone = models.CharField(
+        'телефон',
         max_length=254, blank=True)
 
     class Meta:
