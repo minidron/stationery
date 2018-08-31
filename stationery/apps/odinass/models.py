@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models import Case, When
 from django.db.models import F, Sum, OuterRef, Prefetch, Subquery, Value
 from django.db.models import IntegerField
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.urls import reverse
 
 from django_resized import ResizedImageField
@@ -160,9 +162,6 @@ class Product(models.Model):
     is_favorite = models.BooleanField(
         'избранный',
         db_index=True, default=False)
-    order = models.PositiveIntegerField(
-        'порядок',
-        default=0)
 
     class Meta:
         default_related_name = 'products'
@@ -173,16 +172,56 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
-class ProductOrder(Product):
+        order = getattr(self, 'order', None)
+        if self.is_favorite and not order:
+            ProductOrder.objects.create(
+                product=self, order=ProductOrder.next_order())
+
+        elif not self.is_favorite and order:
+            order.delete()
+
+
+class ProductOrder(models.Model):
     """
     Новинки.
     """
+    product = models.OneToOneField(
+        'odinass.Product',
+        verbose_name='товар',
+        related_name='order',
+        on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(
+        'порядок',
+        default=0, blank=False, null=False)
+
     class Meta:
-        proxy = True
         ordering = ['order']
         verbose_name = 'новинка'
         verbose_name_plural = 'новинки'
+
+    def __str__(self):
+        return str(self.product)
+
+    @classmethod
+    def next_order(cls):
+        last_product = cls.objects.last()
+        if last_product:
+            return last_product.order + 1
+        return 0
+
+
+@receiver(post_delete, sender=ProductOrder)
+def disable_is_favorite(sender, instance, **kwargs):
+    """
+    Ставим is_favorite в False, когда удаляем сортировку у этого товара.
+    """
+    product = instance.product
+    product.is_favorite = False
+    product.order = None
+    product.save()
 
 
 class PropertyValue(models.Model):

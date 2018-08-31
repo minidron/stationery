@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.contrib import admin, messages
+from django.contrib.admin.views.main import ChangeList
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -188,18 +189,35 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     field_properties.short_description = 'свойства'
 
 
+class ProductOrderChangeList(ChangeList):
+    def url_for_result(self, result):
+        return reverse('admin:odinass_product_change',
+                       args=[result.product_id])
+
+
 @admin.register(odinass_models.ProductOrder)
 class ProductOrderAdmin(SortableAdminMixin, admin.ModelAdmin):
     """
     Админка для `Новинки`.
     """
     list_per_page = 100
-    list_filter = []
-    list_display_links = None
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.filter(is_favorite=True)
+    list_display = [
+        'product',
+        'field_order',
+    ]
+
+    readonly_fields = [
+        'field_order',
+    ]
+
+    def field_order(self, instance):
+        return mark_safe(instance.order)
+    field_order.short_description = 'порядок'
+
+    def get_changelist(self, request, **kwargs):
+        super().get_changelist(request, **kwargs)
+        return ProductOrderChangeList
 
 
 @admin.register(odinass_models.PriceType)
