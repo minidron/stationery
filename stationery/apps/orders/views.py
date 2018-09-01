@@ -71,6 +71,7 @@ class RegistrationView(FormView):
 
         user_data = form.cleaned_data
         user.email = user_data.get('email')
+        user.first_name = user_data.get('fio')
         user.profile.phone = user_data.get('phone')
 
         if company_form:

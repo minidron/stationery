@@ -81,6 +81,9 @@ class RegistrationForm(UserCreationForm):
     error_css_class = 'error'
     required_css_class = 'required'
 
+    fio = forms.CharField(
+        label='ФИО',
+        required=True)
     phone = forms.CharField(
         label='Телефон',
         required=True)
