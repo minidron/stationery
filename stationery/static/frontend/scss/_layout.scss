@@ -99,7 +99,11 @@ body {
     }
 
     .header-slogan {
-        color: get($color, 'text', 'light');
+				color: get($color, 'text', 'light');
+
+				@include media('<=phone') {
+					display: none;
+				}
     }
 
     .header-menu {
@@ -108,7 +112,13 @@ body {
         .header-menu--item {
             margin-right: 20px;
             display: inline-block;
-            font-size: 18px;
+						font-size: 18px;
+						@include media('<=phone') {
+							font-size: 14px;	
+						}
+						@include media('<=tablet') {
+							font-size: 14px;
+						}
 
             a {
                 text-decoration: none;
@@ -318,8 +328,9 @@ body {
     .header__section{
 
         .header-panel{
-        height:100px;
-        flex-flow:column;
+				height:100px;
+				flex-flow:column;
+				padding-top: 10px;
         }
         
 
@@ -328,7 +339,7 @@ body {
 
             .header-menu--item{
             padding:3px;
-            margin-left:40px;
+						margin-left:40px;
             }
         }
         .header-auth{
@@ -380,15 +391,22 @@ body {
         }
 
         .navbar-menu--root-item {
-            margin-right: 30px;
+						margin-right: 30px;
+					
 
             a {
                 display: block;
                 font: $fw-medium 12px/50px $ff-Roboto;
                 text-decoration: none;
                 text-transform: uppercase;
-                color: get($color, 'nav', 'text');
-
+								color: get($color, 'nav', 'text');
+								@include media('<=phone') {
+									line-height: 2.5 !important;
+									font-size: 12px;
+								}
+								@include media('<=tablet') {
+									line-height: 1.5;
+								}
                 &:hover {
                     color: #FFF;
                 }
@@ -409,7 +427,10 @@ body {
             text-decoration: none;
             color: get($color, 'nav', 'text');
             background-color: mix($color-secondary, #FFF, 90%);
-            transition: background-color $base-transition;
+						transition: background-color $base-transition;
+						@include media('<=phone') {
+							width: 100%;
+						}
 
             &:before {
                 @include fa-icon;
@@ -451,7 +472,10 @@ body {
         display: flex;
         height: 45px;
         align-items: center;
-        flex-flow: row;
+				flex-flow: row;
+				@include media('<=phone') {
+					display: none;
+				}
 
         .breadcrumbs--item {
             font: $fw-regular 14px/14px $ff-PT-Sans;
