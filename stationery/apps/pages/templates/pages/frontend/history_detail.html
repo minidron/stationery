@@ -18,7 +18,7 @@
 
 
 {% block content %}
-    <h1 class="main--title">Заказ от {{ order.created|date:'d.m.Y' }}</h1>
+    <h1 class="main--title">Заказ №{{ order.pk }} от {{ order.created|date:'d.m.Y' }}</h1>
     <div class="history-container rounded">
         <div class="history-order--status">Статус заказа: {{ order.get_status_display }}</div>
         <table class="history-order--table">

@@ -28,3 +28,5 @@ raven==6.2.1
 requests==2.18.4
 sorl-thumbnail==12.4.1
 Werkzeug==0.13
+
+git+https://github.com/yandex-money/yandex-money-kit-django@b2114b1

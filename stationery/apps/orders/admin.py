@@ -1,18 +1,33 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin, GroupAdmin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.admin import GroupAdmin, UserAdmin
+from django.contrib.auth.models import Group, User
+from django.db.models import FloatField, F, Sum
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
 
-from orders.models import GroupSettings, Item, Profile, Office, Order
+from orders.models import (GroupSettings, Item, Office, Order, OrderStatus,
+                           Profile)
 
 
 class ItemInline(admin.TabularInline):
     model = Item
     extra = 0
-    raw_id_fields = ['offer']
+
+    readonly_fields = [
+        'offer',
+    ]
+
+    fields = [
+        'offer',
+        'quantity',
+        'unit_price',
+    ]
+
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(Order)
@@ -21,6 +36,49 @@ class OrderAdmin(admin.ModelAdmin):
     Админка для заказов.
     """
     inlines = [ItemInline]
+
+    readonly_fields = [
+        'field_items',
+    ]
+
+    search_fields = [
+        'id',
+    ]
+
+    list_display = [
+        'id',
+        'user',
+        'status',
+        'created',
+    ]
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'user',
+                'status',
+                'field_items',
+            ),
+        }),
+    )
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return (qs.prefetch_related('items__offer__product')
+                  .exclude(status=OrderStatus.NOT_CREATED))
+
+    def field_items(self, instance):
+        qs = instance.items.all()
+        return mark_safe(render_to_string('orders/admin/items.html', {
+            'items': qs,
+            'total_quantity': (
+                qs.aggregate(Sum('quantity')).get('quantity__sum', 0)),
+            'total_price': (
+                qs.aggregate(total=Sum(F('unit_price') * F('quantity'),
+                                       output_field=FloatField()))
+                  .get('total', 0)),
+        }))
+    field_items.short_description = 'товары'
 
 
 @admin.register(Item)

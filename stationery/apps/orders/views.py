@@ -1,8 +1,10 @@
-from django.contrib.auth import login, authenticate
+from django.conf import settings
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import DetailView, FormView, ListView
 
 from rest_framework import status
@@ -132,10 +134,12 @@ class CartView(FormView):
         data = self.get_form_kwargs().get('data')
         if data:
             if '_submit' in data:
-                form.order.status = OrderStatus.INWORK
-                form.order.save()
-                self.send_mail(form)
-                self.success_url = reverse('index')
+                if form.order.items.all():
+                    form.order.created = timezone.now()
+                    form.order.status = OrderStatus.INWORK
+                    form.order.save()
+                    self.send_mail(form)
+                self.success_url = reverse('account:history')
 
             if '_reset' in data:
                 form.order.items.all().delete()
@@ -145,6 +149,13 @@ class CartView(FormView):
         return super().form_valid(form)
 
     def send_mail(self, form):
+        user = form.order.user
+
+        if user.groups.filter(name='Оптовик'):
+            email_address = settings.EMAIL_OPT
+        else:
+            email_address = settings.EMAIL_PRIVATE
+
         body_html = render_to_string(
             'orders/mail_order.html',
             {
@@ -158,7 +169,7 @@ class CartView(FormView):
         email = create_email(
             'Заказ с сайта',
             body_html,
-            'opt@kancmiropt.ru'
+            email_address
         )
 
         email.send()

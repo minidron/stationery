@@ -1,0 +1,25 @@
+{% load pages_tag %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Товар</th>
+            <th>Кол-во</th>
+            <th>Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td><a href="{% url 'admin:odinass_product_change' item.offer.product_id %}">{{ item.offer }}</a></td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.total_price|price }} руб.</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td><strong>{{ total_quantity }} шт</strong></td>
+            <td><strong>{{ total_price|price }} руб.</strong></td>
+        </tr>
+    </tbody>
+</table>

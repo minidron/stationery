@@ -9,10 +9,24 @@
 {% block content %}
     <h1 class="main--title">Мои заказы</h1>
     <div class="history-container rounded">
-        <ul class="history--list">
-            {% for order in object_list %}
-                <li class="history--item"><a class="history--item--link" href="{% url 'account:history_detail' order.pk %}">Заказ от {{ order.created|date:'d.m.Y' }}</a> - стоимость: {{ order.amount|price }} руб.</li>
-            {% endfor %}
-        </ul>
+
+        <table class="history-order--table">
+            <thead>
+                <tr>
+                    <th>Заказ</th>
+                    <th>Статус</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in object_list %}
+                    <tr>
+                        <td><a class="history--item--link" href="{% url 'account:history_detail' order.pk %}">Заказ №{{ order.pk }} от {{ order.created|date:'d.m.Y' }}</a></td>
+                        <td>{{ order.get_status_display }}</td>
+                        <td>{% if order.amount %}{{ order.amount|price }} руб.{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

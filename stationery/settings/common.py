@@ -20,6 +20,7 @@ ROOT_URLCONF = 'stationery.urls'
 WSGI_APPLICATION = 'stationery.wsgi.application'
 
 ALLOWED_HOSTS = ['kancmiropt.ru']
+DEFAULT_DOMAIN = 'https://kancmiropt.ru'
 
 ADMINS = [
     ('Pavel Alekin', 'minidron@yandex.ru')
@@ -38,6 +39,7 @@ INSTALLED_APPS = (
     'pipeline',
     'rest_framework',
     'django_filters',
+    'yandex_money',
     'lib',
     'mptt',
     'adminsortable2',
@@ -267,6 +269,8 @@ NOTEBOOK_ARGUMENTS = [
 
 
 # SITE ------------------------------------------------------------------------
+EMAIL_OPT = 'opt@kancmiropt.ru'
+EMAIL_PRIVATE = 'opt@kancmiropt.ru'
 MPTT_ADMIN_LEVEL_INDENT = 20
 # -----------------------------------------------------------------------------
 
@@ -286,4 +290,12 @@ DYNAMIC_PREFERENCES = {
     'SECTION_KEY_SEPARATOR': '__',
     'VALIDATE_NAMES': True,
 }
+# -----------------------------------------------------------------------------
+
+
+# YANDEX MONEY ----------------------------------------------------------------
+YANDEX_MONEY_FAIL_URL = '/ya/fail/'
+YANDEX_MONEY_SUCCESS_URL = '/ya/success/'
+# информировать о случаях, когда модуль вернул Яндекс.Кассе ошибку
+YANDEX_MONEY_MAIL_ADMINS_ON_PAYMENT_ERROR = True
 # -----------------------------------------------------------------------------

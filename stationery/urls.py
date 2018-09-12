@@ -7,6 +7,8 @@ from django.views.generic import RedirectView, TemplateView
 
 from rest_framework import routers
 
+from yandex_money.views import CheckOrderFormView, NoticeFormView
+
 from pages.views import IndexView
 
 from odinass.views import SearchOfferViewSet
@@ -19,19 +21,34 @@ router.register(r'search_offer', SearchOfferViewSet)
 
 
 urlpatterns = [
-    url(r'^$', IndexView.as_view(), name='index'),
-    url(r'^account/', include('orders.urls', namespace='account')),
-    url(r'^api/orders/$', OrderAPIView.as_view()),
-    url(r'^api/', include(router.urls, namespace='api')),
+    url(r'^$',
+        IndexView.as_view(), name='index'),
+    url(r'^account/',
+        include('orders.urls', namespace='account')),
+    url(r'^api/orders/$',
+        OrderAPIView.as_view()),
+    url(r'^api/',
+        include(router.urls, namespace='api')),
+    url(r'^ya/check/$',
+        CheckOrderFormView.as_view(), name='yandex_money_check'),
+    url(r'^ya/aviso/$',
+        NoticeFormView.as_view(), name='yandex_money_notice'),
+    url(r'^ya/success/$',
+        TemplateView.as_view(), name='yandex_money_success'),
+    url(r'^ya/fail/$',
+        TemplateView.as_view(), name='yandex_money_fail'),
     url(r'^robots.txt$',
         TemplateView.as_view(
             template_name='robots.txt', content_type='text/plain')),
     url(r'^favicon.ico$',
         RedirectView.as_view(
             url=staticfiles_storage.url('favicon.ico'), permanent=True)),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^1c/', include('odinass.urls', namespace='1c')),
-    url(r'^', include('pages.urls', namespace='pages')),
+    url(r'^admin/',
+        include(admin.site.urls)),
+    url(r'^1c/',
+        include('odinass.urls', namespace='1c')),
+    url(r'^',
+        include('pages.urls', namespace='pages')),
 ]
 
 

@@ -1,0 +1,26 @@
+<h2>Заказ №{{ order.pk }} от {{ order.created|date:'d.m.Y' }} подтвержден</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Код</th>
+            <th>Товар</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Итого</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.offer.product.article }}</td>
+                <td><a href="http://{{ site }}{{ item.offer.get_absolute_url }}">{{ item }}</a></td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.total_price }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>Полная стоимость: <strong>{{ order.amount }}</strong></p>
