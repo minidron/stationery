@@ -174,7 +174,11 @@
         label {
             font: $fw-bold 15px/1 $ff-PT-Sans;
             color: get($color, 'text', 'base');
-            padding-left: 30px;
+						padding-left: 30px;
+						@include media('<=phone') {
+							display: inline-block;
+							padding-top: 10px;
+						}
         }
 
         input[type='checkbox'] {
@@ -312,7 +316,10 @@
                     box-sizing: border-box;
                     font: normal 14px/24px $ff-PT-Sans;
                     color: get($color, 'text', 'base');
-                    background-color: #FFF;
+										background-color: #FFF;
+										@include media('<=phone') {
+											text-align: center;
+										}
                 }
             }
         }

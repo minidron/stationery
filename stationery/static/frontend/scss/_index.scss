@@ -220,7 +220,10 @@
                     box-sizing: border-box;
                     font: normal 14px/24px $ff-PT-Sans;
                     color: get($color, 'text', 'base');
-                    background-color: #FFF;
+										background-color: #FFF;
+										@include media('<=phone') {
+											text-align: center;
+										}
                 }
             }
         }

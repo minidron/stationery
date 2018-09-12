@@ -6,7 +6,10 @@
         align-items: center;
         flex-flow: row;
         padding: 20px;
-        border-bottom: 1px solid get($color, 'header', 'border');
+				border-bottom: 1px solid get($color, 'header', 'border');
+				@include media('<=phone') {
+					display: block;
+				}
     }
 
     .cart--item-offer {
@@ -41,14 +44,23 @@
             box-sizing: border-box;
             font: normal 14px/24px $ff-PT-Sans;
             color: get($color, 'text', 'base');
-            background-color: #FFF;
+						background-color: #FFF;
+						@include media('<=phone') {
+							margin-left: 100%;
+							text-align: center;
+							margin-top: 10px;
+						}
         }
     }
 
     .cart--item-unit_price {
         margin-left: 20px;
         font: $fw-bold 14px/14px $ff-Roboto;
-        color: get($color, 'text', 'light');
+				color: get($color, 'text', 'light');
+				@include media('<=phone') {
+					margin-left: 35%;
+					padding-top: 10px;
+				}
 
         &:after {
             @include fa-icon;
@@ -61,7 +73,11 @@
     .cart--item-total_price {
         margin-left: 10px;
         font: $fw-bold 14px/14px $ff-Roboto;
-        color: get($color, 'text', 'base');
+				color: get($color, 'text', 'base');
+				@include media('<=phone') {
+					margin-left: 35%;
+					padding-top: 10px;
+				}
 
         &:after {
             @include fa-icon;
@@ -72,11 +88,14 @@
     }
 
     .cart--item-delete {
-        margin-left: 30px;
+				margin-left: 30px;
 
         .cart--item-delete--link {
             text-decoration: none;
-            color: get($color, 'link', 'base');
+						color: get($color, 'link', 'base');
+						@include media('<=phone') {
+							margin-left: 35%;
+						}
 
             &:hover {
                 color: get($color, 'link', 'hover');
@@ -85,7 +104,11 @@
             &:after {
                 @include fa-icon;
                 content: $fa-var-trash;
-                font-size: 16px;
+								font-size: 16px;
+								@include media('<=phone') {
+									font-size: 20px;
+									padding-top: 10px;
+								}
             }
         }
     }
@@ -96,12 +119,19 @@
         align-items: center;
         justify-content: flex-start;
         border-radius: 0 0 $base-radius $base-radius;
-        background-color: get($color, 'nav', 'background');
+				background-color: get($color, 'nav', 'background');
+				@include media('<=phone') {
+					display: block;
+					padding: 10px;
+				}
 
         .cart-info--save {
             flex: 1;
             box-sizing: border-box;
-            padding-left: 20px;
+						padding-left: 20px;
+						@include media('<=phone') {
+							padding: 0;
+						}
 
             .submit {
                 display: inline-block;
@@ -116,7 +146,10 @@
                 color: get($color, 'button', 'normal', 'text');
                 background-color: get($color, 'button', 'normal', 'background');
                 cursor: pointer;
-                transition: background-color $base-transition;
+								transition: background-color $base-transition;
+								@include media('<=phone') {
+									width:100%;
+								}
 
                 &:hover {
                     background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
@@ -137,16 +170,26 @@
                 background-color: get($color, 'button', 'normal', 'background');
                 cursor: pointer;
                 transition: background-color $base-transition;
-
+								@include media('<=phone') {
+									margin-top: 10px;
+									width:100%;
+								}
                 &:hover {
-                    background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
+										background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
+										
                 }
             }
         }
 
         .cart-info--price {
             font: $fw-bold 18px/18px $ff-Roboto;
-            color: get($color, 'nav', 'text');
+						color: get($color, 'nav', 'text');
+						@include media('<=phone') {
+							font-size: 20px;
+							padding-top: 20px;
+							text-align: center;
+							padding-bottom: 20px;
+						}
 
             &:after {
                 @include fa-icon;
@@ -169,7 +212,10 @@
                 background-color: get($color, 'button', 'cart', 'background');
                 cursor: pointer;
                 transition: background-color $base-transition;
-
+								@include media('<=phone') {
+									width: 100%;
+									margin: 0;
+								}
                 &:hover {
                     background-color: darken(get($color, 'button', 'cart', 'background'), 10%);
                 }
