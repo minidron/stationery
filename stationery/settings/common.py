@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'odinass',
     'pages',
     'orders',
+    'ya',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -270,7 +271,7 @@ NOTEBOOK_ARGUMENTS = [
 
 # SITE ------------------------------------------------------------------------
 EMAIL_OPT = 'opt@kancmiropt.ru'
-EMAIL_PRIVATE = 'opt@kancmiropt.ru'
+EMAIL_PRIVATE = 'info@kancmiropt.ru'
 MPTT_ADMIN_LEVEL_INDENT = 20
 # -----------------------------------------------------------------------------
 

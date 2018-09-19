@@ -7,8 +7,6 @@ from django.views.generic import RedirectView, TemplateView
 
 from rest_framework import routers
 
-from yandex_money.views import CheckOrderFormView, NoticeFormView
-
 from pages.views import IndexView
 
 from odinass.views import SearchOfferViewSet
@@ -29,14 +27,10 @@ urlpatterns = [
         OrderAPIView.as_view()),
     url(r'^api/',
         include(router.urls, namespace='api')),
-    url(r'^ya/check/$',
-        CheckOrderFormView.as_view(), name='yandex_money_check'),
-    url(r'^ya/aviso/$',
-        NoticeFormView.as_view(), name='yandex_money_notice'),
-    url(r'^ya/success/$',
-        TemplateView.as_view(), name='yandex_money_success'),
-    url(r'^ya/fail/$',
-        TemplateView.as_view(), name='yandex_money_fail'),
+    url(r'^demo-ya/',
+        include('ya.urls')),
+    url(r'^ya/',
+        include('ya.urls')),
     url(r'^robots.txt$',
         TemplateView.as_view(
             template_name='robots.txt', content_type='text/plain')),
