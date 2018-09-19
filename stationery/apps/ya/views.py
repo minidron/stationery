@@ -43,7 +43,7 @@ class OrderView(FormView):
             order_amount=order.remaining_payment_sum,
             success_url='%s%s' % (site_url, settings.YANDEX_MONEY_SUCCESS_URL),
             fail_url='%s%s' % (site_url, settings.YANDEX_MONEY_FAIL_URL),
-            article_id=order,
+            article_id=order.pk,
         )
 
         return payment
