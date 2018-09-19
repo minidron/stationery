@@ -9,7 +9,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('yandex_money', '0002_auto_20180919_1711'),
         ('orders', '0011_auto_20180830_1058'),
     ]
 
