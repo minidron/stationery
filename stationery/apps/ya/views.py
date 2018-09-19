@@ -45,6 +45,7 @@ class OrderView(FormView):
             fail_url='%s%s' % (site_url, settings.YANDEX_MONEY_FAIL_URL),
         )
 
+        payment.save()
         return payment
 
     def get_form_kwargs(self):
