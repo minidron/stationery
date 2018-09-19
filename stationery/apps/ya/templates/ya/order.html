@@ -9,7 +9,7 @@
 {% block content %}
     <h1 class="main--title">Оплата заказа</h1>
     <div class="payment-container rounded">
-        <form method="POST" action="">{% csrf_token %}
+        <form method="POST" action="https://demomoney.yandex.ru/eshop.xml">{% csrf_token %}
             {{ form.as_ul }}
             <button type="submit">Оплатить</button>
         </form>
