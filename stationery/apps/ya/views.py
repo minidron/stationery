@@ -38,13 +38,20 @@ class OrderView(FormView):
             order_pk = self.request.GET.get('order')
             order = Order.objects.get(pk=order_pk)
 
-        payment = Payment(
+        payment_data = dict(
             user=self.request.user,
             order_amount=order.remaining_payment_sum,
             success_url='%s%s' % (site_url, settings.YANDEX_MONEY_SUCCESS_URL),
             fail_url='%s%s' % (site_url, settings.YANDEX_MONEY_FAIL_URL),
             article_id=order.pk,
         )
+
+        if self.request.method == 'POST':
+            pd = self.request.POST
+            payment_data['order_number'] = pd['orderNumber']
+            payment_data['customer_number'] = pd['customerNumber']
+
+        payment = Payment(**payment_data)
 
         return payment
 
