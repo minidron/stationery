@@ -26,6 +26,8 @@ ADMINS = [
     ('Pavel Alekin', 'minidron@yandex.ru')
 ]
 
+SERVER_EMAIL = 'no-reply@kancmiropt.ru'
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
