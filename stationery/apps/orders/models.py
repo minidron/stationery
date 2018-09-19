@@ -66,6 +66,10 @@ class Order(models.Model):
     updated = models.DateTimeField(
         'Дата изменения',
         editable=False, auto_now=True)
+    gain = models.DecimalField(
+        'приход',
+        default=0,
+        max_digits=12, decimal_places=2)
 
     objects = OrderQuerySet.as_manager()
 
@@ -128,6 +132,13 @@ class Order(models.Model):
         for item in self.items.all():
             result += item.total_price
         return result
+
+    @property
+    def remaining_payment_sum(self):
+        """
+        Остаток к доплате.
+        """
+        return self.amount - self.gain
 
     def send_confirmed_email(self):
         """
