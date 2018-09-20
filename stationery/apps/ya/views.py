@@ -1,6 +1,4 @@
 from django.conf import settings
-from django.http import HttpResponse
-from django.utils.encoding import iri_to_uri
 from django.views.generic import FormView
 
 from yandex_money.forms import PaymentForm
@@ -10,22 +8,8 @@ from yandex_money.models import Payment
 from orders.models import Order
 
 
-class YandexPaymentForm(PaymentForm):
-    def __init__(self, *args, **kwargs):
-        self.instance = kwargs['instance']
-        super().__init__(*args, **kwargs)
-
-
-class HttpResponseTemporaryRedirect(HttpResponse):
-    status_code = 307
-
-    def __init__(self, redirect_to):
-        HttpResponse.__init__(self)
-        self['Location'] = iri_to_uri(redirect_to)
-
-
 class OrderView(FormView):
-    form_class = YandexPaymentForm
+    form_class = PaymentForm
     template_name = 'ya/order.html'
 
     def get_payment_instance(self, order=None):
@@ -38,7 +22,7 @@ class OrderView(FormView):
             order_pk = self.request.GET.get('order')
             order = Order.objects.get(pk=order_pk)
 
-        payment_data = dict(
+        payment = Payment(
             user=self.request.user,
             order_amount=order.remaining_payment_sum,
             success_url='%s%s' % (site_url, settings.YANDEX_MONEY_SUCCESS_URL),
@@ -46,12 +30,7 @@ class OrderView(FormView):
             article_id=order.pk,
         )
 
-        if self.request.method == 'POST':
-            pd = self.request.POST
-            payment_data['order_number'] = pd['orderNumber']
-            payment_data['customer_number'] = pd['customerNumber']
-
-        payment = Payment(**payment_data)
+        payment.save()
 
         return payment
 
@@ -65,7 +44,9 @@ class OrderView(FormView):
         })
         return kwargs
 
-    def form_valid(self, form):
-        form.instance.save()
-        url = 'https://demomoney.yandex.ru/eshop.xml'
-        return HttpResponseTemporaryRedirect(url)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form_action': settings.YANDEX_MONEY_ENDPOINT,
+        })
+        return context

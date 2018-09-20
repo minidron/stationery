@@ -301,4 +301,5 @@ YANDEX_MONEY_FAIL_URL = '/ya/fail/'
 YANDEX_MONEY_SUCCESS_URL = '/ya/success/'
 # информировать о случаях, когда модуль вернул Яндекс.Кассе ошибку
 YANDEX_MONEY_MAIL_ADMINS_ON_PAYMENT_ERROR = True
+YANDEX_MONEY_ENDPOINT = 'https://demomoney.yandex.ru/eshop.xml'
 # -----------------------------------------------------------------------------
