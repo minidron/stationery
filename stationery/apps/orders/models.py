@@ -95,7 +95,7 @@ class Order(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('history_detail', args=[str(self.pk)])
+        return reverse('account:history_detail', args=[str(self.pk)])
 
     @classmethod
     def get_cart(cls, user):
