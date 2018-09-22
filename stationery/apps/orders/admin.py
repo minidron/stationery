@@ -57,6 +57,7 @@ class OrderAdmin(admin.ModelAdmin):
             'fields': (
                 'user',
                 'status',
+                'gain',
                 'field_items',
             ),
         }),
