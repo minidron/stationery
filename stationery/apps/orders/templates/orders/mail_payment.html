@@ -1,7 +1,4 @@
-<h2>Заказ номер {{ order.pk }}</h2>
-
-<p>Пользователь: {{ request.user }}</p>
-<p>{{ request.user.profile.company }} {{ request.user.profile.inn }}</p>
+<h2>Заказ №{{ order.pk }} от {{ order.created|date:'d.m.Y' }} оплачен</h2>
 
 <table border="1">
     <thead>

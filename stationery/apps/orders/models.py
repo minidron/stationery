@@ -3,6 +3,7 @@ from django.contrib.gis.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 from yandex_money.signals import payment_completed
 
@@ -87,8 +88,14 @@ class Order(models.Model):
         if self.pk and self.status == OrderStatus.CONFIRMED:
             old = self._meta.model.objects.get(pk=self.pk)
             if old.status != self.status:
-                self.send_confirmed_email()
+                self.send_confirmed_client_email()
+
+        if self.pk and self.status != OrderStatus.DELIVERY:
+            self.register_payment()
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('history_detail', args=[str(self.pk)])
 
     @classmethod
     def get_cart(cls, user):
@@ -142,7 +149,15 @@ class Order(models.Model):
         """
         return self.amount - self.gain
 
-    def send_confirmed_email(self):
+    def register_payment(self):
+        """
+        Переводим в статус `Доставка`, если заказ оплачен и отправляем письма.
+        """
+        if self.gain and self.gain >= self.amount:
+            self.status = OrderStatus.DELIVERY
+            self.send_payment_client_email()
+
+    def send_confirmed_client_email(self):
         """
         Отправляем письмо клиенту, что его заказ подтвержден.
         """
@@ -162,6 +177,32 @@ class Order(models.Model):
 
         email = create_email(
             'Ваш заказ подтвержден',
+            body_html,
+            user.email
+        )
+
+        email.send()
+
+    def send_payment_client_email(self):
+        """
+        Отправляем письмо клиенту, что его заказ оплачен.
+        """
+        user = self.user
+        if not user.email:
+            return
+
+        body_html = render_to_string(
+            'orders/mail_payment.html',
+            {
+                'site': settings.DEFAULT_DOMAIN,
+                'order': self,
+                'items': self.items.all(),
+                'is_opt': True if user.groups.filter(name='Оптовик') else False,  # NOQA
+            }
+        )
+
+        email = create_email(
+            'Ваш заказ оплачен',
             body_html,
             user.email
         )
