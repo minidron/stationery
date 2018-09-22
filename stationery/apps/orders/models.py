@@ -4,6 +4,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 
+from yandex_money.signals import payment_completed
+
 from lib.email import create_email
 
 from orders.fields import YandexPointField
@@ -273,6 +275,17 @@ def create_or_update_group_settings(sender, instance, created, **kwargs):
     if created:
         GroupSettings.objects.create(group=instance)
     instance.settings.save()
+
+
+@receiver(payment_completed)
+def update_order_gain(sender, **kwargs):
+    """
+    У Яндекса sender = instance.  Мда...
+    """
+    instance = sender
+    order = Order.objects.get(pk=instance.article_id)
+    order.gain = order.gain or 0 + instance.order_amount
+    order.save()
 
 
 class Office(models.Model):

@@ -44,5 +44,35 @@
             </tbody>
         </table>
         <div class="history-order--amount">Полная стоимость: <strong>{{ order.amount|price }} руб.</strong></div>
+
+        {% if form %}
+            <form class="order-form" method="POST" action="{{ form_action }}">{% csrf_token %}
+                {{ form.non_field_errors }}
+
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                <div class="field-row">
+                    {{ form.paymentType.label_tag }}
+                    {{ form.paymentType }}
+                    {{ form.paymentType.errors }}
+                </div>
+
+                <div class="field-row">
+                    {{ form.cps_email.label_tag }}
+                    {{ form.cps_email }}
+                    {{ form.cps_email.errors }}
+                </div>
+
+                <div class="field-row">
+                    {{ form.cps_phone.label_tag }}
+                    {{ form.cps_phone }}
+                    {{ form.cps_phone.errors }}
+                </div>
+
+                <div class="submit-row"><button class="submit" type="submit">Оплатить</button></div>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}

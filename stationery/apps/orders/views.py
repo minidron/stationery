@@ -1,3 +1,4 @@
+from django import forms
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
@@ -12,6 +13,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from lib.email import create_email
+
+from yandex_money.forms import PaymentForm
+from yandex_money.models import Payment
 
 from orders.forms import CompanyRegistrationForm, ItemFormSet, RegistrationForm
 from orders.models import Order, OrderStatus
@@ -191,9 +195,54 @@ class HistoryListView(ListView):
         return qs
 
 
+class YaPaymentForm(PaymentForm):
+    paymentType = forms.CharField(
+        label='Способ оплаты',
+        widget=forms.RadioSelect(choices=settings.YANDEX_ALLOWED_PAYMENTS),
+        min_length=2, max_length=2, initial=Payment.PAYMENT_TYPE.PC)
+
+
 class HistoryDetailView(DetailView):
     """
     Подробный просмотр заказа.
     """
+    form_class = YaPaymentForm
     model = Order
     template_name = 'pages/frontend/history_detail.html'
+
+    def get_payment_instance(self):
+        """
+        Создаём объект "Платёж".
+        """
+        site_url = '%s://%s' % (self.request.scheme, self.request.get_host())
+        order = self.object
+
+        payment = Payment(
+            user=self.request.user,
+            order_amount=order.remaining_payment_sum,
+            success_url='%s%s' % (site_url, settings.YANDEX_MONEY_SUCCESS_URL),
+            fail_url='%s%s' % (site_url, settings.YANDEX_MONEY_FAIL_URL),
+            article_id=order.pk,
+            cps_email=self.request.user.email,
+            cps_phone=self.request.user.profile.phone,
+        )
+
+        payment.save()
+
+        return payment
+
+    def get_form(self, **kwargs):
+        form = None
+        if self.request.method == 'GET':
+            order = self.object
+            if order.status == OrderStatus.CONFIRMED:
+                form = self.form_class(instance=self.get_payment_instance())
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form': self.get_form(),
+            'form_action': settings.YANDEX_MONEY_ENDPOINT,
+        })
+        return context
