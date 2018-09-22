@@ -17,7 +17,7 @@
         {% for item in items %}
             <tr>
                 <td>{{ item.offer.product.article }}</td>
-                <td><a href="https://{{ site }}{{ item.offer.get_absolute_url }}">{{ item }}</a></td>
+                <td><a href="{{ site }}{{ item.offer.get_absolute_url }}">{{ item }}</a></td>
                 <td>{{ item.unit_price }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.total_price }}</td>
@@ -28,4 +28,4 @@
 
 <p>Полная стоимость: <strong>{{ order.amount }}</strong></p>
 
-<p><a href="https://{{ site }}{{ order.offer.get_absolute_url }}">Открыть заказ</a></p>
+<p><a href="{{ site }}{{ order.get_absolute_url }}">Открыть заказ</a></p>
