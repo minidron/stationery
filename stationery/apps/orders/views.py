@@ -220,6 +220,10 @@ class HistoryDetailView(DetailView):
     model = Order
     template_name = 'pages/frontend/history_detail.html'
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user=self.request.user)
+
     def get_payment_instance(self):
         """
         Создаём объект "Платёж".
