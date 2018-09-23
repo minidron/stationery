@@ -1,7 +1,8 @@
 from django.conf.urls import url
-from django.views.generic import TemplateView
 
 from yandex_money.views import CheckOrderFormView, NoticeFormView
+
+from ya.views import SuccessPayment
 
 
 urlpatterns = [
@@ -10,7 +11,7 @@ urlpatterns = [
     url(r'^aviso/$',
         NoticeFormView.as_view(), name='yandex_money_notice'),
     url(r'^success/$',
-        TemplateView.as_view(), name='yandex_money_success'),
+        SuccessPayment.as_view(), name='yandex_money_success'),
     url(r'^fail/$',
-        TemplateView.as_view(), name='yandex_money_fail'),
+        SuccessPayment.as_view(), name='yandex_money_fail'),
 ]
