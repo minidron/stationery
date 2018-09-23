@@ -265,6 +265,8 @@ class HistoryDetailView(DetailView):
                 customer_number=data['customerNumber'],
                 order_amount=data['sum'],
                 article_id=order.pk,
+                payment_type=data['paymentType'],
+                order_number=data['orderNumber'],
                 cps_email=data['cps_email'],
                 cps_phone=data['cps_phone'],
                 success_url=data['shopSuccessURL'],
