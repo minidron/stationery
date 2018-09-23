@@ -1,6 +1,7 @@
-Host: www.site.ru
+Host: https://kancmiropt.ru
 
 User-agent: *
+Disallow: /account/
 Disallow: /admin/
 Disallow: /api/
 Disallow: /autocomplete/
