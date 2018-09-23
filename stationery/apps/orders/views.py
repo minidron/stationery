@@ -3,9 +3,11 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.encoding import iri_to_uri
 from django.views.generic import DetailView, FormView, ListView
 
 from rest_framework import status
@@ -202,6 +204,14 @@ class YaPaymentForm(PaymentForm):
         min_length=2, max_length=2, initial=Payment.PAYMENT_TYPE.PC)
 
 
+class HttpResponseTemporaryRedirect(HttpResponse):
+    status_code = 307
+
+    def __init__(self, redirect_to):
+        HttpResponse.__init__(self)
+        self['Location'] = iri_to_uri(redirect_to)
+
+
 class HistoryDetailView(DetailView):
     """
     Подробный просмотр заказа.
@@ -218,7 +228,6 @@ class HistoryDetailView(DetailView):
         order = self.object
 
         payment = Payment(
-            user=self.request.user,
             order_amount=order.remaining_payment_sum,
             success_url='%s%s' % (site_url, settings.YANDEX_MONEY_SUCCESS_URL),
             fail_url='%s%s' % (site_url, settings.YANDEX_MONEY_FAIL_URL),
@@ -226,8 +235,6 @@ class HistoryDetailView(DetailView):
             cps_email=self.request.user.email,
             cps_phone=self.request.user.profile.phone,
         )
-
-        payment.save()
 
         return payment
 
@@ -243,6 +250,27 @@ class HistoryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context.update({
             'form': self.get_form(),
-            'form_action': settings.YANDEX_MONEY_ENDPOINT,
         })
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance='')
+        if form.is_valid():
+            order = self.get_object()
+            data = form.cleaned_data
+            payment = Payment(
+                user=request.user,
+                shop_id=data['shopId'],
+                scid=data['scid'],
+                customer_number=data['customerNumber'],
+                order_amount=data['sum'],
+                article_id=order.pk,
+                cps_email=data['cps_email'],
+                cps_phone=data['cps_phone'],
+                success_url=data['shopSuccessURL'],
+                fail_url=data['shopFailURL'],
+            )
+            payment.save()
+
+            url = settings.YANDEX_MONEY_ENDPOINT
+            return HttpResponseTemporaryRedirect(url)
