@@ -273,7 +273,7 @@ NOTEBOOK_ARGUMENTS = [
 
 # SITE ------------------------------------------------------------------------
 EMAIL_OPT = 'opt@kancmiropt.ru'
-EMAIL_PRIVATE = 'info@kancmiropt.ru'
+EMAIL_PRIVATE = 'opt@kancmiropt.ru'
 MPTT_ADMIN_LEVEL_INDENT = 20
 # -----------------------------------------------------------------------------
 

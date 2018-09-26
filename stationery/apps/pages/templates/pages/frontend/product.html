@@ -56,7 +56,7 @@
                     {% for rest in offer.rests.all %}
                         <dl class="offer-price--offer-rest">
                             <dt class="offer-price--offer-rest--name"><span>{{ rest.warehouse }}</span></dt>
-                            <dd class="offer-price--offer-rest--value"><span>{{ rest }}</span></dd>
+                            <dd class="offer-price--offer-rest--value"><span>{{ rest|rest }}</span></dd>
                         </dl>
                     {% endfor %}
                     {% endspaceless %}

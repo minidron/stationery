@@ -156,6 +156,7 @@ class Order(models.Model):
         if self.gain and self.gain >= self.amount:
             self.status = OrderStatus.DELIVERY
             self.send_payment_client_email()
+            self.send_payment_manager_email()
 
     def send_confirmed_client_email(self):
         """
@@ -205,6 +206,27 @@ class Order(models.Model):
             'Ваш заказ оплачен',
             body_html,
             user.email
+        )
+
+        email.send()
+
+    def send_payment_manager_email(self):
+        """
+        Отправляем письмо менеджеру, что заказ клиента оплачен.
+        """
+        body_html = render_to_string(
+            'orders/mail_payment_manager.html',
+            {
+                'site': settings.DEFAULT_DOMAIN,
+                'order': self,
+                'items': self.items.all(),
+            }
+        )
+
+        email = create_email(
+            'Заказ №%s оплачен' % self.pk,
+            body_html,
+            settings.EMAIL_OPT
         )
 
         email.send()

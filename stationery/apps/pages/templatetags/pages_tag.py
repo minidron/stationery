@@ -1,5 +1,6 @@
 from django import template
 
+from odinass.models import Rest
 from odinass.utils import format_price
 
 
@@ -11,6 +12,15 @@ def price(value):
     if not value:
         return ''
     return format_price(value)
+
+
+@register.filter
+def rest(value):
+    if not value and not isinstance(value, Rest):
+        return ''
+
+    value = value.value
+    return value if value > 0 else 0
 
 
 @register.simple_tag(takes_context=True)

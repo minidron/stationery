@@ -244,7 +244,8 @@ class HistoryDetailView(DetailView):
 
     def get_form(self, **kwargs):
         form = None
-        if self.request.method == 'GET':
+        groups = self.request.user.groups
+        if self.request.method == 'GET' and not groups.filter(name='Оптовик'):
             order = self.object
             if order.status == OrderStatus.CONFIRMED:
                 form = self.form_class(instance=self.get_payment_instance())
