@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'django_filters',
     'yandex_money',
+    'yandex_kassa',
     'lib',
     'mptt',
     'adminsortable2',
