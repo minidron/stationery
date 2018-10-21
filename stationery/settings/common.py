@@ -138,6 +138,7 @@ BOWER_INSTALLED_APPS = (
     'normalize-css#7',
     'nouislider#10.1',
     'owl.carousel#2.2',
+    'jquery.maskedinput#1.4',
     'swiper#4.1',
     'underscore#1.8',
 )
@@ -200,6 +201,7 @@ PIPELINE = {
                 'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
                 'bower_components/nouislider/distribute/nouislider.min.js',
                 'bower_components/swiper/dist/js/swiper.min.js',
+                'bower_components/jquery.maskedinput/dist/jquery.maskedinput.min.js',  # NOQA
                 'frontend/js/jquery.popmenu.js',
             ),
             'output_filename': 'frontend/js/libs.js',
