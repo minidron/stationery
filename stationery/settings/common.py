@@ -132,9 +132,11 @@ BOWER_INSTALLED_APPS = (
     'bootstrap#3.3',
     'devbridge-autocomplete#1.4',
     'font-awesome#4.7',
+    'ilyabirman-likely#2.3',
     'include-media#1.4',
     'include-media-export#1.0',
     'jquery-ui#1.12',
+    'jquery.maskedinput#1.4',
     'marionette#3.5',
     'normalize-css#7',
     'nouislider#10.1',
@@ -178,6 +180,7 @@ PIPELINE = {
                 'bower_components/nouislider/distribute/nouislider.min.css',
                 'bower_components/swiper/dist/css/swiper.min.css',
                 'bower_components/animate.css/animate.min.css',
+                'bower_components/Likely/release/likely.css',
             ),
             'output_filename': 'frontend/css/libs.css',
         },
@@ -201,6 +204,8 @@ PIPELINE = {
                 'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
                 'bower_components/nouislider/distribute/nouislider.min.js',
                 'bower_components/swiper/dist/js/swiper.min.js',
+                'bower_components/jquery.maskedinput/dist/jquery.maskedinput.min.js',  # NOQA
+                'bower_components/Likely/release/likely.js',
                 'frontend/js/jquery.popmenu.js',
             ),
             'output_filename': 'frontend/js/libs.js',

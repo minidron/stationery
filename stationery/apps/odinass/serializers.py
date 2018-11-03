@@ -22,6 +22,7 @@ class OfferTitleFilter(django_filters.Filter):
     Поиск для автокомплита.
     """
     max_result = 10
+    uniq_category = True
 
     def filter(self, qs, value):
         qs = qs.annotate(full_name=Concat('product__article', Value(' '),
@@ -41,6 +42,11 @@ class OfferTitleFilter(django_filters.Filter):
         qs = (qs.filter(full_name_clauses)
                 .exclude(product__category__in=unpublished))
 
+        if self.uniq_category:
+            products = (qs.order_by('product__category__title')
+                          .distinct('product__category__title'))
+            qs = qs.filter(id__in=products).order_by('product__title')
+
         return qs[:self.max_result]
 
 
@@ -49,6 +55,7 @@ class OfferQFilter(OfferTitleFilter):
     Поиск для страницы поиска.
     """
     max_result = 200
+    uniq_category = False
 
 
 class SearchOfferFilter(django_filters.FilterSet):

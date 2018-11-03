@@ -165,10 +165,10 @@ class CartView(FormView):
         body_html = render_to_string(
             'orders/mail_order.html',
             {
-                'site': self.request.get_host(),
-                'order': form.order,
                 'items': form.order.items.all(),
-                'request': self.request,
+                'order': form.order,
+                'site': self.request.get_host(),
+                'user': user,
             }
         )
 
