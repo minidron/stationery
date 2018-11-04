@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 from yandex_kassa.conf import settings as kassa_settings
+from yandex_kassa.signals import payment_created, payment_done
 
 
 class BaseChoices:
@@ -181,6 +182,18 @@ class Payment(models.Model):
         ordering = ['-pk']
         verbose_name = 'платёж'
         verbose_name_plural = 'платежи'
+
+    def save(self, *args, **kwargs):
+        created = self._state.adding
+        if created:
+            payment_created.send(sender=self.__class__, instance=self)
+
+        if self.pk and self.is_paid:
+            old = self._meta.model.objects.get(pk=self.pk)
+            if old.status != self.status:
+                payment_done.send(sender=self.__class__, instance=self)
+
+        super().save(*args, **kwargs)
 
     @property
     def is_paid(self):
