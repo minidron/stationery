@@ -1,11 +1,10 @@
-import uuid
-
 from django import forms
 
-from yandex_checkout import Payment
-
 from yandex_kassa.conf import settings as kassa_settings
-from yandex_kassa.models import PaymentMethod
+from yandex_kassa.interface import YandexKassaInterface
+from yandex_kassa.models import Payment, PaymentMethod
+
+from orders.models import Order
 
 
 class BasePaymentForm(forms.Form):
@@ -22,7 +21,8 @@ class BasePaymentForm(forms.Form):
     email = forms.EmailField(
         label='Email', required=False)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, order=None, *args, **kwargs):
+        self.order = order
         super().__init__(*args, **kwargs)
         self.set_payment_method_choices()
 
@@ -58,5 +58,91 @@ class BasePaymentForm(forms.Form):
             msg = 'Для этого способа оплаты требуется указать номер телефона'
             self.add_error('phone', msg)
 
+    def get_payment_amount(self):
+        """
+        Возвращает dict amount.
+        """
+        raise NotImplementedError(
+                'Необходимо определить get_payment_amount() в `%s`.' %
+                type(self).__name__)
+
+    def get_payment_description(self):
+        """
+        Возвращает dict description.
+        """
+        return None
+
+    def get_payment_confirmation(self):
+        """
+        Возвращает dict confirmation.
+        """
+        raise NotImplementedError(
+                'Необходимо определить get_payment_confirmation() в `%s`.' %
+                type(self).__name__)
+
+    def get_payment_method_data(self):
+        """
+        Возвращает dict payment_method_data.
+        """
+        raise NotImplementedError(
+                'Необходимо определить get_payment_method_data() в `%s`.' %
+                type(self).__name__)
+
+    def get_payment_receipt(self):
+        """
+        Возвращает dict receipt.
+        """
+        return None
+
     def create_payment(self):
-        import ipdb; ipdb.set_trace()
+        """
+        Создаёт платёж.
+
+        Подробнее про параметры, при создании платежа:
+        https://kassa.yandex.ru/docs/checkout-api/#sozdanie-platezha
+        """
+        payment_data = {'capture': True,
+                        **self.get_payment_amount(),
+                        **self.get_payment_method_data(),
+                        **self.get_payment_confirmation()}
+
+        for method in ['get_payment_description', 'get_payment_receipt']:
+            additional_data = getattr(self, method)()
+            if additional_data:
+                payment_data.update(additional_data)
+
+        interface = YandexKassaInterface()
+        payment = interface.create_payment(payment_data)
+        success_url = payment.pop('confirmation_url')
+        Payment.objects.create(**payment)
+
+        return success_url
+
+
+class YandexPaymentForm(BasePaymentForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.order = Order.objects.get(pk=114)
+
+    def get_payment_amount(self):
+        return {
+            'amount': {
+                'value': self.order.amount,
+                'currency': kassa_settings.PAYMENT_DEFAULT_CURRENCY,
+            }
+        }
+
+    def get_payment_method_data(self):
+        return {
+            'payment_method_data': {
+                'type': self.cleaned_data['payment_method_data'],
+            }
+        }
+
+    def get_payment_confirmation(self):
+        return {
+            'confirmation': {
+                'type': 'redirect',
+                'return_url': 'https://www.merchant-website.com/return_url',
+            }
+        }

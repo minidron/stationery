@@ -6,7 +6,20 @@ from django.utils import timezone
 from yandex_kassa.conf import settings as kassa_settings
 
 
-class PaymentStatus:
+class BaseChoices:
+    """
+    Базовый класс для вариантов.
+    """
+
+    @classmethod
+    def available_choices(cls):
+        """
+        Доступные варианты.
+        """
+        return [choice[0] for choice in cls.CHOICES]
+
+
+class PaymentStatus(BaseChoices):
     """
     Статусы платежа.
     """
@@ -23,7 +36,7 @@ class PaymentStatus:
     )
 
 
-class PaymentCurrency:
+class PaymentCurrency(BaseChoices):
     """
     Валюта платежа.
     """
@@ -46,7 +59,7 @@ class PaymentCurrency:
     )
 
 
-class PaymentMethod:
+class PaymentMethod(BaseChoices):
     """
     Способы оплаты.
     """
@@ -81,7 +94,7 @@ class PaymentMethod:
     )
 
 
-class ReceiptRegistrationStatus:
+class ReceiptRegistrationStatus(BaseChoices):
     """
     Статусы доставки чека в онлайн-кассу.
     """
