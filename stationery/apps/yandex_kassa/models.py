@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils import timezone
 
@@ -49,32 +50,49 @@ class PaymentMethod:
     """
     Способы оплаты.
     """
-    YANDEX_MONEY = 'yandex_money'
+    ALFABANK = 'alfabank'
+    APPLEPAY = 'apple_pay'
+    B2B_SBERBANK = 'b2b_sberbank'
     BANK_CARD = 'bank_card'
-    SBERBANK = 'sberbank'
     CASH = 'cash'
+    GOOGLE_PAY = 'google_pay'
+    INSTALMENTS = 'installments'
     MOBILE_BALANCE = 'mobile_balance'
     PSB = 'psb'
     QIWI = 'qiwi'
+    SBERBANK = 'sberbank'
     WEBMONEY = 'webmoney'
-    ALFABANK = 'alfabank'
-    APPLEPAY = 'apple_pay'
-    GOOGLE_PAY = 'google_pay'
-    INSTALMENTS = 'installments'
+    YANDEX_MONEY = 'yandex_money'
 
     CHOICES = (
-        (YANDEX_MONEY, 'Яндекс.Деньги'),
+        (ALFABANK, 'Альфа-Клик'),
+        (APPLEPAY, 'Apple Pay'),
+        (B2B_SBERBANK, 'Сбербанк Бизнес Онлайн'),
         (BANK_CARD, 'Банковская карта'),
-        (SBERBANK, 'Сбербанк Онлайн'),
-        (CASH, 'Наличными в терминале'),
+        (CASH, 'Наличные'),
+        (GOOGLE_PAY, 'Google Pay'),
+        (INSTALMENTS, 'Заплатить по частям'),
         (MOBILE_BALANCE, 'Баланс мобильного телефона'),
         (PSB, 'Интернет-банк Промсвязьбанка'),
         (QIWI, 'QIWI Кошелек'),
+        (SBERBANK, 'Сбербанк Онлайн'),
         (WEBMONEY, 'Webmoney'),
-        (ALFABANK, 'Альфа-Клик'),
-        (APPLEPAY, 'Apple Pay'),
-        (GOOGLE_PAY, 'Google Pay'),
-        (INSTALMENTS, 'Через сервис "Заплатить по частям"'),
+        (YANDEX_MONEY, 'Яндекс.Деньги'),
+    )
+
+
+class ReceiptRegistrationStatus:
+    """
+    Статусы доставки чека в онлайн-кассу.
+    """
+    PENDING = 'pending'
+    SUCCEEDED = 'succeeded'
+    CANCELED = 'canceled'
+
+    CHOICES = (
+        (PENDING, 'Создан'),
+        (SUCCEEDED, 'Завершен'),
+        (CANCELED, 'Отменен'),
     )
 
 
@@ -90,7 +108,7 @@ class Payment(models.Model):
     status = models.CharField(
         'статус',
         max_length=20, choices=PaymentStatus.CHOICES,
-        default=PaymentStatus.PENDING)
+        default=PaymentStatus.PENDING, db_index=True)
     amount = models.DecimalField(
         'сумма',
         max_digits=15, decimal_places=2)
@@ -102,6 +120,18 @@ class Payment(models.Model):
         'способ оплаты',
         max_length=20, choices=PaymentMethod.CHOICES,
         default=kassa_settings.PAYMENT_DEFAULT_METHOD)
+    description = models.TextField(
+        'описание транзакции',
+        blank=True)
+    metadata = JSONField(
+        'дополнительные данные',
+        blank=True, null=True, default=dict)
+
+    # Данные для формирования чека в онлайн-кассе.
+    receipt_registration = models.CharField(
+        'статус доставки чека в онлайн-кассу',
+        max_length=20, blank=True, choices=ReceiptRegistrationStatus.CHOICES,
+        db_index=True)
 
     # Время и даты.
     created_at = models.DateTimeField(
@@ -114,13 +144,34 @@ class Payment(models.Model):
         'время отмены удержания',
         editable=False, blank=True, null=True)
 
+    # Данные по заказу.
+    order_id = models.TextField(
+        'ID заказа',
+        help_text='Внутренний номер заказа/товара.',
+        max_length=100, blank=True)
+
     # Данные плательщика.
-    user = models.ForeignKey(
+    payer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='пользователь',
+        verbose_name='плательщик',
         on_delete=models.SET_NULL, blank=True, null=True)
+    payer_email = models.EmailField(
+        'email плательщика',
+        max_length=100, blank=True)
+    payer_phone = models.CharField(
+        'телефон плательщика',
+        max_length=20, blank=True)
 
     class Meta:
         default_related_name = '%(app_label)s_%(model_name)ss'
+        get_latest_by = 'pk'
+        ordering = ['-pk']
         verbose_name = 'платёж'
         verbose_name_plural = 'платежи'
+
+    @property
+    def is_paid(self):
+        """
+        Оплачен платёж или нет.
+        """
+        return self.status == PaymentStatus.SUCCEEDED
