@@ -169,12 +169,12 @@ class Payment(models.Model):
         settings.AUTH_USER_MODEL,
         verbose_name='плательщик',
         on_delete=models.SET_NULL, blank=True, null=True)
-    payer_email = models.EmailField(
-        'email плательщика',
-        max_length=100, blank=True)
     payer_phone = models.CharField(
         'телефон плательщика',
         max_length=20, blank=True)
+    payer_email = models.EmailField(
+        'email плательщика',
+        max_length=100, blank=True)
 
     class Meta:
         default_related_name = '%(app_label)s_%(model_name)ss'
@@ -182,6 +182,13 @@ class Payment(models.Model):
         ordering = ['-pk']
         verbose_name = 'платёж'
         verbose_name_plural = 'платежи'
+
+    def __str__(self):
+        return 'id=%(id)s, order_id=%(order)s, status=%(status)s' % {
+            'id': self.payment_id,
+            'order': self.order_id,
+            'status': self.status,
+        }
 
     def save(self, *args, **kwargs):
         created = self._state.adding

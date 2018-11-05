@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'pipeline',
     'rest_framework',
     'django_filters',
-    'yandex_money',
     'yandex_kassa',
     'lib',
     'mptt',
@@ -52,7 +51,6 @@ INSTALLED_APPS = (
     'odinass',
     'pages',
     'orders',
-    'ya',
 )
 
 MIDDLEWARE_CLASSES = (

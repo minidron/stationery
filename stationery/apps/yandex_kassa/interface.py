@@ -19,11 +19,11 @@ class YandexKassaInterface:
         """
         return str(uuid.uuid4())
 
-    def create_payment(self, payment_data):
+    def create_payment(self, data):
         """
         Создать платёж.
         """
-        payment = Payment.create(payment_data, self.generate_idempotence_key())
+        payment = Payment.create(data, self.generate_idempotence_key())
 
         # TODO: Сделать специальный класс для данной ошибки и описание.
         payment_status = payment.status
@@ -55,4 +55,24 @@ class YandexKassaInterface:
         """
         Получить информацию о платеже.
         """
-        return Payment.find_one(payment_id)
+        payment = Payment.find_one(payment_id)
+
+        created_at = (dateparse.parse_datetime(payment.created_at)
+                      if payment.created_at else None)
+        captured_at = (dateparse.parse_datetime(payment.captured_at)
+                       if payment.captured_at else None)
+        expires_at = (dateparse.parse_datetime(payment.expires_at)
+                      if payment.expires_at else None)
+
+        return {
+            'amount': payment.amount.value,
+            'captured_at': captured_at,
+            'created_at': created_at,
+            'currency': payment.amount.currency,
+            'description': payment.description,
+            'expires_at': expires_at,
+            'metadata': payment.metadata,
+            'payment_method': payment.payment_method.type,
+            'receipt_registration': payment.receipt_registration,
+            'status': payment.status,
+        }

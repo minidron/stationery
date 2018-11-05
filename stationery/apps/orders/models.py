@@ -5,7 +5,8 @@ from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.urls import reverse
 
-from yandex_money.signals import payment_completed
+from yandex_kassa.models import Payment
+from yandex_kassa.signals import payment_done
 
 from lib.email import create_email
 
@@ -340,14 +341,10 @@ def create_or_update_group_settings(sender, instance, created, **kwargs):
     instance.settings.save()
 
 
-@receiver(payment_completed)
-def update_order_gain(sender, **kwargs):
-    """
-    У Яндекса sender = instance.  Мда...
-    """
-    instance = sender
-    order = Order.objects.get(pk=instance.article_id)
-    order.gain = order.gain or 0 + instance.order_amount
+@receiver(payment_done, sender=Payment)
+def update_order_gain(sender, instance, **kwargs):
+    order = Order.objects.get(pk=instance.order_id)
+    order.gain = order.gain or 0 + instance.amount
     order.save()
 
 

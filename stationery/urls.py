@@ -13,8 +13,6 @@ from odinass.views import SearchOfferViewSet
 
 from orders.views import OrderAPIView
 
-from yandex_kassa.views import TestFormView
-
 
 router = routers.DefaultRouter()
 router.register(r'search_offer', SearchOfferViewSet)
@@ -23,18 +21,12 @@ router.register(r'search_offer', SearchOfferViewSet)
 urlpatterns = [
     url(r'^$',
         IndexView.as_view(), name='index'),
-    url(r'^test/$',
-        TestFormView.as_view()),
     url(r'^account/',
         include('orders.urls', namespace='account')),
     url(r'^api/orders/$',
         OrderAPIView.as_view()),
     url(r'^api/',
         include(router.urls, namespace='api')),
-    url(r'^demo-ya/',
-        include('ya.urls')),
-    url(r'^ya/',
-        include('ya.urls')),
     url(r'^robots.txt$',
         TemplateView.as_view(
             template_name='robots.txt', content_type='text/plain')),

@@ -3,11 +3,10 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.utils.encoding import iri_to_uri
 from django.views.generic import DetailView, FormView, ListView
 
 from rest_framework import status
@@ -16,8 +15,9 @@ from rest_framework.views import APIView
 
 from lib.email import create_email
 
-from yandex_money.forms import PaymentForm
-from yandex_money.models import Payment
+from yandex_kassa.conf import settings as kassa_settings
+from yandex_kassa.forms import BasePaymentForm
+from yandex_kassa.models import PaymentMethod
 
 from orders.forms import CompanyRegistrationForm, ItemFormSet, RegistrationForm
 from orders.models import Order, OrderStatus
@@ -197,19 +197,50 @@ class HistoryListView(ListView):
         return qs
 
 
-class YaPaymentForm(PaymentForm):
-    paymentType = forms.CharField(
+class YaPaymentForm(BasePaymentForm):
+    payment_method_data = forms.ChoiceField(
         label='Способ оплаты',
-        widget=forms.RadioSelect(choices=settings.YANDEX_ALLOWED_PAYMENTS),
-        min_length=2, max_length=2, initial=Payment.PAYMENT_TYPE.PC)
+        widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES)
 
+    def get_payment_amount(self):
+        return {
+            'amount': {
+                'value': self.order.amount,
+                'currency': kassa_settings.PAYMENT_DEFAULT_CURRENCY,
+            }
+        }
 
-class HttpResponseTemporaryRedirect(HttpResponse):
-    status_code = 307
+    def get_payment_method_data(self):
+        return {
+            'payment_method_data': {
+                'type': self.cleaned_data['payment_method_data'],
+            }
+        }
 
-    def __init__(self, redirect_to):
-        HttpResponse.__init__(self)
-        self['Location'] = iri_to_uri(redirect_to)
+    def get_payment_confirmation(self):
+        return {
+            'confirmation': {
+                'type': 'redirect',
+                'return_url': self.request.build_absolute_uri(),
+            }
+        }
+
+    def get_payment_description(self):
+        return {'description': str(self.order)}
+
+    def get_payment_data(self, payment_data):
+        data = super().get_payment_data(payment_data)
+        data.update({
+            'order_id': str(self.order.pk),
+            'payer': self.payer,
+            'payer_phone': self.cleaned_data['phone'],
+            'payer_email': self.cleaned_data['email'],
+        })
+        return data
+
+    def create_payment(self, request, order=None, payer=None):
+        self.request = request
+        return super().create_payment(order, payer)
 
 
 class HistoryDetailView(DetailView):
@@ -217,6 +248,7 @@ class HistoryDetailView(DetailView):
     Подробный просмотр заказа.
     """
     form_class = YaPaymentForm
+    form_initial = None
     model = Order
     template_name = 'pages/frontend/history_detail.html'
 
@@ -224,60 +256,40 @@ class HistoryDetailView(DetailView):
         qs = super().get_queryset()
         return qs.filter(user=self.request.user)
 
-    def get_payment_instance(self):
-        """
-        Создаём объект "Платёж".
-        """
-        site_url = '%s://%s' % (self.request.scheme, self.request.get_host())
-        order = self.object
-
-        payment = Payment(
-            order_amount=order.remaining_payment_sum,
-            success_url='%s%s' % (site_url, settings.YANDEX_MONEY_SUCCESS_URL),
-            fail_url='%s%s' % (site_url, settings.YANDEX_MONEY_FAIL_URL),
-            article_id=order.pk,
-            cps_email=self.request.user.email,
-            cps_phone=self.request.user.profile.phone,
-        )
-
-        return payment
+    def get_form_kwargs(self):
+        kwargs = {}
+        if self.request.method == 'GET':
+            kwargs['initial'] = {
+                'phone': self.request.user.profile.phone,
+                'email': self.request.user.email,
+            }
+        elif self.request.method in ('POST', 'PUT'):
+            kwargs['data'] = self.request.POST
+        return kwargs
 
     def get_form(self, **kwargs):
         form = None
         groups = self.request.user.groups
-        if self.request.method == 'GET' and not groups.filter(name='Оптовик'):
+        if not groups.filter(name='Оптовик'):
             order = self.object
             if order.status == OrderStatus.CONFIRMED:
-                form = self.form_class(instance=self.get_payment_instance())
+                form = self.form_class(**self.get_form_kwargs())
         return form
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'form': self.get_form(),
-        })
-        return context
+        if 'form' not in kwargs:
+            kwargs['form'] = self.get_form()
+        return super().get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, instance='')
-        if form.is_valid():
-            order = self.get_object()
-            data = form.cleaned_data
-            payment = Payment(
-                user=request.user,
-                shop_id=data['shopId'],
-                scid=data['scid'],
-                customer_number=data['customerNumber'],
-                order_amount=data['sum'],
-                article_id=order.pk,
-                payment_type=data['paymentType'],
-                order_number=data['orderNumber'],
-                cps_email=data['cps_email'],
-                cps_phone=data['cps_phone'],
-                success_url=data['shopSuccessURL'],
-                fail_url=data['shopFailURL'],
-            )
-            payment.save()
+        self.object = self.get_object()
+        form = self.get_form()
 
-            url = settings.YANDEX_MONEY_ENDPOINT
-            return HttpResponseTemporaryRedirect(url)
+        if form and form.is_valid():
+            success_url = form.create_payment(request=request,
+                                              order=self.object,
+                                              payer=request.user)
+            return HttpResponseRedirect(success_url)
+        else:
+            context = self.get_context_data(object=self.object, form=form)
+            return self.render_to_response(context)
