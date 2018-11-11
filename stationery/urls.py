@@ -7,6 +7,8 @@ from django.views.generic import RedirectView, TemplateView
 
 from rest_framework import routers
 
+from yandex_kassa.views import notification
+
 from pages.views import IndexView
 
 from odinass.views import SearchOfferViewSet
@@ -27,6 +29,8 @@ urlpatterns = [
         OrderAPIView.as_view()),
     url(r'^api/',
         include(router.urls, namespace='api')),
+    url(r'^yandex-notification/$',
+        notification),
     url(r'^robots.txt$',
         TemplateView.as_view(
             template_name='robots.txt', content_type='text/plain')),
