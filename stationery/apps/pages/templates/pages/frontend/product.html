@@ -66,7 +66,14 @@
                         <input class="quantity" type="text" value="1">
                     </div>
                     <a href="#" class="add-cart" data-offer-id="{{ offer.id }}" data-offer-price="{{ offer.retail_price }}">В корзину</a>
-                </div>
+								</div>
+								<div class="likely-on-page">
+									<div class="likely"  data-url="{{ offer.get_absolute_url }}" data-media="{{ offer_image.url }}" data-title="{{ offer.full_title }}">
+									<div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
+									<div class="facebook" title="Поделится facebook">facebook</div>
+									<div class="odnoklassniki" title="Класснуть">Класснуть</div>
+									</div>
+								</div>
             </div>
         </div>
     </div>
