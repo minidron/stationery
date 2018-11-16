@@ -91,36 +91,6 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
-  # ДОБАВЛЕНИЕ В КОРЗИНУ
-  # ---------------------------------------------------------------------------
-  $ ->
-    cart = $ '#cart-full-price'
-
-    $('a[data-offer-id]').click (e) ->
-      e.preventDefault()
-
-      el = $ @
-      quantity = el.closest('.offer-price--cart').find('.quantity').val()
-
-      $.ajax
-        type: 'POST'
-        url: '/api/orders/'
-        data: {
-          'offer': $(this).data('offerId')
-          'quantity': quantity
-          'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-        }
-        success: (data, status) =>
-          cart.text toPrice data.amount
-          $('.offer-in-cart').animateCss 'zoomInUp', ->
-            $('.offer-in-cart').animateCss 'fadeOut', ->
-              $('.offer-in-cart').addClass 'hidden'
-          console.log status
-        error: (data, status) =>
-          console.log status
-  # ---------------------------------------------------------------------------
-
-
   # КОРЗИНА ТОВАРОВ
   # ---------------------------------------------------------------------------
   $ ->

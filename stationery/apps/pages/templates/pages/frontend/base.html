@@ -76,7 +76,7 @@
 
     <nav class="navbar__section">
         <div class="navbar-container">
-            <span class="slide-toggle"><i class="fa fa-bars"></i></i></span>
+            <span class="slide-toggle"><i class="fa fa-bars"></i></span>
             <ul class="navbar-menu mobile-hide">
                 {% for category in categories %}
                     <li class="navbar-menu--root-item">
@@ -89,8 +89,11 @@
             </ul>
             {% block navbar_cart %}
                 {% if user.is_authenticated %}
-                    <div class="navbar-cart">
-                        <a id="cart-full-price" class="navbar-cart--link" href="{% url 'account:cart' %}" data-cart-id="{{ cart.pk }}">{{ cart.amount|price|default:'0' }}</a>
+                    <div v-cloak id="navbar-cart-app" class="navbar-cart">
+                        <cart-link
+                            initial-amount="{{ cart.amount|price|default:'0' }}"
+                            href="{% url 'account:cart' %}"
+                            :amount="amount"></cart-link>
                     </div>
                 {% endif %}
             {% endblock %}
@@ -107,7 +110,7 @@
         </div>
     {% endblock %}
 
-    <main class="main__section" style="
+    <main id="{% block main_id %}offers-cart-app{% endblock %}" class="main__section" style="
         background-color: {{ global_preferences.фон__цвет }};
         background-image: {% if global_preferences.фон__изображение %}url('{{ global_preferences.фон__изображение.url }}'){% else %}none{% endif %};
         background-repeat: {% if global_preferences.фон__заполнение == '1' %}no-repeat{% else %}repeat{% endif %};
@@ -116,6 +119,15 @@
             {% block content %}
             {% endblock content %}
         </div>
+        <transition
+            enter-active-class="animated zoomInUp"
+            leave-active-class="animated fadeOut"
+        >
+            <popup
+                :text="popupText"
+                @close="popupText = ''"
+            ></popup>
+        </transition>
     </main>
 
     <footer class="footer__section">
@@ -146,11 +158,10 @@
       </div>
     </footer>
 
-    <div class="offer-in-cart hidden">Товар добавлен в корзину</div>
-
     {% block scripts %}
         {% csrf_token %}
         {% javascript 'libs' %}
+        {% javascript 'vuecart' %}
         {% javascript 'frontend' %}
     {% endblock %}
 </body>

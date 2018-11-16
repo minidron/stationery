@@ -9,6 +9,8 @@ from rest_framework import routers
 
 from yandex_kassa.views import notification
 
+from api.urls import router as api_router
+
 from pages.views import IndexView
 
 from odinass.views import SearchOfferViewSet
@@ -25,6 +27,8 @@ urlpatterns = [
         IndexView.as_view(), name='index'),
     url(r'^account/',
         include('orders.urls', namespace='account')),
+    url(r'^api/v2/',
+        include(api_router.urls, namespace='api-v2')),
     url(r'^api/orders/$',
         OrderAPIView.as_view()),
     url(r'^api/',

@@ -51,6 +51,22 @@
 							margin-top: 10px;
 						}
         }
+
+        &.error {
+            input {
+                border-color: $color-accent;
+            }
+        }
+    }
+
+    .cart--item-quantity--error {
+        margin-top: 5px;
+        font: normal 13px/16px $ff-PT-Sans;
+        color: $color-accent;
+
+        .errorlist {
+            @include clear-list;
+        }
     }
 
     .cart--item-unit_price {

@@ -116,7 +116,7 @@
         }
 
         .offer-info {
-            flex: 1;
+            flex-grow: 1;
             padding: 0 20px;
             border-right: 1px solid get($color, 'header', 'border');
 
@@ -219,6 +219,7 @@
                     outline: 0 none;
                     box-sizing: border-box;
                     font: normal 14px/24px $ff-PT-Sans;
+                    line-height: 1;
                     color: get($color, 'text', 'base');
 										background-color: #FFF;
 										@include media('<=phone') {

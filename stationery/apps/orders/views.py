@@ -119,7 +119,7 @@ class CartView(FormView):
     Страница корзины.
     """
     form_class = ItemFormSet
-    success_url = reverse_lazy('cart')
+    success_url = reverse_lazy('account:cart')
     template_name = 'pages/frontend/cart.html'
 
     def get_context_data(self, **kwargs):

@@ -389,6 +389,10 @@ class Offer(models.Model):
                             .order_by('warehouse__title'))
 
     @property
+    def rest_limit(self):
+        return self.rest_list.aggregate(total=Sum('value'))['total']
+
+    @property
     def full_title(self):
         return self.product.title
 

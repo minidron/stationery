@@ -71,12 +71,11 @@
                         <div class="offer-price--availability">
                             Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
                         </div>
-                        <div class="offer-price--cart">
-                            <div class="offer-price--quantity">
-                                <input class="quantity" type="text" value="1">
-                            </div>
-                            <a href="#" class="add-cart" data-offer-id="{{ offer.id }}" data-offer-price="{{ offer.retail_price }}">В корзину</a>
-                        </div>
+                        <offer-price
+                            offer-id="{{ offer.id }}"
+                            @offer-added="updateNavbarCart"
+                            @offer-limit-error="showLimitError"
+                        ></offer-price>
                     </div>
                 </div>
             {% endfor %}

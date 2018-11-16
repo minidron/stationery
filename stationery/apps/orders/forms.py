@@ -19,6 +19,13 @@ class ItemForm(forms.ModelForm):
             'quantity': forms.TextInput,
         }
 
+    def clean_quantity(self):
+        data = self.cleaned_data['quantity']
+        limit = self.instance.offer.rest_limit
+        if limit < data:
+            raise forms.ValidationError('Осталось %s шт.' % limit)
+        return data
+
 
 class ItemFormSet(object):
     """

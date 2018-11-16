@@ -315,6 +315,7 @@
                     outline: 0 none;
                     box-sizing: border-box;
                     font: normal 14px/24px $ff-PT-Sans;
+                    line-height: 1;
                     color: get($color, 'text', 'base');
 										background-color: #FFF;
 										@include media('<=phone') {

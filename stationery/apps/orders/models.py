@@ -114,7 +114,12 @@ class Order(models.Model):
             item = Item(order=self, offer_id=offer_id, quantity=quantity)
         else:
             item.quantity += quantity
+
+        if item.quantity > item.offer.rest_limit:
+            return None
+
         item.save(user=user)
+        return item
 
     def update_item(self, offer_id, quantity):
         try:

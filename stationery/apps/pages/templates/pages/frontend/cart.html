@@ -20,7 +20,10 @@
                             <a class="cart--item-offer--link" href="{{ offer.get_absolute_url }}">{{ offer }}</a>
                         </div>
                     {% endwith %}
-                    <div class="cart--item-quantity">{{ item_form.quantity }}</div>
+                    <div class="cart--item-quantity{% if item_form.quantity.errors %} error{% endif %}">
+                        {{ item_form.quantity }}
+                        <div class="cart--item-quantity--error">{{ item_form.quantity.errors }}</div>
+                    </div>
                     <div class="cart--item-unit_price">x {{ item_form.instance.unit_price|price }}</div>
                     <div class="cart--item-total_price">= {{ item_form.instance.total_price|price }}</div>
                     <div class="cart--item-delete"><a class="cart--item-delete--link" href="#" data-delete-offer-id="{{ item_form.instance.offer.id }}"></a></div>

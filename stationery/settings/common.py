@@ -126,21 +126,21 @@ BOWER_COMPONENTS_ROOT = path('static')
 
 BOWER_INSTALLED_APPS = (
     'animate.css#3.5',
-    'backbone#1.3',
+    'axios#0.18',
     'bootstrap#3.3',
     'devbridge-autocomplete#1.4',
+    'es6-promise#4.2',
     'font-awesome#4.7',
     'ilyabirman-likely#2.3',
     'include-media#1.4',
     'include-media-export#1.0',
     'jquery-ui#1.12',
     'jquery.maskedinput#1.4',
-    'marionette#3.5',
     'normalize-css#7',
     'nouislider#10.1',
     'owl.carousel#2.2',
     'swiper#4.1',
-    'underscore#1.8',
+    'vue#2.5',
 )
 
 # './manage.py bower_install' - install bower apps
@@ -208,21 +208,18 @@ PIPELINE = {
             ),
             'output_filename': 'frontend/js/libs.js',
         },
-        'marionette': {
+        'vuecart': {
             'source_filenames': (
-                'bower_components/underscore/underscore-min.js',
-                'bower_components/backbone/backbone-min.js',
-                'bower_components/backbone.radio/build/backbone.radio.min.js',
-                'bower_components/backbone.marionette/lib/backbone.marionette.min.js',  # NOQA
+                'bower_components/es6-promise/es6-promise.auto.min.js',
+                'bower_components/axios/dist/axios.min.js',
+                'bower_components/vue/dist/vue.min.js',
+
+                'orders/frontend/js/cart/modules.js',
+                'orders/frontend/js/cart/utils.js',
+                'orders/frontend/js/cart/components.js',
+                'orders/frontend/js/cart/app.js',
             ),
-            'output_filename': 'frontend/js/marionette.js',
-        },
-        'cart': {
-            'source_filenames': (
-                'orders/frontend/coffee/cart/app.coffee',
-                'orders/frontend/coffee/cart/models.coffee',
-            ),
-            'output_filename': 'frontend/js/cart.js',
+            'output_filename': 'frontend/js/vuecart.js',
         },
         'frontend': {
             'source_filenames': (
@@ -297,26 +294,4 @@ DYNAMIC_PREFERENCES = {
     'SECTION_KEY_SEPARATOR': '__',
     'VALIDATE_NAMES': True,
 }
-# -----------------------------------------------------------------------------
-
-
-# YANDEX MONEY ----------------------------------------------------------------
-YANDEX_MONEY_FAIL_URL = '/ya/fail/'
-YANDEX_MONEY_SUCCESS_URL = '/ya/success/'
-# информировать о случаях, когда модуль вернул Яндекс.Кассе ошибку
-YANDEX_MONEY_MAIL_ADMINS_ON_PAYMENT_ERROR = True
-YANDEX_MONEY_ENDPOINT = 'https://demomoney.yandex.ru/eshop.xml'
-YANDEX_ALLOWED_PAYMENTS = (
-    ('PC', 'Кошелек Яндекс.Деньги'),
-    ('AC', 'Банковская карта'),
-    ('GP', 'Наличными через кассы и терминалы'),
-    ('MC', 'Счет мобильного телефона'),
-    ('WM', 'Кошелек WebMoney'),
-    ('SB', 'Сбербанк: оплата по SMS или Сбербанк Онлайн'),
-    # ('AB', 'Альфа-Клик'),
-    # ('MA', 'MasterPass'),
-    # ('PB', 'Интернет-банк Промсвязьбанка'),
-    ('QW', 'QIWI Wallet'),
-    # ('CR', 'Заплатить по частям'),
-)
 # -----------------------------------------------------------------------------
