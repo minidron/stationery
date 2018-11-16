@@ -106,7 +106,16 @@
         .offer-price {
             padding: 20px;
             width: 250px;
-            box-sizing: border-box;
+						box-sizing: border-box;
+
+						.likely-on-page {
+							padding-top: 20px;
+							text-align: center;
+							display: block;
+							.likely__widget{
+								background: #fff;
+							}
+						}
 
             .offer-price--price {
                 margin-bottom: 15px;
@@ -199,7 +208,8 @@
                     &:hover {
                         background-color: darken(get($color, 'button', 'cart', 'background'), 10%);
                     }
-                }
+								}
+								
             }
 
             .offer-price--quantity {

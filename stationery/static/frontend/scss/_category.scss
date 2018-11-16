@@ -63,7 +63,8 @@
             li {
                 label {
                     font: $fw-regular 14px/20px $ff-PT-Sans;
-                    color: get($color, 'text', 'base');
+										color: get($color, 'text', 'base');
+										
                 }
             }
         }
@@ -131,14 +132,21 @@
         .reset {
             text-decoration: none;
             font: $fw-regular 14px/20px $ff-Roboto;
-            color: get($color, 'link', 'base');
+						color: get($color, 'link', 'base');
+						margin-left: 160px;
 
             &:hover {
                 color: get($color, 'link', 'hover');
             }
         }
     }
-
+	.likely-on-page{
+		padding-top: 20px;
+		text-align: center;
+		.likely__widget{
+			background: #fff;
+		}
+	}
     .category-filters--button {
         .submit {
             width: 100%;
@@ -172,8 +180,8 @@
         margin-bottom: 20px;
 
         label {
-            font: $fw-bold 15px/1 $ff-PT-Sans;
-            color: get($color, 'text', 'base');
+            font: $fw-bold 22px/1 $ff-PT-Sans;
+            color: get($color-accent);
 						padding-left: 30px;
 						@include media('<=phone') {
 							display: inline-block;
@@ -183,7 +191,8 @@
 
         input[type='checkbox'] {
             margin-right: 3px;
-            vertical-align: middle;
+						vertical-align: middle;
+						zoom: 2; 
         }
     }
 

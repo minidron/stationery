@@ -92,3 +92,6 @@ tmp/
 
 # MS Office temp files
 ~$*
+
+mini.crt
+mini.key

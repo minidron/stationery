@@ -79,7 +79,7 @@
         <div class="category-content">
             <div class="category-filters--has-rest">
                 <label for="id_order">{{ form_search.order.label }} {{ form_search.order }}</label>
-                <label for="id_has_rests">{{ form_search.has_rests }} Сортировать по наличию</label>
+                <label for="id_has_rests">{{ form_search.has_rests }} Наличие на складе</label>
                 {% if is_filtered %}
                     <div class="category-filters--reset"><a href="#" class="reset">Сбросить фильтры</a></div>
                 {% endif %}
@@ -113,11 +113,20 @@
                             <div class="offer-price--availability">
                                 Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
                             </div>
+
                             <offer-price
                                 offer-id="{{ offer.id }}"
                                 @offer-added="updateNavbarCart"
                                 @offer-limit-error="showLimitError"
                             ></offer-price>
+
+                            <div class="likely-on-page">
+                                <div class="likely" data-url="{{ request.get_host }}{{ offer.get_absolute_url }}" data-media="{{ request.get_host }}{% if offer.product.image %}{{ offer.product.image.url }}{% endif %}" data-title="{{ offer.full_title }}">
+                                    <div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
+                                    <div class="facebook" title="Поделится facebook">facebook</div>
+                                    <div class="odnoklassniki" title="Класснуть">Класснуть</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

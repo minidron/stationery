@@ -205,7 +205,8 @@
                     &:hover {
                         background-color: darken(get($color, 'button', 'cart', 'background'), 10%);
                     }
-                }
+								}
+							
             }
 
             .offer-price--quantity {
@@ -227,7 +228,14 @@
 										}
                 }
             }
-        }
+				}
+				.likely-on-page{
+					padding-top: 20px;
+					text-align: center;
+					.likely__widget{
+						background: #fff;
+					}
+				}
     }
 }
 /* ------------------------------------------------------------------------- */
