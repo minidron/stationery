@@ -29,7 +29,7 @@
         <div class="offer-container rounded">
             <div class="offer-image">
                 {% thumbnail offer.product.image '400x400' as offer_image %}
-                    <img src="{{ offer_image.url }}" alt="{{ offer.full_title }}" class="product-item">
+                    <img src="{{ offer_image.url }}" alt="{{ offer.full_title }}" data-media="http://kancmiropt.ru{{ offer_image.url }}" class="product-item">
                 {% empty %}
                     <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.full_title }}" class="product-item">
                 {% endthumbnail %}
@@ -68,7 +68,7 @@
                     <a href="#" class="add-cart" data-offer-id="{{ offer.id }}" data-offer-price="{{ offer.retail_price }}">В корзину</a>
 								</div>
 								<div class="likely-on-page">
-									<div class="likely"  data-url="{{ offer.get_absolute_url }}" data-media="{{ offer_image.url }}" data-title="{{ offer.full_title }}">
+									<div class="likely"  data-url=" http://kancmiropt.ru{{ offer.get_absolute_url }} " data-media="http://kancmiropt.ru{{ offer.product.image.url }}" data-title="{{ offer.full_title }}">
 									<div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
 									<div class="facebook" title="Поделится facebook">facebook</div>
 									<div class="odnoklassniki" title="Класснуть">Класснуть</div>
