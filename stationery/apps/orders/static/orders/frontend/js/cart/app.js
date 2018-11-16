@@ -41,7 +41,7 @@ window.offersCart = new Vue({
             navbarCart.fetchCart();
         },
         showLimitError: function (e) {
-            this.popupText = 'Количество заказанных товаров превышает остаток на складе';
+            this.popupText = 'Недостаточно товара в наличии';
         },
     },
 });
