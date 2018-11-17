@@ -2,14 +2,13 @@ from stationery.settings.common import *  # NOQA
 
 DEBUG = False
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
-YANDEX_MONEY_DEBUG = DEBUG
 
 INSTALLED_APPS += (
     'raven.contrib.django.raven_compat',
 )
 
 MIDDLEWARE_CLASSES += (
-    'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
+    # 'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
 )
 
 RAVEN_CONFIG = {
