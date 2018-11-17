@@ -169,4 +169,10 @@
     </div>
     </form>
     {% endif %}
+
+    {% if category.content %}
+        <div class="category-description rounded">
+            {{ category.content|safe }}
+        </div>
+    {% endif %}
 {% endblock content %}

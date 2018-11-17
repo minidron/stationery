@@ -8,6 +8,8 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
 
+from ckeditor.fields import RichTextField
+
 from django_resized import ResizedImageField
 
 from mptt.models import MPTTModel, TreeForeignKey
@@ -42,6 +44,9 @@ class Category(MPTTModel):
         upload_to='category/', null=True, blank=True)
     order = models.PositiveIntegerField(
         default=0, blank=False, null=False)
+    content = RichTextField(
+        'описание',
+        blank=True)
 
     class MPTTMeta:
         order_insertion_by = ['title']
@@ -162,6 +167,9 @@ class Product(models.Model):
     is_favorite = models.BooleanField(
         'избранный',
         db_index=True, default=False)
+    content = RichTextField(
+        'описание',
+        blank=True)
 
     class Meta:
         default_related_name = 'products'

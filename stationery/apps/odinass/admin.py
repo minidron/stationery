@@ -34,6 +34,7 @@ class CategoryAdmin(DraggableMPTTAdmin):
                 'title',
                 'is_published',
                 'image',
+                'content',
             ),
         }),
         ('Дополнительно', {
@@ -135,6 +136,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
                 'category',
                 'image',
                 'is_favorite',
+                'content',
                 'field_offers',
                 'field_properties',
             ),

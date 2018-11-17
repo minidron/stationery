@@ -77,5 +77,11 @@
                 </div>
             </div>
         </div>
+
+        {% if offer.product.content %}
+            <div class="offer-description rounded">
+                {{ offer.product.content|safe }}
+            </div>
+        {% endif %}
     </div>
 {% endblock content %}
