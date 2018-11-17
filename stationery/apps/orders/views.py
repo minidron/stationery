@@ -11,7 +11,7 @@ from django.views.generic import DetailView, FormView, ListView, TemplateView
 
 from lib.email import create_email
 
-from orders.forms import (CompanyRegistrationForm, ItemFormSet,
+from orders.forms import (CompanyRegistrationForm, ItemFormSet, OrderForm,
                           RegistrationForm, UserProfile, YaPaymentForm)
 from orders.models import Order, OrderStatus
 
@@ -175,11 +175,15 @@ class CartView(LoginRequiredMixin, FormView):
     """
     login_url = reverse_lazy('account:login')
     form_class = ItemFormSet
+    order_form = OrderForm
     success_url = reverse_lazy('account:cart')
     template_name = 'pages/frontend/cart.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update({
+            'order_form': self.get_order_form(),
+        })
         return context
 
     def get_form_kwargs(self):
@@ -191,6 +195,16 @@ class CartView(LoginRequiredMixin, FormView):
                 'data': self.request.POST,
             })
         return kwargs
+
+    def get_order_form(self, form_class=None):
+        kwargs = {
+            'instance': Order.get_cart(self.request.user),
+        }
+        if self.request.method in ('POST', 'PUT'):
+            kwargs.update({
+                'data': self.request.POST,
+            })
+        return self.order_form(**kwargs)
 
     def validate_user(self):
         user = self.request.user
@@ -211,7 +225,18 @@ class CartView(LoginRequiredMixin, FormView):
 
         return True
 
-    def form_valid(self, form):
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        order_form = self.get_order_form()
+        if form.is_valid():
+            return self.form_valid(form, order_form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form, order_form=None):
+        if order_form and order_form.is_valid():
+            form.order.comment = order_form.cleaned_data['comment']
+
         data = self.get_form_kwargs().get('data')
         if data:
             if '_submit' in data:
@@ -232,6 +257,8 @@ class CartView(LoginRequiredMixin, FormView):
                 form.order.items.all().delete()
                 form.order.save()
                 self.success_url = reverse('index')
+
+        form.order.save()
         form.save()
         return super().form_valid(form)
 

@@ -12,7 +12,7 @@ from orders.models import Item, Order
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['comment']
 
 
 class ItemForm(forms.ModelForm):

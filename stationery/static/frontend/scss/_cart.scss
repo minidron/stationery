@@ -12,6 +12,40 @@
 				}
     }
 
+    .field-row {
+        padding: 20px;
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font: $fw-medium 14px/18px $ff-Roboto;
+            color: get($color, 'title', 'base');
+
+            &.required:after {
+                content: '*';
+                margin-left: 3px;
+                color: red;
+            }
+        }
+
+        textarea {
+            padding: 5px 10px;
+            width: 100%;
+            max-width: 600px;
+            height: 100px;
+            border: 1px solid get($color, 'content', 'border');
+            outline: 0 none;
+            box-sizing: border-box;
+            font: normal 16px/34px $ff-PT-Sans;
+            color: get($color, 'text', 'base');
+            background-color: #FFF;
+
+            &:focus {
+                border-color: get($color, 'link', 'base');
+            }
+        }
+    }
+
     .cart--item-offer {
         flex: 1;
         font: $fw-regular 16px/20px $ff-PT-Sans;

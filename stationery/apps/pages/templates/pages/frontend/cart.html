@@ -29,6 +29,13 @@
                     <div class="cart--item-delete"><a class="cart--item-delete--link" href="#" data-delete-offer-id="{{ item_form.instance.offer.id }}"></a></div>
                 </div>
             {% endfor %}
+
+            <div class="field-row">
+                {{ order_form.comment.label_tag }}
+                {{ order_form.comment }}
+                {{ order_form.comment.errors }}
+            </div>
+
             <div class="cart-info">
                 <div class="cart-info--save">
                     <button class="submit" type="submit" name="_save">Сохранить изменения</button>

@@ -74,6 +74,9 @@ class Order(models.Model):
         'приход',
         default=0,
         max_digits=12, decimal_places=2)
+    comment = models.TextField(
+        'комментарий к заказу',
+        blank=True)
 
     objects = OrderQuerySet.as_manager()
 
