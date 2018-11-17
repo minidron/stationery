@@ -16,6 +16,12 @@
     max-width: 400px;
     box-sizing: border-box;
 
+    .intro {
+        padding: 10px;
+        border: 1px solid $color-accent;
+        font: $fw-medium 14px/18px $ff-Roboto;
+    }
+
     .field-row {
         margin-bottom: 15px;
 

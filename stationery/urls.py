@@ -15,8 +15,6 @@ from pages.views import IndexView
 
 from odinass.views import SearchOfferViewSet
 
-from orders.views import OrderAPIView
-
 
 router = routers.DefaultRouter()
 router.register(r'search_offer', SearchOfferViewSet)
@@ -29,8 +27,6 @@ urlpatterns = [
         include('orders.urls', namespace='account')),
     url(r'^api/v2/',
         include(api_router.urls, namespace='api-v2')),
-    url(r'^api/orders/$',
-        OrderAPIView.as_view()),
     url(r'^api/',
         include(router.urls, namespace='api')),
     url(r'^yandex-notification/$',

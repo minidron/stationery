@@ -1,0 +1,16 @@
+{% extends "pages/frontend/base.html" %}
+
+{% block body_class %}account_page{% endblock %}
+
+
+
+{% block content %}
+    <h1 class="main--title">Ваш личный кабинет</h1>
+
+    <div class="account-container rounded">
+        <ul>
+            <li><a href="{% url 'account:history' %}">Заказы</a></li>
+            <li><a href="{% url 'account:profile' %}">Контактные данные</a></li>
+        </ul>
+    </div>
+{% endblock %}

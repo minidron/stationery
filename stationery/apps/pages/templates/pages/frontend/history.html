@@ -6,6 +6,17 @@
 {% block body_class %}history_page{% endblock %}
 
 
+{% block breadcrumbs %}
+    <div class="breadcrumbs__section">
+        <div class="breadcrumbs-container">
+            <ul class="breadcrumbs">
+                <li class="breadcrumbs--item"><a href="{% url 'account:index' %}">Личный кабинет</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
 {% block content %}
     <h1 class="main--title">Мои заказы</h1>
     <div class="history-container rounded">

@@ -1,0 +1,84 @@
+{% extends "pages/frontend/base.html" %}
+
+{% block body_class %}registration_page{% endblock %}
+
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs__section">
+        <div class="breadcrumbs-container">
+            <ul class="breadcrumbs">
+                <li class="breadcrumbs--item"><a href="{% url 'account:index' %}">Личный кабинет</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">Контактные данные</h1>
+
+    <div class="registration-form rounded">
+        <form id="registration-form" method="POST">{% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+
+            {% if form.create_order.value == 'true' %}
+                <div class="intro">Для оформления заказа необходимо заполнить контактные данные.</div>
+            {% endif %}
+
+            <div class="field-row">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.fio.label_tag }}
+                {{ form.fio }}
+                {{ form.fio.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.phone.label_tag }}
+                {{ form.phone }}
+                {{ form.phone.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+            <div class="field-row">
+                {{ form.user_type }}
+                {{ form.user_type.errors }}
+            </div>
+            <div class="field-row field-row-company hide">
+                {{ company_form.company_name.label_tag }}
+                {{ company_form.company_name }}
+                {{ company_form.company_name.errors }}
+            </div>
+            <div class="field-row field-row-company hide">
+                {{ company_form.inn.label_tag }}
+                {{ company_form.inn }}
+                {{ company_form.inn.errors }}
+            </div>
+            <div class="field-row field-row-company hide">
+                {{ company_form.company_address.label_tag }}
+                {{ company_form.company_address }}
+                {{ company_form.company_address.errors }}
+            </div>
+
+            <div class="submit-row"><button class="submit" type="submit">{% if form.create_order.value == 'true' %}Продолжить{% else %}Сохранить{% endif %}</button></div>
+        </form>
+    </div>
+{% endblock %}

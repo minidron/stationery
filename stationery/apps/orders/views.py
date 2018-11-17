@@ -1,47 +1,24 @@
-from django import forms
 from django.conf import settings
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import DetailView, FormView, ListView
-
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 
 from lib.email import create_email
 
-from yandex_kassa.conf import settings as kassa_settings
-from yandex_kassa.forms import BasePaymentForm
-from yandex_kassa.models import PaymentMethod
-
-from orders.forms import CompanyRegistrationForm, ItemFormSet, RegistrationForm
+from orders.forms import (CompanyRegistrationForm, ItemFormSet,
+                          RegistrationForm, UserProfile, YaPaymentForm)
 from orders.models import Order, OrderStatus
 
 
-class OrderAPIView(APIView):
-    """
-    API для заказов.
-    """
-    def get(self, request, *args, **kwargs):
-        order = Order.get_cart(request.user)
-        return Response({'amount': order.amount}, status=status.HTTP_200_OK)
-
-    def post(self, request, *args, **kwargs):
-        order = Order.get_cart(request.user)
-        quantity = int(request.POST['quantity'])
-        order.add_item(request.POST['offer'], quantity, user=request.user)
-        return Response({'amount': order.amount}, status=status.HTTP_200_OK)
-
-    def delete(self, request, *args, **kwargs):
-        order = Order.get_cart(request.user)
-        offer = request.POST['offer']
-        order.remove_item(offer)
-        return Response({'amount': order.amount}, status=status.HTTP_200_OK)
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    login_url = reverse_lazy('account:login')
+    template_name = 'pages/frontend/registration/index.html'
 
 
 class RegistrationView(FormView):
@@ -100,6 +77,84 @@ class RegistrationView(FormView):
         return super().form_valid(form)
 
 
+class UpdateProfileView(LoginRequiredMixin, FormView):
+    """
+    Форма редактирования пользовательских данных.
+    """
+    login_url = reverse_lazy('account:login')
+    form_class = UserProfile
+    company_form = CompanyRegistrationForm
+    success_url = reverse_lazy('account:index')
+    template_name = 'pages/frontend/registration/edit.html'
+
+    def get_initial(self):
+        user = self.request.user
+        is_opt = user.groups.filter(name='Оптовик').exists()
+
+        data_mapping = {
+            'fio': user.first_name,
+            'phone': user.profile.phone,
+            'email': user.email,
+            'user_type': 2 if is_opt else 1,
+            'company_name': user.profile.company,
+            'inn': user.profile.inn,
+            'company_address': user.profile.company_address,
+            'create_order': self.request.GET.get('create_order'),
+        }
+
+        return data_mapping.copy()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'company_form': self.get_company_form(),
+        })
+        return context
+
+    def get_company_form(self, form_class=None):
+        return self.company_form(**self.get_form_kwargs())
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        company_form = self.get_company_form()
+        if form.is_valid():
+            if form.cleaned_data['user_type'] == '2':
+                if company_form.is_valid():
+                    return self.form_valid(form, company_form)
+            else:
+                return self.form_valid(form)
+        return self.form_invalid(form)
+
+    def form_valid(self, form, company_form=None):
+        user = self.request.user
+        user_data = form.cleaned_data
+        group = Group.objects.get(name='Оптовик')
+
+        user.email = user_data['email']
+        user.first_name = user_data['fio']
+        user.profile.phone = user_data['phone']
+
+        if company_form:
+            company_data = company_form.cleaned_data
+
+            user.profile.company = company_data['company_name']
+            user.profile.company_address = company_data['company_address']
+            user.profile.inn = company_data['inn']
+
+            group.user_set.add(user)
+            user.profile.save()
+
+        else:
+            group.user_set.remove(user)
+
+        user.save()
+
+        if user_data['create_order'] is True:
+            self.success_url = reverse('account:cart')
+
+        return super().form_valid(form)
+
+
 class UserLoginView(LoginView):
     """
     Форма авторизации.
@@ -114,10 +169,11 @@ class UserLogoutView(LogoutView):
     next_page = reverse_lazy('index')
 
 
-class CartView(FormView):
+class CartView(LoginRequiredMixin, FormView):
     """
     Страница корзины.
     """
+    login_url = reverse_lazy('account:login')
     form_class = ItemFormSet
     success_url = reverse_lazy('account:cart')
     template_name = 'pages/frontend/cart.html'
@@ -136,10 +192,35 @@ class CartView(FormView):
             })
         return kwargs
 
+    def validate_user(self):
+        user = self.request.user
+        is_opt = user.groups.filter(name='Оптовик').exists()
+
+        attrs = ['first_name']
+        profile_attrs = ['phone']
+        if is_opt:
+            profile_attrs.append(['company', 'inn', 'company_address'])
+
+        for attr in attrs:
+            if not getattr(user, attr, None):
+                return False
+
+        for attr in profile_attrs:
+            if not getattr(user.profile, attr, None):
+                return False
+
+        return True
+
     def form_valid(self, form):
         data = self.get_form_kwargs().get('data')
         if data:
             if '_submit' in data:
+                if not self.validate_user():
+                    form.save()
+                    param = '?create_order=true'
+                    self.success_url = reverse('account:profile') + param
+                    return super().form_valid(form)
+
                 if form.order.items.all():
                     form.order.created = timezone.now()
                     form.order.status = OrderStatus.INWORK
@@ -147,7 +228,7 @@ class CartView(FormView):
                     self.send_mail(form)
                 self.success_url = reverse('account:history')
 
-            if '_reset' in data:
+            elif '_reset' in data:
                 form.order.items.all().delete()
                 form.order.save()
                 self.success_url = reverse('index')
@@ -181,10 +262,11 @@ class CartView(FormView):
         email.send()
 
 
-class HistoryListView(ListView):
+class HistoryListView(LoginRequiredMixin, ListView):
     """
     Страница истории заказов.
     """
+    login_url = reverse_lazy('account:login')
     model = Order
     template_name = 'pages/frontend/history.html'
 
@@ -197,56 +279,11 @@ class HistoryListView(ListView):
         return qs
 
 
-class YaPaymentForm(BasePaymentForm):
-    payment_method_data = forms.ChoiceField(
-        label='Способ оплаты',
-        widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES)
-
-    def get_payment_amount(self):
-        return {
-            'amount': {
-                'value': self.order.amount,
-                'currency': kassa_settings.PAYMENT_DEFAULT_CURRENCY,
-            }
-        }
-
-    def get_payment_method_data(self):
-        return {
-            'payment_method_data': {
-                'type': self.cleaned_data['payment_method_data'],
-            }
-        }
-
-    def get_payment_confirmation(self):
-        return {
-            'confirmation': {
-                'type': 'redirect',
-                'return_url': self.request.build_absolute_uri(),
-            }
-        }
-
-    def get_payment_description(self):
-        return {'description': str(self.order)}
-
-    def get_payment_data(self, payment_data):
-        data = super().get_payment_data(payment_data)
-        data.update({
-            'order_id': str(self.order.pk),
-            'payer': self.payer,
-            'payer_phone': self.cleaned_data['phone'],
-            'payer_email': self.cleaned_data['email'],
-        })
-        return data
-
-    def create_payment(self, request, order=None, payer=None):
-        self.request = request
-        return super().create_payment(order, payer)
-
-
-class HistoryDetailView(DetailView):
+class HistoryDetailView(LoginRequiredMixin, DetailView):
     """
     Подробный просмотр заказа.
     """
+    login_url = reverse_lazy('account:login')
     form_class = YaPaymentForm
     form_initial = None
     model = Order
