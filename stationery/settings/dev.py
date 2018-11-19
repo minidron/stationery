@@ -1,5 +1,6 @@
 from stationery.settings.common import *  # NOQA
 
+
 DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 YANDEX_MONEY_DEBUG = DEBUG

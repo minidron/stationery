@@ -11,5 +11,12 @@ from django.conf import settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stationery.settings')
 
 app = Celery('stationery')
-app.config_from_object('django.conf:settings')
+app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+app.conf.beat_schedule = {
+    'check_import': {
+        'task': 'odinass.tasks.check_import',
+        'schedule': 60 * 30,  # 30 min.
+    },
+}

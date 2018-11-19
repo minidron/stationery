@@ -1,5 +1,6 @@
 from stationery.settings.common import *  # NOQA
 
+
 DEBUG = False
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 

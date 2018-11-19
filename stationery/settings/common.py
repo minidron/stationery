@@ -282,6 +282,7 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 # CELERY ----------------------------------------------------------------------
 CELERY_RESULT_BACKEND = 'rpc'
 CELERY_TRACK_STARTED = True
+CELERY_TIMEZONE = 'Europe/Moscow'
 # -----------------------------------------------------------------------------
 
 
