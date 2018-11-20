@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -11,7 +12,11 @@ from yandex_kassa.models import Payment
 @csrf_exempt
 def notification(request):
     # TODO: Проверка на входные данные.
-    data = json.loads(request.body.decode())
+    try:
+        data = json.loads(request.body.decode())
+    except JSONDecodeError:
+        return HttpResponse(status=200)
+
     payment = get_object_or_404(Payment, payment_id=data['object']['id'])
 
     interface = YandexKassaInterface()
