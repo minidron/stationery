@@ -213,7 +213,7 @@ class CartView(LoginRequiredMixin, FormView):
         attrs = ['first_name']
         profile_attrs = ['phone']
         if is_opt:
-            profile_attrs.append(['company', 'inn', 'company_address'])
+            profile_attrs += ['company', 'inn', 'company_address']
 
         for attr in attrs:
             if not getattr(user, attr, None):
