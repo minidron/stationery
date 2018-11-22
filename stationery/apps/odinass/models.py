@@ -46,7 +46,7 @@ class Category(MPTTModel):
         default=0, blank=False, null=False)
     content = RichTextField(
         'описание',
-        blank=True)
+        blank=True, default='')
 
     class MPTTMeta:
         order_insertion_by = ['title']
@@ -179,7 +179,7 @@ class Product(models.Model):
         db_index=True, default=False)
     content = RichTextField(
         'описание',
-        blank=True)
+        blank=True, default='')
 
     class Meta:
         default_related_name = 'products'
