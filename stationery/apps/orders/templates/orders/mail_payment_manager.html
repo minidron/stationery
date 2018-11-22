@@ -1,5 +1,13 @@
 <h2>Заказ №{{ order.pk }} от {{ order.created|date:'d.m.Y' }} оплачен</h2>
 
+<p>Пользователь: {{ user }}</p>
+<ul>
+    <li>{{ user.profile.company }}</li>
+    <li>{{ user.profile.phone }}</li>
+    <li>{{ user.email }}</li>
+    <li>{{ user.profile.inn }}</li>
+</ul>
+
 <table border="1">
     <thead>
         <tr>
@@ -24,5 +32,7 @@
 </table>
 
 <p>Полная стоимость: <strong>{{ order.amount }}</strong></p>
+
+<p>Комментарий к заказу: {{ order.comment }}</p>
 
 <p><a href="{{ site }}{% url 'admin:orders_order_change' order.pk %}">Открыть заказ</a></p>

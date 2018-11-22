@@ -226,6 +226,7 @@ class Order(models.Model):
         body_html = render_to_string(
             'orders/mail_payment_manager.html',
             {
+                'user': self.user,
                 'site': settings.DEFAULT_DOMAIN,
                 'order': self,
                 'items': self.items.all(),
