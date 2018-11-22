@@ -336,7 +336,7 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
         groups = self.request.user.groups
         if not groups.filter(name='Оптовик'):
             order = self.object
-            if order.status == OrderStatus.CONFIRMED:
+            if order.status in [OrderStatus.CONFIRMED, OrderStatus.INWORK]:
                 form = self.form_class(**self.get_form_kwargs())
         return form
 
