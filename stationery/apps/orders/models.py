@@ -158,6 +158,13 @@ class Order(models.Model):
         """
         return self.amount - self.gain
 
+    @property
+    def weight(self):
+        weight = 0
+        for item in self.items.all():
+            weight += item.total_weight
+        return weight
+
     def register_payment(self):
         """
         Переводим в статус `Доставка`, если заказ оплачен и отправляем письма.
@@ -283,6 +290,10 @@ class Item(models.Model):
     @property
     def total_price(self):
         return self.unit_price * self.quantity
+
+    @property
+    def total_weight(self):
+        return self.offer.weight * self.quantity
 
 
 class Profile(models.Model):

@@ -66,6 +66,11 @@ class PropertyAdmin(admin.ModelAdmin):
         'title',
     ]
 
+    list_display = [
+        'title',
+        'is_weight',
+    ]
+
     readonly_fields = [
         'field_values',
         'id',
@@ -78,6 +83,7 @@ class PropertyAdmin(admin.ModelAdmin):
             'fields': (
                 'title',
                 'field_values',
+                'is_weight',
             ),
         }),
         ('Дополнительно', {

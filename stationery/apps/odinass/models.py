@@ -125,6 +125,9 @@ class Property(models.Model):
     value_type = models.CharField(
         'тип значений',
         max_length=254, blank=True)
+    is_weight = models.BooleanField(
+        'используется для веса',
+        default=False)
 
     class Meta:
         default_related_name = 'properties'
@@ -134,6 +137,13 @@ class Property(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if self.is_weight:
+            (Property.objects.exclude(pk=self.pk)
+                             .filter(is_weight=True)
+                             .update(is_weight=False))
+        super().save(*args, **kwargs)
 
 
 class Product(models.Model):
@@ -403,6 +413,47 @@ class Offer(models.Model):
     @property
     def full_title(self):
         return self.product.title
+
+    @property
+    def weight(self):
+        """
+        Возвращает вес в граммах.
+        """
+        try:
+            weight = self.product.property_values.get(
+                property__is_weight=True).title
+            weight = "".join(weight.split())
+
+            is_gr = False
+            is_kilo = False
+            normalized_weight = ''
+            for s in weight:
+                if s.isdigit():
+                    normalized_weight += s
+                elif s == '.':
+                    normalized_weight += s
+                elif s == ',':
+                    normalized_weight += '.'
+                else:
+                    if s.lower() == 'г':
+                        is_gr = True
+                    elif s.lower() == 'к':
+                        is_kilo = True
+                    break
+
+            if not any([is_gr, is_kilo]):
+                return 0
+
+            try:
+                weight = float(normalized_weight)
+                if is_kilo:
+                    weight = weight * 1000
+            except ValueError:
+                return 0
+
+            return weight
+        except PropertyValue.DoesNotExist:
+            return 0
 
 
 class ActionLog(object):
