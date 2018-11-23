@@ -276,3 +276,14 @@ do ($=jQuery, window, document) ->
 		$('#id_phone').mask("+7 (999) 99-99-999")
 		return
 	#----------------------------------------------------------------------------
+
+
+	# BREADCRUMS ON PHONE 
+	# ----------------------------------------------------------------------------
+	$(document).ready ->
+		if ((window.screen.width < 480) and ($('.breadcrumbs').children("li").length) == 0)
+			$('.breadcrumbs__section').css("display", "none")
+		else 
+			$('.breadcrumbs__section').css("display", "block")
+		return		
+	# ----------------------------------------------------------------------------

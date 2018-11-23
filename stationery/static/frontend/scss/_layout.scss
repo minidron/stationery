@@ -464,7 +464,10 @@ body {
     background-color: #FFF;
 
     .breadcrumbs-container {
-        @include responsive-block;
+				@include responsive-block;
+				@include media('<=phone') {
+					height: 140px;
+				}
     }
 
     .breadcrumbs {
@@ -474,7 +477,8 @@ body {
         align-items: center;
 				flex-flow: row;
 				@include media('<=phone') {
-					display: none;
+					display: block;
+					padding-top: 20px;
 				}
 
         .breadcrumbs--item {
@@ -499,7 +503,10 @@ body {
                     padding-right: 15px;
                     padding-left: 15px;
                     content: $fa-var-angle-right;
-                    color: #CCC;
+										color: #CCC;
+										@include media('<=phone'){
+											content: $fa-var-angle-down;
+										}
                 }
             }
         }
@@ -556,7 +563,7 @@ body {
                   & a{
                     text-decoration: none;
                     color:white;
-                  }
+									}
                 }
 
 
@@ -574,7 +581,20 @@ body {
                      color:white;
                      text-decoration: none;
                    }
-                }
+								}
+						.social{
+							color: #fff;
+							h2 {
+								font-size: 20px;
+								font-weight: 800;
+							}
+							i {
+								padding: 10px;
+								border: 2px #fff solid;
+								border-radius: 5%;
+								margin-left: 10px;
+							}
+						}
         }
 }
 
