@@ -68,6 +68,12 @@ class OrderAdmin(admin.ModelAdmin):
         }),
     )
 
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return (qs.prefetch_related('items__offer__product')
@@ -85,33 +91,6 @@ class OrderAdmin(admin.ModelAdmin):
                   .get('total', 0)),
         }))
     field_items.short_description = 'товары'
-
-
-@admin.register(Item)
-class ItemAdmin(admin.ModelAdmin):
-    """
-    Админка для товаров заказа.
-    """
-    raw_id_fields = ['offer']
-
-    list_display = [
-        'offer',
-        'quantity',
-    ]
-
-
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    """
-    Админка для профиля пользователя.
-    """
-
-
-@admin.register(GroupSettings)
-class GroupSettingsAdmin(admin.ModelAdmin):
-    """
-    Админка для настроек групп.
-    """
 
 
 class ProfileInline(admin.StackedInline):

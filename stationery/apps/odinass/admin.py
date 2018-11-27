@@ -46,6 +46,12 @@ class CategoryAdmin(DraggableMPTTAdmin):
         }),
     )
 
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
+
 
 @admin.register(odinass_models.Warehouse)
 class WarehouseAdmin(admin.ModelAdmin):
@@ -58,6 +64,12 @@ class WarehouseAdmin(admin.ModelAdmin):
         'id',
         'title',
     ]
+
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
 
 
 @admin.register(odinass_models.Property)
@@ -94,6 +106,12 @@ class PropertyAdmin(admin.ModelAdmin):
         }),
     )
 
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
+
     def field_values(self, instance):
         values = instance.property_values.values_list('title', flat=True)
         if not values:
@@ -104,7 +122,12 @@ class PropertyAdmin(admin.ModelAdmin):
 
 @admin.register(odinass_models.PropertyValue)
 class PropertyValueAdmin(admin.ModelAdmin):
-    pass
+
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
 
 
 @admin.register(odinass_models.Product)
@@ -154,6 +177,12 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
             ),
         }),
     )
+
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
 
     def field_offers(self, instance):
         values = instance.offers.all()
@@ -219,6 +248,12 @@ class ProductOrderAdmin(SortableAdminMixin, admin.ModelAdmin):
         'field_order',
     ]
 
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
+
     def field_order(self, instance):
         return mark_safe(instance.order)
     field_order.short_description = 'порядок'
@@ -235,6 +270,12 @@ class PriceTypeAdmin(admin.ModelAdmin):
         'is_default',
     ]
 
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
+
 
 @admin.register(odinass_models.Offer)
 class OfferAdmin(admin.ModelAdmin):
@@ -247,6 +288,12 @@ class OfferAdmin(admin.ModelAdmin):
         'field_prices',
         'field_rests',
     ]
+
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
 
     def field_prices(self, instance):
         values = instance.prices.all()
@@ -266,12 +313,22 @@ class OfferAdmin(admin.ModelAdmin):
 
 @admin.register(odinass_models.Price)
 class PriceAdmin(admin.ModelAdmin):
-    pass
+
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
 
 
 @admin.register(odinass_models.Rest)
 class RestAdmin(admin.ModelAdmin):
-    pass
+
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False
 
 
 @admin.register(odinass_models.Log)
@@ -285,3 +342,9 @@ class LogAdmin(admin.ModelAdmin):
         'action',
         'status',
     ]
+
+    def has_add_permission(self, request):
+        """
+        Убираем возможность ручного добавления.
+        """
+        return False

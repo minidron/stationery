@@ -114,13 +114,13 @@ do ($=jQuery, window, document) ->
     $('.cart--item-delete--link').on 'click', (e) ->
       el = $ @
       $.ajax
-        type: 'DELETE'
-        url: '/api/orders/'
+        type: 'POST'
+        url: '/api/v2/orders/remove_from_cart/'
         headers: {
           'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
         }
         data: {
-          'offer': el.data 'deleteOfferId'
+          'offer_id': el.data 'deleteOfferId'
         }
         success: (data, status) =>
           el.closest('.cart--item').remove()

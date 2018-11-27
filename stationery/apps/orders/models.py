@@ -56,7 +56,7 @@ class DeliveryType(object):
 
     CHOICES = (
         (EXW, 'Самовывоз'),
-        (RUSSIANPOST, 'Почта России'),
+        # (RUSSIANPOST, 'Почта России'),
     )
 
     CHOICES_MACHINE_NAME = {
