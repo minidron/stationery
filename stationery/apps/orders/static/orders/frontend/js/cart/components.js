@@ -109,3 +109,125 @@ Vue.component('popup', {
     template: '<div class="offer-in-cart" v-if="show">{{ text }}</div>'
 });
 /* ------------------------------------------------------------------------- */
+
+
+/* Приложение для оплаты заказа.
+============================================================================ */
+Vue.component('delivery-address', {
+    props: {
+        value: String,
+        initValue: String,
+    },
+
+    beforeMount: function () {
+        let vm = this;
+
+        if (vm.$parent.deliveryAddress == '') {
+            vm.$parent.deliveryAddress = vm.initValue;
+        }
+    },
+
+    mounted: function () {
+        let vm = this;
+
+        vm.$jQuery(vm.$el).autocomplete({
+            serviceUrl: '/api/v2/addresses/suggest/',
+            dataType: 'json',
+            paramName: 'query',
+            deferRequestBy: 1000,
+            minChars: 2,
+
+            transformResult: function (response) {
+                return {
+                    suggestions: vm.$jQuery.map(response, function (dataItem) {
+                        return {
+                            value: dataItem.address,
+                            data: dataItem.zip_code,
+                        };
+                    }),
+                };
+            },
+
+            onSelect: function (response) {
+                vm.$emit('select', response.data);
+            },
+        });
+    },
+
+    destroyed: function () {
+        let vm = this;
+
+        vm.$jQuery(vm.$el).autocomplete('dispose');
+    },
+
+    template: '<input :value="value" @input="$emit(\'input\', $event.target.value)">',
+});
+
+
+Vue.component('delivery-type', {
+    props: {
+        id: String,
+        name: String,
+        required: String,
+        value: String,
+        initValue: String,
+        choices: Array,
+    },
+
+    beforeMount: function () {
+        let vm = this;
+
+        if (vm.$parent.deliveryType == '') {
+            vm.$parent.deliveryType = vm.initValue;
+        }
+    },
+
+    template: '\
+        <ul :id="id">\
+            <li v-for="(choice, index) in choices">\
+                <label :for="id + \'_\' + index">\
+                    <input type="radio" :name="name" :value="choice.value"\
+                        :id="id + \'_\' + index"\
+                        :checked="choice.value == value"\
+                        :required="required"\
+                        @input="$emit(\'input\', $event.target.value)">\
+                    {{ choice.label }}\
+                </label>\
+            </li>\
+        </ul>\
+    ',
+});
+
+
+Vue.component('delivery-zip', {
+    props: {
+        value: String,
+        initValue: String,
+    },
+
+    beforeMount: function () {
+        let vm = this;
+
+        if (vm.$parent.zipCode == '') {
+            vm.$parent.zipCode = vm.initValue;
+        }
+    },
+
+    template: '<input :value="value" @input="$emit(\'input\', $event.target.value)">',
+});
+
+
+Vue.component('delivery-price', {
+    props: {
+        value: Number,
+    },
+
+    computed: {
+        formatedValue: function () {
+            return toPriceString(this.value);
+        },
+    },
+
+    template: '<strong>{{ formatedValue }} руб.</strong>',
+});
+/* ------------------------------------------------------------------------- */

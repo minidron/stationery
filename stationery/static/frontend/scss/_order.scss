@@ -48,6 +48,25 @@
                 border-color: get($color, 'link', 'base');
             }
         }
+
+        &.address {
+            input {
+                max-width: 600px;
+            }
+        }
+
+        &.zip {
+            input {
+                max-width: 200px;
+            }
+        }
+
+        &.price {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font: $fw-regular 16px/20px $ff-PT-Sans;
+            color: get($color, 'text', 'base');
+        }
     }
 
     .error-row {

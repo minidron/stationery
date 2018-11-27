@@ -47,6 +47,24 @@ class OrderStatus(object):
     }
 
 
+class DeliveryType(object):
+    """
+    Тип доставки.
+    """
+    EXW = 1
+    RUSSIANPOST = 2
+
+    CHOICES = (
+        (EXW, 'Самовывоз'),
+        (RUSSIANPOST, 'Почта России'),
+    )
+
+    CHOICES_MACHINE_NAME = {
+        EXW: 'exw',
+        RUSSIANPOST: 'russianpost',
+    }
+
+
 class OrderQuerySet(models.QuerySet):
     def for_user(self, user):
         return self.filter(user=user)
@@ -77,6 +95,19 @@ class Order(models.Model):
     comment = models.TextField(
         'комментарий к заказу',
         blank=True)
+    delivery_type = models.IntegerField(
+        'тип доставки',
+        choices=DeliveryType.CHOICES, default=DeliveryType.EXW)
+    delivery_price = models.DecimalField(
+        'цена доставки',
+        default=0,
+        max_digits=12, decimal_places=2)
+    delivery_address = models.TextField(
+        'адрес доставки',
+        blank=True)
+    zip_code = models.CharField(
+        'почтовый индекс',
+        max_length=10, blank=True)
 
     objects = OrderQuerySet.as_manager()
 
@@ -145,11 +176,15 @@ class Order(models.Model):
             item.delete()
 
     @property
-    def amount(self):
+    def amount_without_delivery(self):
         result = 0
         for item in self.items.all():
             result += item.total_price
         return result
+
+    @property
+    def amount(self):
+        return self.amount_without_delivery + self.delivery_price
 
     @property
     def remaining_payment_sum(self):

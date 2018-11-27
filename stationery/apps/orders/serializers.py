@@ -52,3 +52,11 @@ class OrderSerializer(FieldsMixin, serializers.ModelSerializer):
         Получаем статус заказа в MACHINE_NAME.
         """
         return OrderStatus.CHOICES_MACHINE_NAME[obj.status]
+
+
+class AddressSerializer(serializers.Serializer):
+    """
+    Сериализатор для объекта `Адрес`.
+    """
+    address = serializers.CharField(max_length=255)
+    zip_code = serializers.CharField(max_length=6)

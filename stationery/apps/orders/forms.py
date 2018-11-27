@@ -6,7 +6,7 @@ from yandex_kassa.conf import settings as kassa_settings
 from yandex_kassa.forms import BasePaymentForm
 from yandex_kassa.models import PaymentMethod
 
-from orders.models import Item, Order
+from orders.models import Item, Order, DeliveryType
 
 
 class OrderForm(forms.ModelForm):
@@ -150,9 +150,39 @@ class UserProfile(forms.Form):
 
 
 class YaPaymentForm(BasePaymentForm):
+    delivery_type = forms.TypedChoiceField(
+        label='Доставка',
+        coerce=int,
+        widget=forms.RadioSelect(), choices=DeliveryType.CHOICES)
+    delivery_address = forms.CharField(
+        label='Адрес доставки',
+        required=False)
+    zip_code = forms.CharField(
+        label='Индекс',
+        required=False)
     payment_method_data = forms.ChoiceField(
         label='Способ оплаты',
         widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        delivery_type = cleaned_data['delivery_type']
+        delivery_address = cleaned_data['delivery_address']
+        zip_code = cleaned_data['zip_code']
+
+        if delivery_type == DeliveryType.RUSSIANPOST:
+            if not delivery_address:
+                msg = 'Для этого способа доставки требуется указать адрес.'
+                self.add_error('delivery_address', msg)
+
+            if not zip_code:
+                msg = 'Для этого способа доставки требуется указать индекс.'
+                self.add_error('zip_code', msg)
+            elif len(zip_code) != 6:
+                msg = 'Индекс должен состоять из 6 цифр.'
+                self.add_error('zip_code', msg)
+
+        return cleaned_data
 
     def get_payment_amount(self):
         return {

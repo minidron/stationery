@@ -251,7 +251,8 @@ class CartView(LoginRequiredMixin, FormView):
                     form.order.status = OrderStatus.INWORK
                     form.order.save()
                     self.send_mail(form)
-                self.success_url = reverse('account:history')
+                self.success_url = reverse('account:history_detail',
+                                           kwargs={'pk': form.order.pk})
 
             elif '_reset' in data:
                 form.order.items.all().delete()
@@ -323,9 +324,14 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
     def get_form_kwargs(self):
         kwargs = {}
         if self.request.method == 'GET':
+            order = self.get_object()
+
             kwargs['initial'] = {
                 'phone': self.request.user.profile.phone,
                 'email': self.request.user.email,
+                'delivery_type': order.delivery_type,
+                'delivery_address': order.delivery_address,
+                'zip_code': order.zip_code,
             }
         elif self.request.method in ('POST', 'PUT'):
             kwargs['data'] = self.request.POST
@@ -346,10 +352,23 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
         return super().get_context_data(**kwargs)
 
     def post(self, request, *args, **kwargs):
+        from orders.utils import fetch_delivery_price
+
         self.object = self.get_object()
         form = self.get_form()
 
         if form and form.is_valid():
+            form_data = form.cleaned_data
+            self.object.delivery_type = form_data.get('delivery_type')
+            self.object.delivery_address = form_data.get('delivery_address')
+            self.object.zip_code = form_data.get('zip_code')
+            self.object.delivery_price = fetch_delivery_price(
+                form_data.get('delivery_type'),
+                '142200',
+                form_data.get('zip_code'),
+                self.object.weight)
+            self.object.save()
+
             success_url = form.create_payment(request=request,
                                               order=self.object,
                                               payer=request.user)

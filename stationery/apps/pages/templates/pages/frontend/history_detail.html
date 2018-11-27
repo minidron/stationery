@@ -38,33 +38,96 @@
                     <tr>
                         <td>{{ item.offer.product.article }}</td>
                         <td><a href="{{ item.offer.get_absolute_url }}">{{ item }}</a></td>
-                        <td>{{ item.unit_price|price }} руб.</td>
+                        <td><span class="nowrap">{{ item.unit_price|price }} руб.</span></td>
                         <td>{{ item.quantity }}</td>
-                        <td>{{ item.total_price|price }} руб.</td>
+                        <td><span class="nowrap">{{ item.total_price|price }} руб.</span></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <div class="history-order--amount">Полная стоимость: <strong>{{ order.amount|price }} руб.</strong></div>
+        <div class="history-order--amount">Полная стоимость: <strong data-delivery-price="{{ order.amount_without_delivery }}">{{ order.amount_without_delivery|price }} руб.</strong></div>
 
         {% if form %}
-            <form class="order-form" method="POST" action="">{% csrf_token %}
-                {{ form.non_field_errors }}
+            <div id="order-payment-app">
+                <form class="order-form" method="POST" action="">{% csrf_token %}
+                    {{ form.non_field_errors }}
 
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
 
-                {% for field in form.visible_fields %}
                     <div class="field-row">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {{ field.errors }}
+                        {{ form.delivery_type.label_tag }}
+                        <delivery-type
+                            name="{{ form.delivery_type.name }}"
+                            id="{{ form.delivery_type.auto_id }}"
+                            init-value="{{ form.delivery_type.value }}"
+                            required="{{ form.delivery_type.field.required }}"
+                            v-model="deliveryType"
+                            :choices="[
+                                {% for value, text in form.delivery_type.field.choices %}
+                                {
+                                    label: '{{ text }}',
+                                    value: '{{ value }}',
+                                },
+                                {% endfor %}
+                            ]"
+                        ></delivery-type>
                     </div>
-                {% endfor %}
 
-                <div class="submit-row"><button class="submit" type="submit">Оплатить</button></div>
-            </form>
+                    <div v-show="deliveryType != 1" class="field-row address">
+                        {{ form.delivery_address.label_tag }}
+                        <delivery-address
+                            type="text"
+                            name="{{ form.delivery_address.name }}"
+                            id="{{ form.delivery_address.id_for_label }}"
+                            init-value="{{ form.delivery_address.value }}"
+                            v-model="deliveryAddress"
+                            @select="setZipCode"
+                        ></delivery-address>
+                        {{ form.delivery_address.errors }}
+                    </div>
+
+                    <div v-show="deliveryType != 1" class="field-row zip">
+                        {{ form.zip_code.label_tag }}
+                        <delivery-zip
+                            type="text"
+                            name="{{ form.zip_code.name }}"
+                            id="{{ form.zip_code.id_for_label }}"
+                            init-value="{{ form.zip_code.value }}"
+                            v-model="zipCode"
+                        ></delivery-zip>
+                        {{ form.zip_code.errors }}
+                    </div>
+
+                    <div v-show="deliveryPrice" class="field-row price">
+                        Стоимость доставки:
+                        <delivery-price
+                            :value="deliveryPrice"
+                        ></delivery-price>
+                    </div>
+
+                    <div class="field-row">
+                        {{ form.payment_method_data.label_tag }}
+                        {{ form.payment_method_data }}
+                        {{ form.payment_method_data.errors }}
+                    </div>
+
+                    <div class="field-row">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        {{ form.phone.errors }}
+                    </div>
+
+                    <div class="field-row">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+
+                    <div class="submit-row"><button class="submit" type="submit">Оплатить</button></div>
+                </form>
+            </div>
         {% endif %}
     </div>
 {% endblock %}

@@ -159,7 +159,7 @@ class Payment(models.Model):
         editable=False, blank=True, null=True)
 
     # Данные по заказу.
-    order_id = models.TextField(
+    order_id = models.CharField(
         'ID заказа',
         help_text='Внутренний номер заказа/товара.',
         max_length=100, blank=True)

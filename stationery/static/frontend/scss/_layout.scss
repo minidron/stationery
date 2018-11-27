@@ -33,6 +33,10 @@ body {
     }
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .noUi-base {
     .noUi-connect {
         background-color: $color-accent;
@@ -273,11 +277,16 @@ body {
     }
 }
 
+.header-search {
+    .autocomplete-suggestions {
+        top: 44px;
+        right: 0;
+        left: 0;
+        width: auto !important;
+    }
+}
+
 .autocomplete-suggestions {
-    top: 44px;
-    right: 0;
-    left: 0;
-    width: auto !important;
     box-sizing: border-box;
     box-shadow: 0 3px 8px 0 rgba(#000, 0.2),
                 0 0 0 1px rgba(#000, 0.08);
