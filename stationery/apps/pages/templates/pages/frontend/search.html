@@ -37,11 +37,19 @@
                             <div class="offer-price--availability">
                                 Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
                             </div>
-                            <div class="offer-price--cart">
-                                <div class="offer-price--quantity">
-                                    <input class="quantity" type="text" value="1">
+
+                            <offer-price
+                                offer-id="{{ offer.id }}"
+                                @offer-added="updateNavbarCart"
+                                @offer-limit-error="showLimitError"
+                            ></offer-price>
+
+                            <div class="likely-on-page">
+                                <div class="likely" data-url="{{ request.scheme }}://{{ request.get_host }}{{ offer.get_absolute_url }}" data-media="{{ request.scheme }}://{{ request.get_host }}{% if offer.product.image %}{{ offer.product.image.url }}{% endif %}" data-title="{{ offer.full_title }}">
+                                    <div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
+                                    <div class="facebook" title="Поделится facebook">facebook</div>
+                                    <div class="odnoklassniki" title="Класснуть">Класснуть</div>
                                 </div>
-                                <a href="#" class="add-cart" data-offer-id="{{ offer.id }}" data-offer-price="{{ offer.retail_price }}">В корзину</a>
                             </div>
                         </div>
                     </div>
