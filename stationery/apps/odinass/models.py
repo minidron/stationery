@@ -1,16 +1,20 @@
 import uuid
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Case, When
 from django.db.models import F, Sum, OuterRef, Prefetch, Subquery, Value
 from django.db.models import IntegerField
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.template.loader import render_to_string
 from django.urls import reverse
 
 from ckeditor.fields import RichTextField
 
 from django_resized import ResizedImageField
+
+from lib.email import create_email
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -526,3 +530,16 @@ class Log(models.Model):
 
     def __str__(self):
         return str(self.created)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.status == StatusLog.FAILD:
+            email = create_email(
+                'Ошибка выгрузки на сайт',
+                render_to_string('odinass/email/error_import_current.html', {
+                    'log': self,
+                }),
+                settings.EMAIL_OPT
+            )
+            email.send()
