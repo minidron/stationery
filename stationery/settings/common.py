@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'ckeditor',
     'sorl.thumbnail',
     'dynamic_preferences',
+    'logentry_admin',
     'odinass',
     'pages',
     'orders',
