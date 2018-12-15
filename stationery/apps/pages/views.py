@@ -4,17 +4,17 @@ import operator
 from functools import reduce
 
 from django import forms
-from django.db.models import Max, Min, Prefetch, Q
+from django.db.models import Q, Func, Max, Min, Prefetch
 from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, TemplateView
-
-from pages.models import Blog, Page, Slider
 
 from odinass.models import Category, Offer, Property, PropertyValue
 from odinass.serializers import SearchOfferFilter
 
 from orders.models import Office
+
+from pages.models import Blog, Page, Slider
 
 
 class IndexView(TemplateView):
@@ -36,6 +36,16 @@ class IndexView(TemplateView):
             'slider_list': Slider.objects.all(),
         })
         return context
+
+
+class Floor(Func):
+    function = 'FLOOR'
+    arity = 1
+
+
+class Ceiling(Func):
+    function = 'CEILING'
+    arity = 1
 
 
 class CategoryView(DetailView):
@@ -81,7 +91,9 @@ class CategoryView(DetailView):
         has_offers = True
         if not offers:
             has_offers = False
-        prices = offers.aggregate(Min('retail_price'), Max('retail_price'))
+        prices = offers.aggregate(
+            retail_price__min=Floor(Min('retail_price')),
+            retail_price__max=Ceiling(Max('retail_price')))
         order = 'title'
 
         property_values = Prefetch(
