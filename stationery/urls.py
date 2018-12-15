@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic import RedirectView, TemplateView
 
+from filebrowser.sites import site
+
 from rest_framework import routers
 
 from yandex_kassa.views import notification
@@ -37,6 +39,8 @@ urlpatterns = [
     url(r'^favicon.ico$',
         RedirectView.as_view(
             url=staticfiles_storage.url('favicon.ico'), permanent=True)),
+    url(r'^admin/filebrowser/',
+        include(site.urls)),
     url(r'^admin/',
         include(admin.site.urls)),
     url(r'^1c/',

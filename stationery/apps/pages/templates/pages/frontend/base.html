@@ -111,9 +111,10 @@
     {% endblock %}
 
     <main id="{% block main_id %}offers-cart-app{% endblock %}" class="main__section" style="
-        background-color: {{ global_preferences.фон__цвет }};
-        background-image: {% if global_preferences.фон__изображение %}url('{{ global_preferences.фон__изображение.url }}'){% else %}none{% endif %};
-        background-repeat: {% if global_preferences.фон__заполнение == '1' %}no-repeat{% else %}repeat{% endif %};
+        background-color: {{ background_color }};
+        background-image: {% if background_image %}url('{{ background_image }}'){% else %}none{% endif %};
+        background-repeat: {{ background_repeat }};
+        background-attachment: {{ background_attachment }};
         background-position: 50% 0;">
         <div class="main-container">
             {% block content %}

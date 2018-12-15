@@ -29,6 +29,7 @@ ADMINS = [
 SERVER_EMAIL = 'no-reply@kancmiropt.ru'
 
 INSTALLED_APPS = (
+    'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,8 +48,10 @@ INSTALLED_APPS = (
     'adminsortable2',
     'ckeditor',
     'sorl.thumbnail',
-    'dynamic_preferences',
     'logentry_admin',
+    'colorful',
+    'constance',
+    'constance.backends.database',
     'odinass',
     'pages',
     'orders',
@@ -80,8 +83,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'dynamic_preferences.processors.global_preferences',
                 'pages.context_processors.menu',
+                'pages.context_processors.config',
             ],
         },
     },
@@ -287,13 +290,52 @@ CELERY_TIMEZONE = 'Europe/Moscow'
 # -----------------------------------------------------------------------------
 
 
-# DYNAMIC PREFERENCES ---------------------------------------------------------
-DYNAMIC_PREFERENCES = {
-    'ADMIN_ENABLE_CHANGELIST_FORM': False,
-    'ENABLE_CACHE': True,
-    'MANAGER_ATTRIBUTE': 'preferences',
-    'REGISTRY_MODULE': 'dynamic_preferences_registry',
-    'SECTION_KEY_SEPARATOR': '__',
-    'VALIDATE_NAMES': True,
+# CONSTANCE PREFERENCES -------------------------------------------------------
+class FileBrowserSiteHack:
+    name = 'filebrowser'
+
+
+FILEBROWSER_DIRECTORY = ''
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_ADDITIONAL_FIELDS = {
+    'background_color': ['colorful.forms.RGBColorField', {}],
+    'background_repeat': ['django.forms.fields.ChoiceField', {
+        'widget': 'django.forms.Select',
+        'choices': (
+            ('no-repeat', 'Нет'),
+            ('repeat', 'Повторять'),
+        )
+    }],
+    'background_image': ['filebrowser.fields.FileBrowseUploadFormField', {
+        'widget': 'filebrowser.fields.FileBrowseUploadWidget',
+        'widget_kwargs': {
+            'attrs': {
+                'site': FileBrowserSiteHack,
+            },
+        },
+        'required': False,
+    }],
+    'background_attachment': ['django.forms.fields.ChoiceField', {
+        'widget': 'django.forms.Select',
+        'choices': (
+            ('scroll', 'Нет'),
+            ('fixed', 'Фиксированное'),
+        )
+    }],
+}
+
+CONSTANCE_CONFIG = {
+    'BACKGROUND_COLOR': ('#f7f7f7', 'Цвет фона', 'background_color'),
+    'BACKGROUND_REPEAT': ('no-repeat', 'Заполнение фона', 'background_repeat'),
+    'BACKGROUND_IMAGE': ('', 'Изображение', 'background_image'),
+    'BACKGROUND_ATTACHMENT': ('scroll', 'Фиксированное изображение',
+                              'background_attachment'),
+}
+
+CONSTANCE_CONFIG_FIELDSETS = {
+    'Фон': ('BACKGROUND_COLOR', 'BACKGROUND_REPEAT', 'BACKGROUND_IMAGE',
+            'BACKGROUND_ATTACHMENT'),
 }
 # -----------------------------------------------------------------------------
