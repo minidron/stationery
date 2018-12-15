@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -130,6 +131,32 @@ class PropertyValueAdmin(admin.ModelAdmin):
         return False
 
 
+class EmptyValueListFilter(admin.SimpleListFilter):
+    """
+    Базовый класс для фильтров: пустое поле или нет
+    """
+    field_name = 'image'
+    parameter_name = 'image'
+    title = 'есть изображение'
+
+    def lookups(self, request, model_admin):
+        return (
+            (1, 'Да'),
+            (0, 'Нет'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            params = (
+                Q(**{'%s' % self.field_name: ''})
+            )
+            if self.value() == '0':
+                return queryset.filter(params)
+            if self.value() == '1':
+                return queryset.exclude(params)
+        return queryset
+
+
 @admin.register(odinass_models.Product)
 class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     list_per_page = 10
@@ -147,6 +174,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
 
     list_filter = [
         'created',
+        EmptyValueListFilter,
         'is_favorite',
     ]
 
