@@ -15,6 +15,7 @@ from sorl.thumbnail.admin import AdminImageMixin
 from lib.utils import l
 
 from odinass import models as odinass_models
+from odinass.models import Category
 
 
 @admin.register(odinass_models.Category)
@@ -131,10 +132,7 @@ class PropertyValueAdmin(admin.ModelAdmin):
         return False
 
 
-class EmptyValueListFilter(admin.SimpleListFilter):
-    """
-    Базовый класс для фильтров: пустое поле или нет
-    """
+class EmptyImageListFilter(admin.SimpleListFilter):
     field_name = 'image'
     parameter_name = 'image'
     title = 'есть изображение'
@@ -157,6 +155,32 @@ class EmptyValueListFilter(admin.SimpleListFilter):
         return queryset
 
 
+class PublishedListFilter(admin.SimpleListFilter):
+    field_name = 'is_published'
+    parameter_name = 'is_published'
+    title = 'опубликовано на сайте'
+
+    def lookups(self, request, model_admin):
+        return (
+            (1, 'Да'),
+            (0, 'Нет'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            not_published_categories = (
+                Category.objects
+                        .get_queryset_descendants(
+                            Category.objects.filter(is_published=False),
+                            include_self=True))
+
+            if self.value() == '0':
+                return queryset.filter(category__in=not_published_categories)
+            if self.value() == '1':
+                return queryset.exclude(category__in=not_published_categories)
+        return queryset
+
+
 @admin.register(odinass_models.Product)
 class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     list_per_page = 10
@@ -174,7 +198,8 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
 
     list_filter = [
         'created',
-        EmptyValueListFilter,
+        EmptyImageListFilter,
+        PublishedListFilter,
         'is_favorite',
     ]
 
