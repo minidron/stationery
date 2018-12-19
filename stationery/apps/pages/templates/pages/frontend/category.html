@@ -23,6 +23,12 @@
 {% block content %}
     <h1 class="main--title">{{ category.title }}</h1>
 
+			{% if category.content %}
+					<div class="category-description ">
+							{{ category.content|safe }}
+					</div>
+			{% endif %}
+
     {% if category.get_children %}
         <div class="sub-categories-container">
             {% spaceless %}
@@ -170,9 +176,5 @@
     </form>
     {% endif %}
 
-    {% if category.content %}
-        <div class="category-description rounded">
-            {{ category.content|safe }}
-        </div>
-    {% endif %}
+    
 {% endblock content %}
