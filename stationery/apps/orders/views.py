@@ -332,6 +332,7 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
                 'delivery_type': order.delivery_type,
                 'delivery_address': order.delivery_address,
                 'zip_code': order.zip_code,
+                'weight': order.weight,
             }
         elif self.request.method in ('POST', 'PUT'):
             kwargs['data'] = self.request.POST

@@ -164,6 +164,12 @@ class YaPaymentForm(BasePaymentForm):
         label='Способ оплаты',
         widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        weight = kwargs.get('initial', {}).get('weight', 0)
+        if weight == 0:
+            self.fields['delivery_type'].choices = [DeliveryType.CHOICES[0]]
+
     def clean(self):
         cleaned_data = super().clean()
         delivery_type = cleaned_data['delivery_type']

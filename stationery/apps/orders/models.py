@@ -56,7 +56,7 @@ class DeliveryType(object):
 
     CHOICES = (
         (EXW, 'Самовывоз'),
-        # (RUSSIANPOST, 'Почта России'),
+        (RUSSIANPOST, 'Почта России'),
     )
 
     CHOICES_MACHINE_NAME = {
@@ -184,7 +184,7 @@ class Order(models.Model):
 
     @property
     def amount(self):
-        return self.amount_without_delivery + self.delivery_price
+        return float(self.amount_without_delivery) + float(self.delivery_price)
 
     @property
     def remaining_payment_sum(self):
