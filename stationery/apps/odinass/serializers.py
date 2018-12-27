@@ -33,7 +33,8 @@ class OfferTitleFilter(django_filters.Filter):
         else:
             full_name_clauses = reduce(
                 operator.and_,
-                [Q(full_name__iregex=r'(^|\s)%s' % escape(v)) for v in bits])
+                [Q(full_name__iregex=r'(^|\s|\[)%s' % escape(v))
+                 for v in bits])
 
         unpublished = Category.objects.get_queryset_descendants(
             Category.objects.filter(is_published=False),
