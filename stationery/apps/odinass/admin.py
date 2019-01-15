@@ -199,9 +199,11 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     list_filter = [
         'created',
         EmptyImageListFilter,
-        PublishedListFilter,
+        # PublishedListFilter,
         'is_favorite',
     ]
+
+    date_hierarchy = 'created'
 
     readonly_fields = [
         'article',
@@ -255,6 +257,17 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
         ]
         urls.extend(super().get_urls())
         return urls
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        not_published_categories = (
+            Category.objects
+                    .get_queryset_descendants(
+                        Category.objects.filter(is_published=False),
+                        include_self=True))
+
+        return qs.exclude(category__in=not_published_categories)
 
     def delete_property_view(self, request, **kwargs):
         product = odinass_models.Product.objects.get(pk=kwargs['pk'])
