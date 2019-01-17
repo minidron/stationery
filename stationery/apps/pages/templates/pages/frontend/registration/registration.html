@@ -12,7 +12,8 @@
             <div class="field-row">
                 {{ form.username.label_tag }}
                 {{ form.username }}
-                {{ form.username.errors }}
+								{{ form.username.errors }}
+								<p>Имя пользователя должно содержать латинские буквы и символы без пробелов ( Пример: Ivanov_Ivan )</p>
             </div>
             <div class="field-row">
                 {{ form.password1.label_tag }}

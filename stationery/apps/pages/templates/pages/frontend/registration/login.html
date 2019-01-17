@@ -8,11 +8,12 @@
 
     <div class="registration-form rounded">
         <form method="POST">{% csrf_token %}
-            <input type="hidden" name="next" value="{{ next|default:'/' }}">
+						<input type="hidden" name="next" value="{{ next|default:'/' }}">
             <div class="field-row">
                 {{ form.username.label_tag }}
-                {{ form.username }}
-            </div>
+								{{ form.username }}							
+						</div>
+						
             <div class="field-row">
                 {{ form.password.label_tag }}
                 {{ form.password }}
