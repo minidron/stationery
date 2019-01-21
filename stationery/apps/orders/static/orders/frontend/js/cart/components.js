@@ -55,7 +55,8 @@ Vue.component('offer-price', {
                     }
                 })
                 .catch(function (error) {
-                    console.log(error)
+                    url = window.location.origin + '/account/login/';
+                    window.location.replace(url);
                 });
         },
     },
