@@ -63,6 +63,11 @@ LOGGING = {
             'handlers': ['sentry'],
             'propagate': False,
         },
+        'odinass': {
+            'level': 'ERROR',
+            'handlers': ['sentry'],
+            'propagate': False,
+        },
         'yandex_money': {
             'level': 'ERROR',
             'handlers': ['sentry'],
