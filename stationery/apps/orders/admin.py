@@ -8,6 +8,8 @@ from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
 
+from hijack_admin.admin import HijackUserAdminMixin
+
 from orders.models import (GroupSettings, Item, Office, Order, OrderStatus,
                            Profile)
 
@@ -107,7 +109,7 @@ class GroupSettingsInline(admin.StackedInline):
     verbose_name_plural = 'Настройки'
 
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(UserAdmin, HijackUserAdminMixin):
     inlines = (ProfileInline, )
 
     list_display = [
@@ -118,6 +120,7 @@ class CustomUserAdmin(UserAdmin):
         'last_name',
         'field_inn',
         'field_price_type',
+        'hijack_field',
     ]
 
     def field_company(self, instance):

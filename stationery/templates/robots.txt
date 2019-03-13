@@ -5,3 +5,4 @@ Disallow: /account/
 Disallow: /admin/
 Disallow: /api/
 Disallow: /autocomplete/
+Disallow: /hijack/

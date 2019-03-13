@@ -52,6 +52,9 @@ INSTALLED_APPS = (
     'colorful',
     'constance',
     'constance.backends.database',
+    'hijack',
+    'hijack_admin',
+    'compat',
     'odinass',
     'pages',
     'orders',
@@ -287,6 +290,14 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 CELERY_RESULT_BACKEND = 'rpc'
 CELERY_TRACK_STARTED = True
 CELERY_TIMEZONE = 'Europe/Moscow'
+# -----------------------------------------------------------------------------
+
+
+# CONSTANCE PREFERENCES -------------------------------------------------------
+HIJACK_LOGIN_REDIRECT_URL = '/'
+HIJACK_LOGOUT_REDIRECT_URL = '/admin/auth/user/'
+HIJACK_ALLOW_GET_REQUESTS = True
+HIJACK_REGISTER_ADMIN = False
 # -----------------------------------------------------------------------------
 
 

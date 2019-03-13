@@ -45,6 +45,8 @@ urlpatterns = [
         include(admin.site.urls)),
     url(r'^1c/',
         include('odinass.urls', namespace='1c')),
+    url(r'^hijack/',
+        include('hijack.urls', namespace='hijack')),
     url(r'^',
         include('pages.urls', namespace='pages')),
 ]
