@@ -264,6 +264,8 @@ do ($=jQuery, window, document) ->
   # POPUP FILTER
   # ---------------------------------------------------------------------------
   $(document).ready ->
+		if ($(window).width() < 720)
+			$('.mobile-hide').hide()
   $('.slide-toggle').click ->
     $('.mobile-hide').slideToggle()
     return

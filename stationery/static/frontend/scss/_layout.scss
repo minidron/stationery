@@ -118,7 +118,8 @@ body {
             display: inline-block;
 						font-size: 18px;
 						@include media('<=phone') {
-							font-size: 14px;	
+							font-size: 14px;
+							display: none;	
 						}
 						@include media('<=tablet') {
 							font-size: 14px;
@@ -337,7 +338,7 @@ body {
     .header__section{
 
         .header-panel{
-				height:100px;
+				height:50px;
 				flex-flow:column;
 				padding-top: 10px;
         }
@@ -352,7 +353,7 @@ body {
             }
         }
         .header-auth{
-            padding-bottom:3px;
+            padding-bottom:20px;
         }
         }
 /*--------------------------------*/
@@ -364,7 +365,12 @@ body {
 /* NAV
 ============================================================================ */
 .navbar__section {
-    background-color: get($color, 'nav', 'background');
+		background-color: get($color, 'nav', 'background');
+		@include media('<=phone') {
+			position: absolute;
+			top:0;
+			z-index: 999;
+		}
 
     .navbar-container {
         @include responsive-block;
@@ -383,7 +389,8 @@ body {
                 color: white;
                 font-size: 26px;
                 padding-top: 10px;
-                display: inherit;
+								display: inherit;
+								padding-bottom: 10px;
             }
         }
     }
@@ -438,7 +445,10 @@ body {
             background-color: mix($color-secondary, #FFF, 90%);
 						transition: background-color $base-transition;
 						@include media('<=phone') {
-							width: 100%;
+							position: absolute;
+							top:0;
+							float: left;
+							width:100px;
 						}
 
             &:before {
@@ -475,7 +485,7 @@ body {
     .breadcrumbs-container {
 				@include responsive-block;
 				@include media('<=phone') {
-					height: 140px;
+					display: none;
 				}
     }
 
