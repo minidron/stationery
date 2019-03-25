@@ -269,7 +269,7 @@ class CartView(LoginRequiredMixin, FormView):
         if user.groups.filter(name='Оптовик'):
             email_address = settings.EMAIL_OPT
         else:
-            email_address = settings.EMAIL_PRIVATE
+            return True
 
         body_html = render_to_string(
             'orders/mail_order.html',
