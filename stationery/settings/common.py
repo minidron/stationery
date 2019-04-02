@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'odinass',
     'pages',
     'orders',
+    'cart',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,6 +89,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'pages.context_processors.menu',
                 'pages.context_processors.config',
+                'cart.context_processors.cart',
             ],
         },
     },

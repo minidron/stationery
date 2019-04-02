@@ -323,7 +323,7 @@ class Price(models.Model):
 
 
 class OfferQuerySet(models.QuerySet):
-    def offers(self, user=None, category=None):
+    def offers(self, user=None, category=None, ids=None):
         price_params = {}
         if user and hasattr(user, 'profile') and user.profile.price_type:
             price_params['price_type'] = user.profile.price_type
@@ -340,6 +340,8 @@ class OfferQuerySet(models.QuerySet):
         offer_params = {}
         if category:
             offer_params['product__category'] = category
+        if ids:
+            offer_params['pk__in'] = ids
 
         return (Offer.objects
                      .select_related('product')

@@ -107,14 +107,12 @@
                 </li>
             </ul>
             {% block navbar_cart %}
-                {% if user.is_authenticated %}
-                    <div v-cloak id="navbar-cart-app" class="navbar-cart">
-                        <cart-link
-                            initial-amount="{{ cart.amount|price|default:'0' }}"
-                            href="{% url 'account:cart' %}"
-                            :amount="amount"></cart-link>
-                    </div>
-                {% endif %}
+                <div v-cloak id="navbar-cart-app" class="navbar-cart">
+                    <cart-link
+                        initial-amount="{{ cart.get_total_price|price|default:'0' }}"
+                        href="{% url 'account:cart' %}"
+                        :amount="amount"></cart-link>
+                </div>
             {% endblock %}
         </div>
     </nav>
