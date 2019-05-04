@@ -35,9 +35,9 @@ class ItemFormSet(object):
     """
     Формсет для товаров в корзине.
     """
-    def __init__(self, data=None, order=None):
+    def __init__(self, data=None, cart=None):
         self.data = data or {}
-        self.order = order
+        self.cart = cart
 
     def __iter__(self):
         return iter(self.forms)
@@ -52,7 +52,7 @@ class ItemFormSet(object):
         Формируем формы товаров.
         """
         forms = []
-        for item in self.order.items.select_related('offer').all():
+        for item in self.cart:
             defaults = {
                 'data': self.data or None,
                 'prefix': self.add_prefix(item.id),

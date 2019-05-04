@@ -40,7 +40,7 @@ Vue.component('offer-price', {
 
             vm.$http({
                 method: 'post',
-                url: '/api/v2/orders/add_to_cart/',
+                url: '/api/v2/cart/add_to_cart/',
                 data: {
                     offer_id: vm.offerId,
                     quantity: vm.quantity,

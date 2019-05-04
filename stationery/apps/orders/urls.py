@@ -1,5 +1,7 @@
 from django.conf.urls import url
 
+from cart import views as cart_views
+
 from orders import views as orders_views
 
 
@@ -7,7 +9,7 @@ urlpatterns = [
     url(r'^$',
         orders_views.UserProfileView.as_view(), name='index'),
     url(r'^cart/$',
-        orders_views.CartView.as_view(), name='cart'),
+        cart_views.CartView.as_view(), name='cart'),
     url(r'^registration/$',
         orders_views.RegistrationView.as_view(), name='registration'),
     url(r'^profile/$',

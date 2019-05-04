@@ -12,7 +12,7 @@ window.navbarCart = new Vue({
         fetchCart: function (e) {
             let vm = this;
 
-            vm.$http.get('/api/v2/orders/cart/')
+            vm.$http.get('/api/v2/cart/cart/')
                 .then(function (response) {
                     vm.amount = toPriceString(response.data.amount);
                 })

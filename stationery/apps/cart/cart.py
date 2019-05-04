@@ -19,6 +19,9 @@ class Cart(object):
 
     def __iter__(self):
         offer_ids = self.cart.keys()
+        if not offer_ids:
+            return
+
         offers = Offer.objects.offers(user=self.request.user, ids=offer_ids)
 
         for offer in offers:
@@ -44,13 +47,22 @@ class Cart(object):
         """
         Добавление нового товара в корзину или изменение кол-ва.
         """
+        offer_id = str(offer_id)
+
         if offer_id not in self.cart:
             self.cart[offer_id] = {'quantity': 0}
 
         if update_quantity:
-            self.cart[offer_id]['quantity'] = quantity
+            new_quantity = quantity
         else:
-            self.cart[offer_id]['quantity'] += quantity
+            new_quantity = self.cart[offer_id]['quantity'] + quantity
+
+        # Если на складе не хватает товара, то мы не его добавляем в корзину.
+        instance = Offer.objects.get(pk=offer_id)
+        if new_quantity > instance.rest_limit:
+            return -1
+
+        self.cart[offer_id]['quantity'] = new_quantity
 
         if self.cart[offer_id]['quantity'] == 0:
             del self.cart[offer_id]
@@ -61,6 +73,8 @@ class Cart(object):
         """
         Удаление товара из корзины.
         """
+        offer_id = str(offer_id)
+
         if offer_id in self.cart:
             del self.cart[offer_id]
             self.save()

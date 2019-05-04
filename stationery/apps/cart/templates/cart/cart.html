@@ -1,0 +1,51 @@
+{% extends "pages/frontend/base.html" %}
+
+{% load pages_tag %}
+
+
+{% block body_class %}cart_page{% endblock %}
+
+
+{% block navbar_cart %}{% endblock %}
+
+{% block content %}
+    <h1 class="main--title">Ваша корзина</h1>
+    <div class="cart-container rounded">
+        <form method="POST">{% csrf_token %}
+            {% for item_form in form %}
+                <div class="cart--item">
+                    {% with item_form.offer as offer %}
+                        <div class="cart--item-offer">
+                            <span class="article">{{ offer.product.article }}</span>
+                            <a class="cart--item-offer--link" href="{{ offer.get_absolute_url }}">{{ offer }}</a>
+                        </div>
+                        <div class="cart--item-quantity{% if item_form.quantity.errors %} error{% endif %}">
+                            {{ item_form.quantity }}
+                            <div class="cart--item-quantity--error">{{ item_form.quantity.errors }}</div>
+                        </div>
+                        <div class="cart--item-unit_price">x {{ offer.retail_price|price }}</div>
+                        <div class="cart--item-total_price">= {{ item_form.instance.total_price|price }}</div>
+                        <div class="cart--item-delete"><a class="cart--item-delete--link" href="#" data-delete-offer-id="{{ item_form.instance.offer.id }}"></a></div>
+                    {% endwith %}
+                </div>
+            {% endfor %}
+
+            <div class="field-row">
+                {{ order_form.comment.label_tag }}
+                {{ order_form.comment }}
+                {{ order_form.comment.errors }}
+            </div>
+
+            <div class="cart-info">
+                <div class="cart-info--save">
+                    <button class="submit" type="submit" name="_save">Сохранить изменения</button>
+                    <button class="reset" type="submit" name="_reset">Очистить корзину</button>
+                </div>
+                <div class="cart-info--price">= {{ cart.amount|default:'0'|price }}</div>
+                <div class="cart-info--send">
+                    <button class="submit" type="submit" name="_submit">Оформить заказ</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
