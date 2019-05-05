@@ -17,6 +17,7 @@
             {% for item_form in form %}
                 {% with item_form.offer as offer %}
                     <cart-offer
+                        @price-update="updateTotalPrice"
                         name="{{ item_form.prefix }}-{{ item_form.quantity.name }}"
                         limit="{{ offer.rest_limit }}"
                         offer-id="{{ offer.id }}"
@@ -28,10 +29,6 @@
                 {% endwith %}
             {% endfor %}
 
-
-
-
-
             <div class="field-row">
                 {{ order_form.comment.label_tag }}
                 {{ order_form.comment }}
@@ -40,10 +37,12 @@
 
             <div class="cart-info">
                 <div class="cart-info--save">
-                    <button class="submit" type="submit" name="_save">Сохранить изменения</button>
-                    <button class="reset" type="submit" name="_reset">Очистить корзину</button>
+                    <clear-cart
+                        @clear-cart="clearCart"></clear-cart>
                 </div>
-                <div class="cart-info--price">= {{ cart.amount|default:'0'|price }}</div>
+                <cart-total
+                    initial-total="{{ cart.get_total_price|default:'0' }}"
+                    :total="total"></cart-total>
                 <div class="cart-info--send">
                     <button class="submit" type="submit" name="_submit">Оформить заказ</button>
                 </div>

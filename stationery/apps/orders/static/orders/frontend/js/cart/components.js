@@ -136,8 +136,11 @@ Vue.component('cart-offer', {
         formatedPrice: function () {
             return toPriceString(this.price.replace(',', '.'));
         },
+        total: function () {
+            return this.price.replace(',', '.') * this.quantity;
+        },
         formatedTotalPrice: function () {
-            return toPriceString(this.price.replace(',', '.') * this.quantity);
+            return toPriceString(this.total);
         },
     },
 
@@ -159,6 +162,7 @@ Vue.component('cart-offer', {
                     }
                     else {
                         vm.quantity = e.target.value;
+                        vm.$emit('price-update');
                     }
                 })
                 .catch(function (error) {
@@ -178,6 +182,7 @@ Vue.component('cart-offer', {
             })
                 .then(function (response) {
                     vm.show = false;
+                    vm.$emit('price-update');
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -206,6 +211,30 @@ Vue.component('cart-offer', {
             </div>\
         </div>\
     '
+});
+
+
+Vue.component('cart-total', {
+    props: {
+        total: Number,
+        initialTotal: String,
+    },
+
+    computed: {
+        displayTotal: function () {
+            let total = this.initialTotal.replace(',', '.');
+
+            if (this.total !== undefined) total = this.total;
+            return toPriceString(total);
+        },
+    },
+
+    template: '<div class="cart-info--price">= {{ displayTotal }}</div>'
+});
+
+
+Vue.component('clear-cart', {
+    template: '<button @click.prevent="$emit(\'clear-cart\')" class="reset">Очистить корзину</button>'
 });
 /* ------------------------------------------------------------------------- */
 

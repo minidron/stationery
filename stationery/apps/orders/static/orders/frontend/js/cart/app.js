@@ -30,6 +30,43 @@ window.navbarCart = new Vue({
 window.сartPage = new Vue({
     delimiters: ['[[', ']]'],
     el: '#cart-app',
+
+    data: {
+        total: undefined,
+    },
+
+    methods: {
+        clearCart: function (e) {
+            let vm = this;
+
+            vm.$http.post('/api/v2/cart/clear_cart/')
+                .then(function (response) {
+                    vm.$children.forEach(function (el) {
+                        if (el.$options.name == 'cart-offer') {
+                            el.show = false;
+                        }
+                    })
+
+                    vm.total = 0;
+                })
+                .catch(function (error) {
+                    console.log(error)
+                });
+        },
+
+        updateTotalPrice: function (e) {
+            let vm = this,
+                total = 0;
+
+            vm.$children.forEach(function (el) {
+                if (el.$options.name == 'cart-offer' && el.show) {
+                    total += el.total;
+                }
+            })
+
+            vm.total = total;
+        },
+    },
 });
 /* ------------------------------------------------------------------------- */
 

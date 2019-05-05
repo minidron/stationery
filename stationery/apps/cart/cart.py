@@ -41,7 +41,8 @@ class Cart(object):
         """
         Очистка корзины.
         """
-        del self.session[CART_SESSION_ID]
+        self.session[CART_SESSION_ID] = {}
+        self.session.modified = True
 
     def add_offer(self, offer_id, quantity=1, update_quantity=False):
         """
@@ -60,6 +61,8 @@ class Cart(object):
         # Если на складе не хватает товара, то мы не его добавляем в корзину.
         instance = Offer.objects.get(pk=offer_id)
         if new_quantity > instance.rest_limit:
+            if self.cart[offer_id]['quantity'] == 0:
+                del self.cart[offer_id]
             return -1
 
         self.cart[offer_id]['quantity'] = new_quantity

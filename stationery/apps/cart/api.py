@@ -56,3 +56,12 @@ class CartViewSet(viewsets.ViewSet):
         cart = Cart(request)
         cart.remove_offer(item['offer_id'])
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'])
+    def clear_cart(self, request):
+        """
+        Очищаем корзину.
+        """
+        cart = Cart(request)
+        cart.clear()
+        return Response({'success': 'cart clear'})
