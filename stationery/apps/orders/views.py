@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
@@ -7,7 +7,11 @@ from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.views.generic import DetailView, FormView, ListView, TemplateView
+
+from cart.conf import CART_SESSION_ID
 
 from lib.email import create_email
 
@@ -167,6 +171,17 @@ class UserLogoutView(LogoutView):
     Выход пользователя.
     """
     next_page = reverse_lazy('index')
+
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        cart = request.session.get(CART_SESSION_ID)
+        auth_logout(request)
+        if cart is not None:
+            request.session[CART_SESSION_ID] = cart
+        next_page = self.get_next_page()
+        if next_page:
+            return HttpResponseRedirect(next_page)
+        return super(LogoutView, self).dispatch(request, *args, **kwargs)
 
 
 class CartView(LoginRequiredMixin, FormView):

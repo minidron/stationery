@@ -8,27 +8,29 @@
 
 {% block navbar_cart %}{% endblock %}
 
+{% block main_id %}cart-app{% endblock %}
+
 {% block content %}
     <h1 class="main--title">Ваша корзина</h1>
     <div class="cart-container rounded">
         <form method="POST">{% csrf_token %}
             {% for item_form in form %}
-                <div class="cart--item">
-                    {% with item_form.offer as offer %}
-                        <div class="cart--item-offer">
-                            <span class="article">{{ offer.product.article }}</span>
-                            <a class="cart--item-offer--link" href="{{ offer.get_absolute_url }}">{{ offer }}</a>
-                        </div>
-                        <div class="cart--item-quantity{% if item_form.quantity.errors %} error{% endif %}">
-                            {{ item_form.quantity }}
-                            <div class="cart--item-quantity--error">{{ item_form.quantity.errors }}</div>
-                        </div>
-                        <div class="cart--item-unit_price">x {{ offer.retail_price|price }}</div>
-                        <div class="cart--item-total_price">= {{ item_form.instance.total_price|price }}</div>
-                        <div class="cart--item-delete"><a class="cart--item-delete--link" href="#" data-delete-offer-id="{{ item_form.instance.offer.id }}"></a></div>
-                    {% endwith %}
-                </div>
+                {% with item_form.offer as offer %}
+                    <cart-offer
+                        name="{{ item_form.prefix }}-{{ item_form.quantity.name }}"
+                        limit="{{ offer.rest_limit }}"
+                        offer-id="{{ offer.id }}"
+                        article="{{ offer.product.article }}"
+                        title="{{ offer }}"
+                        link="{{ offer.get_absolute_url }}"
+                        init-quantity="{{ item_form.quantity.value }}"
+                        price="{{ offer.retail_price }}"></cart-offer>
+                {% endwith %}
             {% endfor %}
+
+
+
+
 
             <div class="field-row">
                 {{ order_form.comment.label_tag }}

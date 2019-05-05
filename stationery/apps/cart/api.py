@@ -33,6 +33,19 @@ class CartViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'])
+    def update_cart(self, request):
+        """
+        Обновляем кол-во товара в корзине.
+        """
+        serializer = ItemSSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        item = dict(serializer.validated_data)
+        cart = Cart(request)
+        if cart.add_offer(**item, update_quantity=True) == -1:
+            return Response({'error': 'limit'}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'])
     def remove_from_cart(self, request):
         """
         Удаляем товар из корзины.

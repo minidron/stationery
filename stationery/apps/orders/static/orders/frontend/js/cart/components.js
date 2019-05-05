@@ -55,8 +55,7 @@ Vue.component('offer-price', {
                     }
                 })
                 .catch(function (error) {
-                    url = window.location.origin + '/account/login/';
-                    window.location.replace(url);
+                    console.log(error);
                 });
         },
     },
@@ -108,6 +107,105 @@ Vue.component('popup', {
     },
 
     template: '<div class="offer-in-cart" v-if="show">{{ text }}</div>'
+});
+/* ------------------------------------------------------------------------- */
+
+
+/* Приложения для страницы корзины.
+============================================================================ */
+Vue.component('cart-offer', {
+    props: {
+        name: String,
+        limit: String,
+        offerId: String,
+        article: String,
+        title: String,
+        link: String,
+        initQuantity: String,
+        price: String,
+    },
+
+    data: function () {
+        return {
+            quantity: this.initQuantity,
+            show: true,
+        };
+    },
+
+    computed: {
+        formatedPrice: function () {
+            return toPriceString(this.price.replace(',', '.'));
+        },
+        formatedTotalPrice: function () {
+            return toPriceString(this.price.replace(',', '.') * this.quantity);
+        },
+    },
+
+    methods: {
+        updateItem: function (e) {
+            let vm = this;
+
+            vm.$http({
+                method: 'post',
+                url: '/api/v2/cart/update_cart/',
+                data: {
+                    offer_id: vm.offerId,
+                    quantity: e.target.value,
+                },
+            })
+                .then(function (response) {
+                    if (response.data.hasOwnProperty('error')) {
+                        e.target.value = vm.quantity;
+                    }
+                    else {
+                        vm.quantity = e.target.value;
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        deleteItem: function (e) {
+            let vm = this;
+
+            vm.$http({
+                method: 'post',
+                url: '/api/v2/cart/remove_from_cart/',
+                data: {
+                    offer_id: vm.offerId,
+                },
+            })
+                .then(function (response) {
+                    vm.show = false;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+    },
+
+    template: '\
+        <div class="cart--item" v-if="show">\
+            <div class="cart--item-offer">\
+                <span class="article">{{ article }}</span>\
+                <a class="cart--item-offer--link" :href="link">{{ title }}</a>\
+            </div>\
+            <div class="cart--item-quantity">\
+                <div>{{ limit }}</div>\
+                <input type="text" required="required"\
+                    :name="name"\
+                    :value="quantity"\
+                    @input="updateItem"\
+                >\
+            </div>\
+            <div class="cart--item-unit_price">x {{ formatedPrice }}</div>\
+            <div class="cart--item-total_price">= {{ formatedTotalPrice }}</div>\
+            <div class="cart--item-delete">\
+                <a @click.prevent="deleteItem" class="cart--item-delete--link" href="#"></a>\
+            </div>\
+        </div>\
+    '
 });
 /* ------------------------------------------------------------------------- */
 

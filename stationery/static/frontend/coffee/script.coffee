@@ -91,46 +91,6 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
 
 
-  # КОРЗИНА ТОВАРОВ
-  # ---------------------------------------------------------------------------
-  $ ->
-    $('.cart--item-quantity input').on 'keyup change', (e) ->
-      el = $ @
-      txt = el.closest('.cart--item').find('.cart--item-unit_price').text()
-      price = parseFloat txt.replace /[^\d\.]+/g, ''
-      totalPrice = el.val() * price
-      el.closest('.cart--item').find('.cart--item-total_price').text "= #{toPrice(totalPrice)}"
-      $('.cart-info--price').trigger 'htmlchange'
-
-
-    $('.cart-info--price').on 'htmlchange', (e) ->
-      el = $ @
-      sum = 0
-      $.each $('.cart--item-total_price'), ->
-        sum += parseFloat $(this).text().replace /[^\d\.]+/g, ''
-      el.text "= #{toPrice(sum)}"
-
-
-    $('.cart--item-delete--link').on 'click', (e) ->
-      el = $ @
-      $.ajax
-        type: 'POST'
-        url: '/api/v2/orders/remove_from_cart/'
-        headers: {
-          'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
-        }
-        data: {
-          'offer_id': el.data 'deleteOfferId'
-        }
-        success: (data, status) =>
-          el.closest('.cart--item').remove()
-          $('.cart-info--price').trigger 'htmlchange'
-          console.log status
-        error: (data, status) =>
-          console.log status
-  # ---------------------------------------------------------------------------
-
-
   # PRICE SLIDER
   # ---------------------------------------------------------------------------
   $ ->
