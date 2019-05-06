@@ -10,6 +10,8 @@ urlpatterns = [
         orders_views.UserProfileView.as_view(), name='index'),
     url(r'^cart/$',
         cart_views.CartView.as_view(), name='cart'),
+    url(r'^payment/$',
+        cart_views.PaymentView.as_view(), name='payment'),
     url(r'^registration/$',
         orders_views.RegistrationView.as_view(), name='registration'),
     url(r'^profile/$',

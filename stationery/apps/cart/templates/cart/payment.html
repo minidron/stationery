@@ -1,0 +1,133 @@
+{% extends "pages/frontend/base.html" %}
+
+{% load pages_tag %}
+
+
+{% block body_class %}cart_page{% endblock %}
+
+
+{% block navbar_cart %}{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">Оплата и доставка</h1>
+    <div class="cart-container rounded">
+        <form method="POST">{% csrf_token %}
+            <div class="field-row order-form">
+                {{ form.non_field_errors }}
+
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                <div class="order-field-row">
+                    {{ form.delivery_type.label_tag }}
+                    <delivery-type
+                        name="{{ form.delivery_type.name }}"
+                        id="{{ form.delivery_type.auto_id }}"
+                        init-value="{{ form.delivery_type.value }}"
+                        required="{{ form.delivery_type.field.required }}"
+                        v-model="deliveryType"
+                        :choices="[
+                            {% for value, text in form.delivery_type.field.choices %}
+                            {
+                                label: '{{ text }}',
+                                value: '{{ value }}',
+                            },
+                            {% endfor %}
+                        ]"
+                    ></delivery-type>
+                </div>
+
+                <div v-show="deliveryType != 1" class="order-field-row address">
+                    {{ form.delivery_address.label_tag }}
+                    <delivery-address
+                        type="text"
+                        name="{{ form.delivery_address.name }}"
+                        id="{{ form.delivery_address.id_for_label }}"
+                        init-value="{{ form.delivery_address.value }}"
+                        v-model="deliveryAddress"
+                        @select="setZipCode"
+                    ></delivery-address>
+                    {{ form.delivery_address.errors }}
+                </div>
+
+                <div v-show="deliveryType != 1" class="order-field-row zip">
+                    {{ form.zip_code.label_tag }}
+                    <delivery-zip
+                        type="text"
+                        name="{{ form.zip_code.name }}"
+                        id="{{ form.zip_code.id_for_label }}"
+                        init-value="{{ form.zip_code.value }}"
+                        v-model="zipCode"
+                    ></delivery-zip>
+                    {{ form.zip_code.errors }}
+                </div>
+
+                <div v-show="deliveryPrice" class="order-field-row price">
+                    Стоимость доставки:
+                    <delivery-price
+                        :value="deliveryPrice"
+                    ></delivery-price>
+                </div>
+
+                <div class="order-field-row">
+                    {{ form.payment_method_data.label_tag }}
+                    {{ form.payment_method_data }}
+                    {{ form.payment_method_data.errors }}
+                </div>
+
+                <div class="order-field-row">
+                    {{ form.phone.label_tag }}
+                    {{ form.phone }}
+                    {{ form.phone.errors }}
+                </div>
+
+                <div class="order-field-row">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+            </div>
+
+            <div class="field-row">
+                <table class="history-order--table">
+                    <thead>
+                        <tr>
+                            <th>Код</th>
+                            <th>Товар</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Итого</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart %}
+                            <tr>
+                                {% with item.instance as offer %}
+                                    <td>{{ offer.product.article }}</td>
+                                    <td><a href="{{ offer.get_absolute_url }}">{{ offer }}</a></td>
+                                    <td><span class="nowrap">{{ offer.retail_price|price }} руб.</span></td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td><span class="nowrap">{{ offer.retail_price|price }} руб.</span></td>
+                                {% endwith %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-info">
+                <div class="cart-info--save">
+                    <a href="{% url 'account:cart' %}" class="reset">Назад</a>
+                </div>
+                <cart-total
+                    initial-total="{{ cart.get_total_price|default:'0' }}"
+                    :total="total"></cart-total>
+                <div class="cart-info--send">
+                    <button class="submit" type="submit" name="_submit">Оформить заказ</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -13,7 +13,7 @@ class CartItemFormSet:
     """
     Формсет для товаров в корзине.
     """
-    def __init__(self, data=None, cart=None):
+    def __init__(self, data=None, cart=None, *args, **kwargs):
         self.data = data or {}
         self.cart = cart
 
@@ -49,21 +49,10 @@ class CartItemFormSet:
 
     def is_valid(self):
         """
-        Проверяем все формы на валидность, пропуская формы, которые будут
-        удалены, а также если форма не была изменена
+        Проверяем все формы на валидность.
         """
         status = []
         for form in self:
             is_valid = form.is_valid()
-            if form.has_changed():
-                status.append(is_valid)
+            status.append(is_valid)
         return all(status)
-
-    def save(self):
-        """
-        Сохраняем измененные формы или удаляем, если форма была выбрана на
-        удаление
-        """
-        for form in self:
-            if form.has_changed():
-                form.save()

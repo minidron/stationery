@@ -60,7 +60,7 @@ class Cart(object):
 
         # Если на складе не хватает товара, то мы не его добавляем в корзину.
         instance = Offer.objects.get(pk=offer_id)
-        if new_quantity > instance.rest_limit:
+        if new_quantity < 0 or new_quantity > instance.rest_limit:
             if self.cart[offer_id]['quantity'] == 0:
                 del self.cart[offer_id]
             return -1

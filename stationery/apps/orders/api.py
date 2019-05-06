@@ -100,12 +100,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         Получаем цену доставки.
         """
         data = request.data
-        order = Order.objects.get(pk=data.get('order_id'))
         price = fetch_delivery_price(
             data.get('delivery_type'),
             '142200',
             data.get('zip_code'),
-            order.weight)
+            2)  # Вес заказа
         return Response({'price': price}, status=status.HTTP_200_OK)
 
 

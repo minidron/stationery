@@ -2,13 +2,10 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.template.loader import render_to_string
 from django.urls import reverse
 
 from yandex_kassa.models import Payment
 from yandex_kassa.signals import payment_done
-
-from lib.email import create_email
 
 from orders.fields import YandexPointField
 
@@ -120,60 +117,12 @@ class Order(models.Model):
         return str(self.pk)
 
     def save(self, *args, **kwargs):
-        if self.pk and self.status == OrderStatus.CONFIRMED:
-            old = self._meta.model.objects.get(pk=self.pk)
-            if old.status != self.status:
-                self.send_confirmed_client_email()
-
         if self.pk and self.status != OrderStatus.DELIVERY:
             self.register_payment()
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('account:history_detail', args=[str(self.pk)])
-
-    @classmethod
-    def get_cart(cls, user):
-        """
-        Получить корзину пользователя, если нет, то создать её.
-        """
-        cart, created = cls.objects.get_or_create(
-            user=user, status=OrderStatus.NOT_CREATED)
-        return cart
-
-    def add_item(self, offer_id, quantity, user=None):
-        try:
-            item = Item.objects.get(order=self, offer=offer_id)
-        except Item.DoesNotExist:
-            item = Item(order=self, offer_id=offer_id, quantity=quantity)
-        else:
-            item.quantity += quantity
-
-        if item.quantity > item.offer.rest_limit:
-            return None
-
-        item.save(user=user)
-        return item
-
-    def update_item(self, offer_id, quantity):
-        try:
-            item = Item.objects.get(order=self, offer=offer_id)
-        except Item.DoesNotExist:
-            pass
-        else:
-            if quantity == 0:
-                item.delete()
-            else:
-                item.quantity = quantity
-                item.save()
-
-    def remove_item(self, offer_id):
-        try:
-            item = Item.objects.get(order=self, offer=offer_id)
-        except Item.DoesNotExist:
-            pass
-        else:
-            item.delete()
 
     @property
     def amount_without_delivery(self):
@@ -206,82 +155,6 @@ class Order(models.Model):
         """
         if self.gain and self.gain >= self.amount:
             self.status = OrderStatus.DELIVERY
-            self.send_payment_client_email()
-            self.send_payment_manager_email()
-
-    def send_confirmed_client_email(self):
-        """
-        Отправляем письмо клиенту, что его заказ подтвержден.
-        """
-        user = self.user
-        if not user.email:
-            return
-
-        body_html = render_to_string(
-            'orders/mail_confirmed.html',
-            {
-                'site': settings.DEFAULT_DOMAIN,
-                'order': self,
-                'items': self.items.all(),
-                'is_opt': True if user.groups.filter(name='Оптовик') else False,  # NOQA
-            }
-        )
-
-        email = create_email(
-            'Ваш заказ подтвержден',
-            body_html,
-            user.email
-        )
-
-        email.send()
-
-    def send_payment_client_email(self):
-        """
-        Отправляем письмо клиенту, что его заказ оплачен.
-        """
-        user = self.user
-        if not user.email:
-            return
-
-        body_html = render_to_string(
-            'orders/mail_payment.html',
-            {
-                'site': settings.DEFAULT_DOMAIN,
-                'order': self,
-                'items': self.items.all(),
-                'is_opt': True if user.groups.filter(name='Оптовик') else False,  # NOQA
-            }
-        )
-
-        email = create_email(
-            'Ваш заказ оплачен',
-            body_html,
-            user.email
-        )
-
-        email.send()
-
-    def send_payment_manager_email(self):
-        """
-        Отправляем письмо менеджеру, что заказ клиента оплачен.
-        """
-        body_html = render_to_string(
-            'orders/mail_payment_manager.html',
-            {
-                'user': self.user,
-                'site': settings.DEFAULT_DOMAIN,
-                'order': self,
-                'items': self.items.all(),
-            }
-        )
-
-        email = create_email(
-            'Заказ №%s оплачен' % self.pk,
-            body_html,
-            settings.EMAIL_OPT
-        )
-
-        email.send()
 
 
 class Item(models.Model):
@@ -311,16 +184,6 @@ class Item(models.Model):
 
     def __str__(self):
         return str(self.offer)
-
-    def save(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        self.unit_price = self.get_unit_price(user)
-        super().save(*args, **kwargs)
-        if self.quantity == 0:
-            self.delete()
-
-    def get_unit_price(self, user=None):
-        return self.offer.price(user=user)
 
     @property
     def total_price(self):

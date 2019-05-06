@@ -197,7 +197,6 @@ Vue.component('cart-offer', {
                 <a class="cart--item-offer--link" :href="link">{{ title }}</a>\
             </div>\
             <div class="cart--item-quantity">\
-                <div>{{ limit }}</div>\
                 <input type="text" required="required"\
                     :name="name"\
                     :value="quantity"\

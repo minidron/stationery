@@ -1,10 +1,12 @@
 /* FORM
 ============================================================================ */
 .order-form {
-    margin-top: 30px;
-
-    .field-row {
+    .order-field-row {
         margin-bottom: 15px;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
 
         ul {
             @include clear-list;
