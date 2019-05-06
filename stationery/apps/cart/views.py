@@ -76,13 +76,15 @@ class PaymentView(LoginRequiredMixin, FormView):
         }
 
         if self.request.method == 'GET':
+            cart = Cart(self.request)
+
             kwargs['initial'] = {
                 'phone': self.request.user.profile.phone,
                 'email': self.request.user.email,
                 'delivery_type': DeliveryType.EXW,
                 'delivery_address': '',
                 'zip_code': '',
-                'weight': 2,
+                'weight': cart.get_total_weight(),
             }
 
         if self.request.method in ('POST', 'PUT'):

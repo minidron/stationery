@@ -103,11 +103,10 @@ window.offersCart = new Vue({
                 if (vm.zipCode.length == 6) {
                     vm.$http({
                         method: 'post',
-                        url: '/api/v2/orders/delivery_price/',
+                        url: '/api/v2/cart/delivery_price/',
                         data: {
                             delivery_type: vm.deliveryType,
                             zip_code: vm.zipCode,
-                            order_id: getOrderFromURL(),
                         },
                     })
                         .then(function (response) {
@@ -124,10 +123,10 @@ window.offersCart = new Vue({
             if (newPrice != oldPrice) {
                 let vm = this,
                     priceEl = vm.$jQuery('[data-delivery-price]'),
-                    price = priceEl.data('deliveryPrice')
+                    price = priceEl.data('deliveryPrice').replace(',', '.'),
                     fullPrice = newPrice + parseFloat(price);
 
-                priceEl.text(toPriceString(fullPrice) + ' руб.');
+                priceEl.text(toPriceString(fullPrice));
             }
         },
     },

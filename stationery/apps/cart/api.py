@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from cart.cart import Cart
 from cart.serializers import ItemSSerializer
 
+from orders.utils import fetch_delivery_price
+
 
 class CartViewSet(viewsets.ViewSet):
     """
@@ -65,3 +67,17 @@ class CartViewSet(viewsets.ViewSet):
         cart = Cart(request)
         cart.clear()
         return Response({'success': 'cart clear'})
+
+    @action(detail=False, methods=['post'])
+    def delivery_price(self, request):
+        """
+        Получаем цену доставки.
+        """
+        data = request.data
+        cart = Cart(self.request)
+        price = fetch_delivery_price(
+            data.get('delivery_type'),
+            '142200',
+            data.get('zip_code'),
+            cart.get_total_weight())
+        return Response({'price': price}, status=status.HTTP_200_OK)

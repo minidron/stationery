@@ -88,3 +88,12 @@ class Cart(object):
         """
         return sum(Decimal(offer['instance'].retail_price) * offer['quantity']
                    for offer in self)
+
+    def get_total_weight(self):
+        """
+        Получение веса всех товаров в корзине.
+        """
+        weight = 0
+        for offer in self:
+            weight += offer['instance'].weight * offer['quantity']
+        return int(weight)

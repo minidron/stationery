@@ -121,9 +121,7 @@
                 <div class="cart-info--save">
                     <a href="{% url 'account:cart' %}" class="reset">Назад</a>
                 </div>
-                <cart-total
-                    initial-total="{{ cart.get_total_price|default:'0' }}"
-                    :total="total"></cart-total>
+                <div class="cart-info--price">= <span data-delivery-price="{{ cart.get_total_price }}">{{ cart.get_total_price|default:'0'|price }}</span></div>
                 <div class="cart-info--send">
                     <button class="submit" type="submit" name="_submit">Оформить заказ</button>
                 </div>
