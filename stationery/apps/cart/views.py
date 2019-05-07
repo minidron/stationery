@@ -72,6 +72,15 @@ class PaymentView(LoginRequiredMixin, FormView):
     form_class = YaPaymentForm
     template_name = 'cart/payment.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = Cart(self.request)
+        user = cart.request.user
+        context.update({
+            'is_opt': user.groups.filter(name='Оптовик').exists(),
+        })
+        return context
+
     def get_form_kwargs(self):
         """
         Передаём данные для создания формы оплаты.
@@ -117,14 +126,14 @@ class PaymentView(LoginRequiredMixin, FormView):
         data = form.cleaned_data
         cart = Cart(self.request)
         user = cart.request.user
-        is_opt = self.request.user.groups.filter(name='Оптовик').exists()
+        is_opt = user.groups.filter(name='Оптовик').exists()
 
         with transaction.atomic():
             order_data = {
                 'user': user,
                 'status': OrderStatus.INWORK,
-                'comment': '',
-                'delivery_type': data['delivery_type'],
+                'comment': data['comment'],
+                'delivery_type': data['delivery_type'] or DeliveryType.EXW,
                 'delivery_address': data['delivery_address'],
                 'zip_code': data['zip_code'],
             }

@@ -153,7 +153,8 @@ class YaPaymentForm(BasePaymentForm):
     delivery_type = forms.TypedChoiceField(
         label='Доставка',
         coerce=int,
-        widget=forms.RadioSelect(), choices=DeliveryType.CHOICES)
+        widget=forms.RadioSelect(), choices=DeliveryType.CHOICES,
+        required=False)
     delivery_address = forms.CharField(
         label='Адрес доставки',
         required=False)
@@ -162,7 +163,11 @@ class YaPaymentForm(BasePaymentForm):
         required=False)
     payment_method_data = forms.ChoiceField(
         label='Способ оплаты',
-        widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES)
+        widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES,
+        required=False)
+    comment = forms.CharField(
+        label='Комментарий к заказу',
+        widget=forms.Textarea(), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
