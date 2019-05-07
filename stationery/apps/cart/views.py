@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
 
@@ -41,7 +42,8 @@ class CartView(FormView):
 
         # Пользователь не авторизован.
         if not user.is_authenticated:
-            return self.form_invalid(cart_form)
+            return HttpResponseRedirect(reverse('account:login') +
+                                        '?next=%s' % reverse('account:cart'))
 
         if cart_form.is_valid():
             return self.form_valid(cart_form)
