@@ -166,8 +166,8 @@ class YaPaymentForm(BasePaymentForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        weight = kwargs.get('initial', {}).get('weight', 0)
-        if weight == 0:
+        weight = kwargs.get('initial', {}).get('weight', None)
+        if weight and weight == 0:
             self.fields['delivery_type'].choices = [DeliveryType.CHOICES[0]]
 
     def clean(self):
