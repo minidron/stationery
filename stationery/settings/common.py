@@ -215,7 +215,7 @@ PIPELINE = {
             'source_filenames': (
                 'bower_components/es6-promise/es6-promise.auto.min.js',
                 'bower_components/axios/dist/axios.min.js',
-                'bower_components/vue/dist/vue.js',
+                'bower_components/vue/dist/vue.min.js',
 
                 'orders/frontend/js/cart/modules.js',
                 'orders/frontend/js/cart/utils.js',

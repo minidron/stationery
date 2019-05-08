@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse
 from django.utils.functional import cached_property
 
 from yandex_kassa.conf import settings as kassa_settings
@@ -218,10 +219,15 @@ class YaPaymentForm(BasePaymentForm):
         }
 
     def get_payment_confirmation(self):
+        url = '{scheme}://{host}{order_url}'.format(
+            scheme=self.request.scheme,
+            host=self.request.get_host(),
+            order_url=reverse('account:history_detail',
+                              kwargs={'pk': self.order.pk}))
         return {
             'confirmation': {
                 'type': 'redirect',
-                'return_url': self.request.build_absolute_uri(),
+                'return_url': url,
             }
         }
 

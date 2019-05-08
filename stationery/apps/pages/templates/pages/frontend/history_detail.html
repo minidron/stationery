@@ -52,7 +52,7 @@
                 </tr>
             </tbody>
         </table>
-        <div class="history-order--amount">Стоимость доставки: <strong>{{ order.delivery_price|price }} руб.</strong></div>
+        <div class="history-order--amount">Стоимость доставки: <strong>{{ order.delivery_price|default:'0'|price }} руб.</strong></div>
         <div class="history-order--amount">Полная стоимость: <strong>{{ order.amount|price }} руб.</strong></div>
     </div>
 {% endblock %}
