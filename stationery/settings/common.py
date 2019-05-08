@@ -195,13 +195,7 @@ PIPELINE = {
             'source_filenames': (
                 'frontend/scss/style.scss',
             ),
-            'output_filename': 'frontend/css/style.css',
-        },
-        'styles': {
-            'source_filenames': (
-                'scss/styles.scss',
-            ),
-            'output_filename': 'css/styles.css',
+            'output_filename': 'frontend/css/style-2019-05-08.css',
         },
     },
     'JAVASCRIPT': {
@@ -228,25 +222,13 @@ PIPELINE = {
                 'orders/frontend/js/cart/components.js',
                 'orders/frontend/js/cart/app.js',
             ),
-            'output_filename': 'frontend/js/vuecart.js',
+            'output_filename': 'frontend/js/vuecart-2019-05-08.js',
         },
         'frontend': {
             'source_filenames': (
                 'frontend/coffee/script.coffee',
             ),
-            'output_filename': 'frontend/js/script.js',
-        },
-        'scripts': {
-            'source_filenames': (
-                'bower_components/jquery/dist/jquery.min.js',
-                'bower_components/bootstrap/dist/js/bootstrap.min.js',
-                'bower_components/owl.carousel/dist/owl.carousel.min.js',
-                'bower_components/magnific-popup/dist/jquery.magnific-popup.min.js',  # NOQA
-                'bower_components/jquery-ui/jquery-ui.min.js',
-                'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
-                'js/common.js',
-            ),
-            'output_filename': 'js/scripts.js',
+            'output_filename': 'frontend/js/script-2019-05-08.js',
         },
     },
     'COMPILERS': (
