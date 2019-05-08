@@ -43,8 +43,16 @@
                         <td><span class="nowrap">{{ item.total_price|price }} руб.</span></td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><span class="nowrap">{{ order.amount_without_delivery|price }} руб.</span></td>
+                </tr>
             </tbody>
         </table>
-        <div class="history-order--amount">Полная стоимость: <strong data-delivery-price="{{ order.amount_without_delivery }}">{{ order.amount_without_delivery|price }} руб.</strong></div>
+        <div class="history-order--amount">Стоимость доставки: <strong>{{ order.delivery_price|price }} руб.</strong></div>
+        <div class="history-order--amount">Полная стоимость: <strong>{{ order.amount|price }} руб.</strong></div>
     </div>
 {% endblock %}

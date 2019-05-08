@@ -11,6 +11,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 
+from yandex_kassa.models import Payment, ReceiptRegistrationStatus
+
 from cart.conf import CART_SESSION_ID
 
 from lib.email import create_email

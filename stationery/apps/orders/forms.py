@@ -177,9 +177,9 @@ class YaPaymentForm(BasePaymentForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        delivery_type = cleaned_data['delivery_type']
-        delivery_address = cleaned_data['delivery_address']
-        zip_code = cleaned_data['zip_code']
+        delivery_type = cleaned_data.get('delivery_type')
+        delivery_address = cleaned_data.get('delivery_address')
+        zip_code = cleaned_data.get('zip_code')
 
         if delivery_type == DeliveryType.RUSSIANPOST:
             if not delivery_address:
@@ -192,6 +192,13 @@ class YaPaymentForm(BasePaymentForm):
             elif len(zip_code) != 6:
                 msg = 'Индекс должен состоять из 6 цифр.'
                 self.add_error('zip_code', msg)
+
+        payment_method_data = cleaned_data.get('payment_method_data')
+
+        if payment_method_data == PaymentMethod.CASH:
+            if delivery_type == DeliveryType.RUSSIANPOST:
+                msg = 'Для этого способа доставки оплата наличными недоступна.'
+                self.add_error('payment_method_data', msg)
 
         return cleaned_data
 

@@ -142,7 +142,7 @@
                                     <td><a href="{{ offer.get_absolute_url }}">{{ offer }}</a></td>
                                     <td><span class="nowrap">{{ offer.retail_price|price }} руб.</span></td>
                                     <td>{{ item.quantity }}</td>
-                                    <td><span class="nowrap">{{ offer.retail_price|price }} руб.</span></td>
+                                    <td><span class="nowrap">{{ offer.retail_price|mul:item.quantity|price }} руб.</span></td>
                                 {% endwith %}
                             </tr>
                         {% endfor %}
