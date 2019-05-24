@@ -1,3 +1,5 @@
+from numbers import Number
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
@@ -173,7 +175,7 @@ class YaPaymentForm(BasePaymentForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         weight = kwargs.get('initial', {}).get('weight', None)
-        if weight and weight == 0:
+        if isinstance(weight, Number) and weight == 0:
             self.fields['delivery_type'].choices = [DeliveryType.CHOICES[0]]
 
     def clean(self):
