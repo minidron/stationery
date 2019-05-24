@@ -33,6 +33,7 @@ window.сartPage = new Vue({
 
     data: {
         total: undefined,
+        popupText: '',
     },
 
     methods: {
