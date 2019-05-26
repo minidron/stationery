@@ -2,10 +2,13 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.template.loader import render_to_string
 from django.urls import reverse
 
 from yandex_kassa.models import Payment
 from yandex_kassa.signals import payment_done
+
+from lib.email import create_email
 
 from orders.fields import YandexPointField
 
@@ -116,24 +119,25 @@ class Order(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    def save(self, *args, **kwargs):
-        if self.pk and self.status != OrderStatus.DELIVERY:
-            self.register_payment()
-        super().save(*args, **kwargs)
-
     def get_absolute_url(self):
         return reverse('account:history_detail', args=[str(self.pk)])
 
     @property
+    def amount(self):
+        """
+        Сумма заказа с доставкаой.
+        """
+        return float(self.amount_without_delivery) + float(self.delivery_price)
+
+    @property
     def amount_without_delivery(self):
+        """
+        Сумма заказа без доставки.
+        """
         result = 0
         for item in self.items.all():
             result += item.total_price
         return result
-
-    @property
-    def amount(self):
-        return float(self.amount_without_delivery) + float(self.delivery_price)
 
     @property
     def remaining_payment_sum(self):
@@ -144,17 +148,65 @@ class Order(models.Model):
 
     @property
     def weight(self):
+        """
+        Вес заказа.
+        """
         weight = 0
         for item in self.items.all():
             weight += item.total_weight
         return weight
 
-    def register_payment(self):
+    def send_confirmed_client_email(self):
         """
-        Переводим в статус `Доставка`, если заказ оплачен и отправляем письма.
+        Отправляем письмо клиенту, что его заказ подтвержден.
         """
-        if self.gain and self.gain >= self.amount:
-            self.status = OrderStatus.DELIVERY
+        user = self.user
+        if not user.email:
+            return
+
+        body_html = render_to_string(
+            'orders/mail_confirmed.html',
+            {
+                'site': settings.DEFAULT_DOMAIN,
+                'order': self,
+                'items': self.items.all(),
+                'is_opt': user.groups.filter(name='Оптовик').exists(),
+            }
+        )
+
+        email = create_email(
+            'Ваш заказ подтвержден',
+            body_html,
+            user.email
+        )
+
+        email.send()
+
+    def send_payment_client_email(self):
+        """
+        Отправляем письмо клиенту, что его заказ оплачен.
+        """
+        user = self.user
+        if not user.email:
+            return
+
+        body_html = render_to_string(
+            'orders/mail_payment.html',
+            {
+                'site': settings.DEFAULT_DOMAIN,
+                'order': self,
+                'items': self.items.all(),
+                'is_opt': user.groups.filter(name='Оптовик').exists(),
+            }
+        )
+
+        email = create_email(
+            'Ваш заказ оплачен',
+            body_html,
+            user.email
+        )
+
+        email.send()
 
 
 class Item(models.Model):

@@ -116,7 +116,7 @@ class PaymentView(LoginRequiredMixin, FormView):
         """
         self.success_url = self.create_order(form)
         cart = Cart(self.request)
-        cart.clear()  # очищаем корзину.
+        # cart.clear()  # очищаем корзину.
         return super().form_valid(form)
 
     def create_order(self, form):
@@ -144,6 +144,9 @@ class PaymentView(LoginRequiredMixin, FormView):
                     '142200',
                     data['zip_code'],
                     cart.get_total_weight())
+
+            if is_opt:
+                order_data['status'] = OrderStatus.CONFIRMED
 
             order = Order.objects.create(**order_data)
 
