@@ -116,7 +116,7 @@ class PaymentView(LoginRequiredMixin, FormView):
         """
         self.success_url = self.create_order(form)
         cart = Cart(self.request)
-        # cart.clear()  # очищаем корзину.
+        cart.clear()  # очищаем корзину.
         return super().form_valid(form)
 
     def create_order(self, form):
@@ -165,4 +165,6 @@ class PaymentView(LoginRequiredMixin, FormView):
                     return form.create_payment(
                         request=self.request, order=order, payer=user)
 
+            order.send_client_email()
+            order.send_manager_email()
             return reverse('account:history_detail', kwargs={'pk': order.pk})

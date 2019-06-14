@@ -119,6 +119,20 @@ class Order(models.Model):
     def __str__(self):
         return str(self.pk)
 
+    def save(self, *args, **kwargs):
+        if self.pk and self.status != OrderStatus.CONFIRMED:
+            self.register_payment()
+        super().save(*args, **kwargs)
+
+    def register_payment(self):
+        """
+        Переводим в статус `Подтвержденный`, если заказ оплачен.
+        """
+        if self.gain and self.gain >= self.amount:
+            self.status = OrderStatus.CONFIRMED
+            self.send_client_email()
+            self.send_manager_email()
+
     def get_absolute_url(self):
         return reverse('account:history_detail', args=[str(self.pk)])
 
@@ -156,6 +170,49 @@ class Order(models.Model):
             weight += item.total_weight
         return weight
 
+    def send_client_email(self):
+        """
+        Отправка письма клиенту.
+        """
+        if self.status == OrderStatus.INWORK:
+            self.send_inwork_client_email()
+
+        elif self.status == OrderStatus.CONFIRMED:
+            self.send_confirmed_client_email()
+
+    def send_manager_email(self):
+        """
+        Отправка письма менеджеру.
+        """
+        if self.status == OrderStatus.CONFIRMED:
+            self.send_confirmed_manager_email()
+
+    def send_inwork_client_email(self):
+        """
+        Отправляем письмо клиенту, что его заказ в работе.
+        """
+        user = self.user
+        if not user.email:
+            return
+
+        body_html = render_to_string(
+            'orders/mail_inwork_client.html',
+            {
+                'site': settings.DEFAULT_DOMAIN,
+                'order': self,
+                'items': self.items.all(),
+                'is_opt': user.groups.filter(name='Оптовик').exists(),
+            }
+        )
+
+        email = create_email(
+            'Заказ №%s' % self.pk,
+            body_html,
+            user.email
+        )
+
+        email.send()
+
     def send_confirmed_client_email(self):
         """
         Отправляем письмо клиенту, что его заказ подтвержден.
@@ -165,7 +222,7 @@ class Order(models.Model):
             return
 
         body_html = render_to_string(
-            'orders/mail_confirmed.html',
+            'orders/mail_confirmed_client.html',
             {
                 'site': settings.DEFAULT_DOMAIN,
                 'order': self,
@@ -182,28 +239,24 @@ class Order(models.Model):
 
         email.send()
 
-    def send_payment_client_email(self):
+    def send_confirmed_manager_email(self):
         """
-        Отправляем письмо клиенту, что его заказ оплачен.
+        Отправляем письмо менеджеру, что заказ клиента подтвержден.
         """
-        user = self.user
-        if not user.email:
-            return
-
         body_html = render_to_string(
-            'orders/mail_payment.html',
+            'orders/mail_confirmed_manager.html',
             {
+                'user': self.user,
                 'site': settings.DEFAULT_DOMAIN,
                 'order': self,
                 'items': self.items.all(),
-                'is_opt': user.groups.filter(name='Оптовик').exists(),
             }
         )
 
         email = create_email(
-            'Ваш заказ оплачен',
+            'Заказ №%s с сайта' % self.pk,
             body_html,
-            user.email
+            settings.EMAIL_OPT
         )
 
         email.send()
