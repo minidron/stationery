@@ -448,7 +448,8 @@ body {
 							position: absolute;
 							top:0;
 							float: left;
-							width:100px;
+							width:70px;
+							margin-left:369%;
 						}
 
             &:before {
@@ -544,7 +545,14 @@ body {
         padding-top: 20px;
         padding-bottom: 40px;
         background-color: #F7F7F7;
-    }
+		}
+		.back-to img{
+			display: none;
+			@include media('<=phone') {
+				width: 50%; 
+				display: block;
+			}		
+		}
 
     .main--title {
         margin-top: 0;

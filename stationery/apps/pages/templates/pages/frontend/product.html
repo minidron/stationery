@@ -23,6 +23,7 @@
 
 
 {% block content %}
+		<div class="back-to"><a href="{{ category.get_absolute_url }}"><img src="/static/frontend/images/back.png" alt=""></a></div>
     <h1 class="main--title">{{ offer.full_title }}</h1>
     <div class="offer--wrapper">
         <div class="offer-code">Код: {{ offer.product.article }}</div>
