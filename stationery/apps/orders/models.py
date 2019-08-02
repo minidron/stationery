@@ -128,7 +128,7 @@ class Order(models.Model):
         """
         Переводим в статус `Подтвержденный`, если заказ оплачен.
         """
-        if self.gain and self.gain >= self.amount:
+        if self.gain and float(self.gain) >= float(self.amount):
             self.status = OrderStatus.CONFIRMED
             self.send_client_email()
             self.send_manager_email()

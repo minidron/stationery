@@ -1,6 +1,6 @@
 <h2>Заказ номер {{ order.pk }}</h2>
 
-<p>Пользователь: {{ user }}</p>
+<p>Пользователь: {{ user }} ({% if is_opt %}Оптовик{% else %}Физ. лицо{% endif %})</p>
 
 <ul>
     <li>{{ user.profile.company }}</li>
@@ -32,8 +32,16 @@
     </tbody>
 </table>
 
-<p>Полная стоимость: <strong>{{ order.amount }}</strong></p>
+<p>Полная стоимость (с доставкой): <strong>{{ order.amount }}</strong></p>
 
 <p>Комментарий к заказу: {{ order.comment }}</p>
+
+<p>Информация по заказу:</p>
+<ul>
+    <li>Тип доставки: <strong>{{ order.get_delivery_type_display }}</strong></li>
+    <li>Цена доставки: <strong>{{ order.delivery_price }}</strong></li>
+    <li>Адрес доставки: <strong>{{ order.delivery_address }}</strong></li>
+    <li>Денег получено: <strong>{{ order.gain }}</strong></li>
+</ul>
 
 <p><a href="{{ site }}{{ order.get_absolute_url }}">Открыть заказ</a></p>
