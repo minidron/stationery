@@ -249,3 +249,10 @@ class YaPaymentForm(BasePaymentForm):
     def create_payment(self, request, order=None, payer=None):
         self.request = request
         return super().create_payment(order, payer)
+
+
+class YaPaymentFormWithoutCash(YaPaymentForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        field = self.fields['payment_method_data']
+        field.widget.choices = field.widget.choices[1:]

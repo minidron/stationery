@@ -54,5 +54,41 @@
         </table>
         <div class="history-order--amount">Стоимость доставки: <strong>{{ order.delivery_price|default:'0'|price }} руб.</strong></div>
         <div class="history-order--amount">Полная стоимость: <strong>{{ order.amount|price }} руб.</strong></div>
+
+        {% if can_pay %}
+            <br>
+
+            <div class="cart-container">
+                <form method="POST">{% csrf_token %}
+                    <div class="order-form">
+                        {{ form.non_field_errors }}
+
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+
+                        <div class="order-field-row">
+                            {{ form.payment_method_data.label_tag }}
+                            {{ form.payment_method_data }}
+                            {{ form.payment_method_data.errors }}
+                        </div>
+
+                        <div class="order-field-row">
+                            {{ form.phone.label_tag }}
+                            {{ form.phone }}
+                            {{ form.phone.errors }}
+                        </div>
+
+                        <div class="order-field-row">
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                            {{ form.email.errors }}
+                        </div>
+
+                        <div class="submit-row"><button class="submit" type="submit">Оплатить</button></div>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

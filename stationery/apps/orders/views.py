@@ -11,12 +11,14 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 
+from cart.cart import Cart
 from cart.conf import CART_SESSION_ID
 
 from lib.email import create_email
 
 from orders.forms import (CompanyRegistrationForm, ItemFormSet, OrderForm,
-                          RegistrationForm, UserProfile, YaPaymentForm)
+                          RegistrationForm, UserProfile, YaPaymentForm,
+                          YaPaymentFormWithoutCash)
 from orders.models import Order, OrderStatus
 
 
@@ -327,11 +329,67 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
     Подробный просмотр заказа.
     """
     login_url = reverse_lazy('account:login')
-    form_class = YaPaymentForm
+    form_class = YaPaymentFormWithoutCash
     form_initial = None
     model = Order
     template_name = 'pages/frontend/history_detail.html'
 
     def get_queryset(self):
+        """
+        Показывать только заказы пользователя.
+        """
         qs = super().get_queryset()
         return qs.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        """
+        Добавим форму оплаты.
+        """
+        cart = Cart(self.request)
+        user = cart.request.user
+        is_opt = user.groups.filter(name='Оптовик').exists()
+        order = kwargs.get('object', self.get_object())
+        can_pay = order.status in [OrderStatus.INWORK]
+
+        kwargs['can_pay'] = not is_opt and can_pay
+        if 'form' not in kwargs:
+            kwargs['form'] = self.get_form()
+        return super().get_context_data(**kwargs)
+
+    def get_form(self, **kwargs):
+        """
+        Получаем форму оплаты.
+        """
+        return self.form_class(**self.get_form_kwargs())
+
+    def get_form_kwargs(self):
+        """
+        Передаём данные для создания формы оплаты.
+        """
+        kwargs = {}
+        if self.request.method == 'GET':
+            order = self.get_object()
+            kwargs['initial'] = {
+                'phone': self.request.user.profile.phone,
+                'email': self.request.user.email,
+                'delivery_type': order.delivery_type,
+                'delivery_address': order.delivery_address,
+                'zip_code': order.zip_code,
+                'weight': order.weight,
+            }
+        elif self.request.method in ('POST', 'PUT'):
+            kwargs['data'] = self.request.POST
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+
+        if form and form.is_valid():
+            success_url = form.create_payment(request=request,
+                                              order=self.object,
+                                              payer=request.user)
+            return HttpResponseRedirect(success_url)
+        else:
+            context = self.get_context_data(object=self.object, form=form)
+            return self.render_to_response(context)

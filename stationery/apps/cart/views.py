@@ -145,6 +145,9 @@ class PaymentView(LoginRequiredMixin, FormView):
                     data['zip_code'],
                     cart.get_total_weight())
 
+                if data['payment_method_data'] == PaymentMethod.CASH:
+                    order_data['status'] = OrderStatus.CONFIRMED
+
             if is_opt:
                 order_data['status'] = OrderStatus.CONFIRMED
 

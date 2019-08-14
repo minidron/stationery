@@ -27,7 +27,6 @@
                     <th>Заказ</th>
                     <th>Статус</th>
                     <th>Цена</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,7 +35,6 @@
                         <td><a class="history--item--link" href="{% url 'account:history_detail' order.pk %}">Заказ №{{ order.pk }} от {{ order.created|date:'d.m.Y' }}</a></td>
                         <td>{{ order.get_status_display }}</td>
                         <td>{% if order.amount %}{{ order.amount|price }} руб.{% endif %}</td>
-                        <td>{% if order.status == 3 %}<a href="{% url 'account:history_detail' order.pk %}">Оплатить</a>{% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>
