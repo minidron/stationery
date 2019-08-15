@@ -8,20 +8,26 @@
 
     <div class="registration-form rounded">
         <form method="POST">{% csrf_token %}
-						<input type="hidden" name="next" value="{{ next|default:'/' }}">
+            <input type="hidden" name="next" value="{{ next|default:'/' }}">
+
             <div class="field-row">
                 {{ form.username.label_tag }}
-								{{ form.username }}							
-						</div>
-						
+                {{ form.username }}
+            </div>
+
             <div class="field-row">
                 {{ form.password.label_tag }}
                 {{ form.password }}
             </div>
+
             {% if form.errors %}
                 <div class="error-row">Ваше имя пользователя и пароль не совпадают. Попробуйте еще раз.</div>
-						{% endif %}
-						<a href="/account/registration/">Не зарегестрированы?</a>
+            {% endif %}
+
+            <p><a href="{% url 'account:registration' %}">Не зарегестрированы?</a></p>
+
+            <p><a href="{% url 'account:password_recovery' %}">Забыли пароль?</a></p>
+
             <div class="submit-row"><button class="submit" type="submit">Войти</button></div>
         </form>
     </div>

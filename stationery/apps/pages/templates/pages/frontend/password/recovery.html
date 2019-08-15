@@ -1,0 +1,24 @@
+{% extends 'pages/frontend/password/base.html' %}
+
+
+{% block content %}
+    <h1 class="main--title">Восстановление пароля</h1>
+
+    <div class="registration-form rounded">
+        <form id="registration-form" method="POST" action="{{ url }}">{% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {{ form.non_field_errors }}
+
+            <div class="field-row">
+                {{ form.username_or_email.label_tag }}
+                {{ form.username_or_email }}
+                {{ form.username_or_email.errors }}
+            </div>
+
+            <div class="submit-row"><button class="submit" type="submit">Восстановить</button></div>
+        </form>
+    </div>
+{% endblock %}

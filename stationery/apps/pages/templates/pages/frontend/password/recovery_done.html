@@ -1,0 +1,13 @@
+{% extends 'pages/frontend/password/base.html' %}
+
+
+{% block body_class %}{% endblock %}
+
+
+{% block content %}
+    <h1 class="main--title">Восстановление пароля отправлено</h1>
+
+    <div class="account-container rounded">
+        Письмо было отправлено на ваш адрес <strong>{{ email }}</strong>. Воспользуйтесь ссылкой в письме, чтобы установить новый пароль.
+    </div>
+{% endblock %}

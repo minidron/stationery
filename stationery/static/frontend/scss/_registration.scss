@@ -15,6 +15,24 @@
     padding: 20px;
     max-width: 400px;
     box-sizing: border-box;
+    font: $fw-medium 14px/18px $ff-Roboto;
+
+    a {
+        text-decoration: none;
+        color: get($color, 'link', 'base');
+
+        &:hover {
+            color: get($color, 'link', 'hover');
+        }
+    }
+
+    & > *:first-child {
+        margin-top: 0;
+    }
+
+    & > *:last-child {
+        margin-bottom: 0;
+    }
 
     .intro {
         padding: 10px;

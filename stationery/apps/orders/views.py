@@ -11,13 +11,15 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 
+from password_reset.views import Recover, RecoverDone, Reset
+
 from cart.cart import Cart
 from cart.conf import CART_SESSION_ID
 
 from lib.email import create_email
 
 from orders.forms import (CompanyRegistrationForm, ItemFormSet, OrderForm,
-                          RegistrationForm, UserProfile, YaPaymentForm,
+                          RegistrationForm, UserProfile,
                           YaPaymentFormWithoutCash)
 from orders.models import Order, OrderStatus
 
@@ -159,6 +161,30 @@ class UpdateProfileView(LoginRequiredMixin, FormView):
             self.success_url = reverse('account:cart')
 
         return super().form_valid(form)
+
+
+class PasswordRecoveryView(Recover):
+    """
+    Восстановление пароля.
+    """
+    email_template_name = 'pages/frontend/password/recovery_email.txt'
+    success_url_name = 'account:password_recovery_done'
+    template_name = 'pages/frontend/password/recovery.html'
+
+
+class PasswordRecoveryDoneView(RecoverDone):
+    """
+    Восстановление пароля.
+    """
+    template_name = 'pages/frontend/password/recovery_done.html'
+
+
+class PasswordResetView(Reset):
+    """
+    Восстановление пароля.
+    """
+    template_name = 'pages/frontend/password/reset.html'
+    success_url = reverse_lazy('account:login')
 
 
 class UserLoginView(LoginView):

@@ -55,6 +55,7 @@ INSTALLED_APPS = (
     'hijack',
     'hijack_admin',
     'compat',
+    'password_reset',
     'odinass',
     'pages',
     'orders',
