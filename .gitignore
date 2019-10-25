@@ -11,6 +11,7 @@ stationery/static/scss/*/*.css
 
 /.ipynb_checkpoints/
 .idea
+.vscode
 /media/*
 /cover/
 /django-resized/
@@ -78,6 +79,7 @@ nosetests.xml
 .project
 .settings
 .tmproj
+.env
 nbproject
 Thumbs.db
 
