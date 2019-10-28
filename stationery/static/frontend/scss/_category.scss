@@ -6,37 +6,98 @@
 .sub-categories--list {
     @include clear-list;
     display: flex;
-    flex-flow: row wrap;
-    align-items: stretch;
-    justify-content: flex-start;
-    margin-bottom: 40px;
-    margin-left: -20px;
+    flex-wrap: wrap;
+    margin-left: -10px;
 
     .sub-categories--item {
-        margin-top: 20px;
-        padding-left: 20px;
-        flex-shrink: 0;
-        flex-basis: 25%;
+        display: flex;
+        margin-left: 10px;
+        margin-top: 10px;
+        padding: 10px 15px;
+        width: calc(25% - 10px);
+        min-height: 60px;
         box-sizing: border-box;
-        max-width: 25%;
 
         &:nth-child(-n+4) {
             margin-top: 0;
         }
 
-        .sub-category {
-            height: 100%;
+        .sub-category--icon {
+            display: block;
+            margin-right: 15px;
+            width: 36px;
+            height: 36px;
+            background-color: #FFF;
+
+            img {
+                width: 100%;
+                vertical-align: bottom;
+            }
+        }
+
+        .sub-category--items {
+            @include clear-list;
+            flex: 1;
+        }
+
+        .sub-category--item {
+            margin-bottom: 10px;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
 
             .sub-category--link {
-                display: flex;
-                align-items: center;
-                padding: 10px 35px 10px 20px;
-                height: 100%;
-                min-height: 60px;
-                box-sizing: border-box;
-                font: $fw-regular 14px/18px $ff-Roboto;
+                display: inline-block;
+                text-transform: lowercase;
+                font: $fw-medium 15px/20px $ff-Roboto;
                 text-decoration: none;
                 color: get($color, 'text', 'base');
+                transition: color $base-transition;
+
+                &::first-letter {
+                    text-transform: uppercase;
+                }
+
+                &:hover {
+                    color: get($color, 'link', 'hover');
+                }
+            }
+        }
+
+        .sub-category-children--item {
+            position: relative;
+            margin-bottom: 8px;
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: 9px;
+                left: -18px;
+                width: 8px;
+                height: 1px;
+                background-color: #BBB;
+            }
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+
+            .sub-category--link {
+                display: inline-block;
+                text-transform: lowercase;
+                font: $fw-regular 13px/18px $ff-Roboto;
+                text-decoration: none;
+                color: get($color, 'text', 'base');
+                transition: color $base-transition;
+
+                &::first-letter {
+                    text-transform: uppercase;
+                }
+
+                &:hover {
+                    color: get($color, 'link', 'hover');
+                }
             }
         }
     }
@@ -91,7 +152,7 @@
                 label {
                     font: $fw-regular 14px/20px $ff-PT-Sans;
 										color: get($color, 'text', 'base');
-										
+
                 }
             }
         }
@@ -219,7 +280,7 @@
         input[type='checkbox'] {
             margin-right: 3px;
 						vertical-align: middle;
-						zoom: 2; 
+						zoom: 2;
         }
     }
 

@@ -13,7 +13,7 @@
                         <li class="breadcrumbs--item separator"></li>
                     {% endif %}
                 {% endfor %}
-						</ul>
+            </ul>
         </div>
     </div>
 {% endblock %}
@@ -21,26 +21,46 @@
 
 
 {% block content %}
-		<div class="back-to">{% if category.parent %} 
-			<a href="{{ category.parent.get_absolute_url }}"><img src="/static/frontend/images/back.png" alt=""></a> 
-			{% endif %}</div>
+    <div class="back-to">
+        {% if category.parent %}
+            <a href="{{ category.parent.get_absolute_url }}"><img src="/static/frontend/images/back.png" alt=""></a>
+        {% endif %}
+    </div>
     <h1 class="main--title">{{ category.title }}</h1>
 
-			{% if category.content %}
-					<div class="category-description ">
-							{{ category.content|safe }}
-					</div>
-			{% endif %}
+    {% comment %} {% if category.content %}
+        <div class="category-description ">
+            {{ category.content|safe }}
+        </div>
+    {% endif %} {% endcomment %}
 
     {% if category.get_children %}
         <div class="sub-categories-container">
             {% spaceless %}
             <ul class="sub-categories--list">
                 {% for sub_category in category.get_children %}
-                    <li class="sub-categories--item">
-                        <div class="sub-category rounded clickable">
-                            <a class="sub-category--link" href="{{ sub_category.get_absolute_url }}">{{ sub_category }}</a>
-                        </div>
+                    <li class="sub-categories--item rounded clickable">
+                        <span class="sub-category--icon">
+                            {% thumbnail sub_category.image '36x36' as category_image %}
+                                <img src="{{ category_image.url }}">
+                            {% empty %}
+                                <img src="{% static 'frontend/images/category-placeholder.png' %}">
+                            {% endthumbnail %}
+                        </span>
+
+                        <ul class="sub-category--items">
+                            <li class="sub-category--item">
+                                <a class="sub-category--link" href="{{ sub_category.get_absolute_url }}">{{ sub_category }}</a>
+                            </li>
+
+                            {% if sub_category.get_children %}
+                                {% for sub_category_children in sub_category.get_children %}
+                                    <li class="sub-category-children--item">
+                                        <a class="sub-category--link" href="{{ sub_category_children.get_absolute_url }}">{{ sub_category_children }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
                     </li>
                 {% endfor %}
             </ul>
@@ -179,5 +199,5 @@
     </form>
     {% endif %}
 
-    
+
 {% endblock content %}
