@@ -28,11 +28,11 @@
     </div>
     <h1 class="main--title">{{ category.title }}</h1>
 
-    {% comment %} {% if category.content %}
+    {% if category.content %}
         <div class="category-description ">
             {{ category.content|safe }}
         </div>
-    {% endif %} {% endcomment %}
+    {% endif %}
 
     {% if category.get_children %}
         <div class="sub-categories-container">
