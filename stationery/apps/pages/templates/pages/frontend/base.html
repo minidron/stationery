@@ -57,8 +57,6 @@
                 <div class="header-slogan">Все для творчества, школы и офиса</div>
 
                 <ul class="header-menu">
-                    <li class="header-menu--item"><a href="{% url 'pages:static' 'о-компании' %}">Почему мы?</a></li>
-                    <li class="header-menu--item"><a href="{% url 'pages:static' 'доставка' %}">Доставка</a></li>
                     <li class="header-menu--item"><a href="{% url 'pages:static' 'покупателям' %}">Информация для покупателей</a></li>
                     <li class="header-menu--item bold"><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></li>
                     <li class="header-menu--item"><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></li>
@@ -96,16 +94,34 @@
     <nav class="navbar__section">
         <div class="navbar-container">
             <span class="slide-toggle"><i class="fa fa-bars"></i></span>
-            <ul class="navbar-menu mobile-hide">
-                {% for category in categories %}
+            <ul class="navbar-menu mobile-menu drop-down">
                     <li class="navbar-menu--root-item">
-                        <a href="{{ category.get_absolute_url }}">{{ category }}</a>
-                    </li>
-                {% endfor %}
+												<!--<a href="{{ category.get_absolute_url }}">{{ category }}</a>-->
+												<a href="#" class="activ-catalog">Каталог <i class="fa fa-angle-down"></i></a>
+												<ul class="sub-menu">
+													<li>
+														<a href="#">Бумага и канцтовары</a>
+														<ul class="sub-menu-level-2">
+															<li>Категория1</li>
+															<li>Категория2</li>
+															<li>Категория3</li>
+														</ul>
+													</li>
+													<li><a href="#">Офисная мебель</a></li>
+													<li><a href="#">Хобби и творчество</a></li>
+													<li><a href="#">Хозтовары</a></li>
+												</ul>
+										</li>
+										<li class="navbar-menu--root-item">
+											<a href="{% url 'pages:static' 'доставка' %}">Доставка</a></li>
+										</li>
+										<li class="navbar-menu--root-item">
+											<a href="{% url 'pages:static' 'о-компании' %}">О компании</a>
+										</li>
                 <li class="navbar-menu--root-item">
                     <a href="{% url 'pages:blog' %}">Мастер-классы</a>
-                </li>
-            </ul>
+								</li>
+						</ul>
             {% block navbar_cart %}
                 <div v-cloak id="navbar-cart-app" class="navbar-cart">
                     <cart-link

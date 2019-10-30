@@ -231,6 +231,13 @@ do ($=jQuery, window, document) ->
     return
   return
   # ---------------------------------------------------------------------------
+$(document).ready ->
+		if ($(window).width() > 720)
+			$('.sub-menu').hide()
+  $('.drop-down').click ->
+    $('.sub-menu').slideToggle()
+    return
+  return
 
 	# MASK PHONE
 	# ---------------------------------------------------------------------------
@@ -249,3 +256,5 @@ do ($=jQuery, window, document) ->
 			$('.breadcrumbs__section').css("display", "block")
 		return		
 	# ----------------------------------------------------------------------------
+
+

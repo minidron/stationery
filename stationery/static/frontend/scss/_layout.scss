@@ -400,37 +400,74 @@ body {
         flex: 1;
         display: flex;
         flex-flow: row;
-        justify-content: flex-start;
-
+				justify-content: flex-start;
+			.mobile-menu{
+				display:none;
+				width:100%;
+				padding:11px;
+				background:#3E4156;
+				color:#ffffff;
+				text-transform:uppercase;
+				font-weight:600;
+		}
+			
+			.mobile-menu:hover{
+					background:#3E4156;
+					color:#ffffff;
+					text-decoration:none;
+			}
+			
         @include media('<=phone') {
             display: inherit;
         }
 
         .navbar-menu--root-item {
 						margin-right: 30px;
-					
-
-            a {
-                display: block;
-                font: $fw-medium 12px/50px $ff-Roboto;
-                text-decoration: none;
-                text-transform: uppercase;
-								color: get($color, 'nav', 'text');
-								@include media('<=phone') {
-									line-height: 2.5 !important;
-									font-size: 12px;
+						padding-left: 10px;
+						padding-right: 10px;
+					.activ-catalog{
+						background: red;
+						padding-left: 30px;
+					}
+					.sub-menu{
+						display: none;
+						position: absolute;
+						background: white;
+						list-style: none;
+						z-index:99;
+						box-shadow: 0 0 10px rgba(0,0,0,0.5);
+						padding: 30px 30px;
+						color: black;
+						ul{
+							background: white;
+							li {
+								color: black;
+								a	{
+									font-size: 20px;
 								}
-								@include media('<=tablet') {
-									line-height: 1.5;
-								}
-                &:hover {
-                    color: #FFF;
-                }
-            }
+							}
+						}
+					}
+					a {
+						font: $fw-medium 12px/50px $ff-Roboto;
+						text-decoration: none;
+						text-transform: uppercase;
+						color: get($color, 'nav', 'text');
+						@include media('<=phone') {
+							line-height: 2.5 !important;
+							font-size: 12px;
+						}
+						@include media('<=tablet') {
+							line-height: 1.5;
+						}
+						&:hover {
+								color: #FFF;
+						}
+					}
 
             &:last-of-type {
                 margin-right: 0;
-            }
+						}
         }
     }
 
