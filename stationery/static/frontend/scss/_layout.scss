@@ -420,15 +420,14 @@ body {
         @include media('<=phone') {
             display: inherit;
         }
-
+				.activ-catalog{
+					background: red;
+					padding-left: 30px;
+				}
         .navbar-menu--root-item {
 						margin-right: 30px;
 						padding-left: 10px;
 						padding-right: 10px;
-					.activ-catalog{
-						background: red;
-						padding-left: 30px;
-					}
 					.sub-menu{
 						display: none;
 						position: absolute;
@@ -438,6 +437,19 @@ body {
 						box-shadow: 0 0 10px rgba(0,0,0,0.5);
 						padding: 30px 30px;
 						color: black;
+						li:hover{
+							.sub-menu-level-2{
+								display: block;
+								position: absolute;
+								left:180px;
+								top:0;
+								padding: 30px;
+								li {
+									padding-top:10px;
+									list-style-type: none;
+								}
+							}
+						}
 						ul{
 							background: white;
 							li {
@@ -448,6 +460,10 @@ body {
 							}
 						}
 					}
+					.sub-menu-level-2{
+						display:  none;
+					}
+
 					a {
 						font: $fw-medium 12px/50px $ff-Roboto;
 						text-decoration: none;
