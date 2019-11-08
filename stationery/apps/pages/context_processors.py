@@ -20,7 +20,9 @@ def config(request):
 
 def menu(request):
     categories = Category.objects.root_nodes().filter(is_published=True)
+    full_categories = Category.objects.filter(is_published=True)
 
     return {
         'categories': categories,
+        'full_categories': full_categories,
     }

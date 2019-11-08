@@ -421,8 +421,11 @@ body {
             display: inherit;
         }
 				.activ-catalog{
-					background: red;
+					background: #D32F2F;
 					padding-left: 30px;
+					a{
+						font-size: 16px !important;
+					}
 				}
         .navbar-menu--root-item {
 						margin-right: 30px;
@@ -437,6 +440,13 @@ body {
 						box-shadow: 0 0 10px rgba(0,0,0,0.5);
 						padding: 30px 30px;
 						color: black;
+						a{
+							color: black;
+							font-size: 12px !important;
+						}
+						a:hover{
+							color: red;
+						}
 						li:hover{
 							.sub-menu-level-2{
 								display: block;
@@ -444,9 +454,20 @@ body {
 								left:180px;
 								top:0;
 								padding: 30px;
+								width: 300px;
+								font-size: 8px;
+								box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 								li {
 									padding-top:10px;
 									list-style-type: none;
+									
+								}
+								a {
+									color: black;
+									line-height: 0.8;
+								}
+								a:hover{
+									color:red;
 								}
 							}
 						}
@@ -454,14 +475,14 @@ body {
 							background: white;
 							li {
 								color: black;
-								a	{
-									font-size: 20px;
-								}
 							}
 						}
 					}
 					.sub-menu-level-2{
 						display:  none;
+						a{
+							font-size: 12px;
+						}
 					}
 
 					a {
