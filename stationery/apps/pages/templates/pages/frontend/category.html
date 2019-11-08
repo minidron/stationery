@@ -97,11 +97,14 @@
                         <div class="offer-filter--wrapper">
                             <h3 class="offer-filter--title">{{ field.label }}</h3>
                             <div class="offer-filter--">
-                                {{ field }}
+																{{ field }}
                             </div>
                         </div>
                     {% endif %}
-                {% endfor %}
+								{% endfor %}
+								{% if is_filtered %}
+									<div class="category-filters--reset"><a href="#" class="reset">Сбросить фильтры</a></div>
+								{% endif %}
             </div>
             <div class="category-filters--button"><button class="submit" type="submit">Найти</button></div>
         </div>
@@ -109,9 +112,6 @@
             <div class="category-filters--has-rest">
                 <label for="id_order">{{ form_search.order.label }} {{ form_search.order }}</label>
                 <label for="id_has_rests">{{ form_search.has_rests }} Наличие на складе</label>
-                {% if is_filtered %}
-                    <div class="category-filters--reset"><a href="#" class="reset">Сбросить фильтры</a></div>
-                {% endif %}
             </div>
 
             <div class="category-offers">

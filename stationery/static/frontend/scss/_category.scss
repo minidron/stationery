@@ -214,14 +214,14 @@
     }
 
     .category-filters--reset {
-        margin-bottom: 20px;
+				margin-bottom: 20px;
+				margin-top: 20px;
         text-align: center;
 
         .reset {
             text-decoration: none;
             font: $fw-regular 14px/20px $ff-Roboto;
 						color: get($color, 'link', 'base');
-						margin-left: 160px;
 
             &:hover {
                 color: get($color, 'link', 'hover');
