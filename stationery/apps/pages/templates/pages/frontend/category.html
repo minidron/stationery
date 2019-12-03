@@ -1,6 +1,6 @@
 {% extends "pages/frontend/base.html" %}
 
-{% load static thumbnail pages_tag %}
+{% load static thumbnail pages_tag mptt_tags %}
 
 
 {% block breadcrumbs %}
@@ -37,33 +37,41 @@
     {% if category.get_children %}
         <div class="sub-categories-container">
             {% spaceless %}
-            <ul class="sub-categories--list">
-                {% for sub_category in category.get_children %}
-                    <li class="sub-categories--item rounded clickable">
-                        <span class="sub-category--icon">
-                            {% thumbnail sub_category.image '36x36' as category_image %}
-                                <img src="{{ category_image.url }}">
-                            {% empty %}
-                                <img src="{% static 'frontend/images/category-placeholder.png' %}">
-                            {% endthumbnail %}
-                        </span>
 
-                        <ul class="sub-category--items">
-                            <li class="sub-category--item">
-                                <a class="sub-category--link" href="{{ sub_category.get_absolute_url }}">{{ sub_category }}</a>
+            <ul class="recursetree">
+                {% recursetree category.get_descendants %}
+                    {% with node.level|subtract:category.level as level %}
+                        {% if node.is_published %}
+
+                            <li class="level--{{ level }} {% if level == 1 %}rounded clickable{% endif %}">
+                                {% if level == 1 %}
+                                    <div class="recursetree--title">
+                                        <span class="sub-category--icon">
+                                            {% thumbnail sub_category.image '36x36' as category_image %}
+                                                <img src="{{ category_image.url }}">
+                                            {% empty %}
+                                                <img src="{% static 'frontend/images/category-placeholder.png' %}">
+                                            {% endthumbnail %}
+                                        </span>
+
+                                        <a href="{{ node.get_absolute_url }}">{{ node }}</a>
+                                    </div>
+                                {% else %}
+                                    <a href="{{ node.get_absolute_url }}">{{ node }}</a>
+                                {% endif %}
+
+                                {% if not node.is_leaf_node %}
+                                    <ul>
+                                        {{ children }}
+                                    </ul>
+                                {% endif %}
                             </li>
 
-                            {% if sub_category.get_children %}
-                                {% for sub_category_children in sub_category.get_children %}
-                                    <li class="sub-category-children--item">
-                                        <a class="sub-category--link" href="{{ sub_category_children.get_absolute_url }}">{{ sub_category_children }}</a>
-                                    </li>
-                                {% endfor %}
-                            {% endif %}
-                        </ul>
-                    </li>
-                {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                {% endrecursetree %}
             </ul>
+
             {% endspaceless %}
         </div>
     {% endif %}

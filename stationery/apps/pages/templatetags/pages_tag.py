@@ -28,6 +28,11 @@ def mul(value, arg):
     return value * arg
 
 
+@register.filter
+def subtract(value, arg):
+    return value - arg
+
+
 @register.simple_tag(takes_context=True)
 def pagination_url(context, page):
     request = context['request']
