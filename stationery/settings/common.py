@@ -196,7 +196,7 @@ PIPELINE = {
             'source_filenames': (
                 'frontend/scss/style.scss',
             ),
-            'output_filename': 'frontend/css/style-2019-12-03.css',
+            'output_filename': 'frontend/css/style-2019-12-14.css',
         },
     },
     'JAVASCRIPT': {
@@ -229,7 +229,7 @@ PIPELINE = {
             'source_filenames': (
                 'frontend/coffee/script.coffee',
             ),
-            'output_filename': 'frontend/js/script-2019-12-03.js',
+            'output_filename': 'frontend/js/script-2019-12-14.js',
         },
     },
     'COMPILERS': (

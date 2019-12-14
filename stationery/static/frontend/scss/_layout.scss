@@ -119,7 +119,7 @@ body {
 						font-size: 18px;
 						@include media('<=phone') {
 							font-size: 14px;
-							display: none;	
+							display: none;
 						}
 						@include media('<=tablet') {
 							font-size: 14px;
@@ -307,6 +307,11 @@ body {
             flex: 1;
         }
 
+        .category {
+            font-weight: $fw-bold;
+            color: get($color, 'text', 'base');
+        }
+
         .price {
             margin-left: 30px;
             width: 80px;
@@ -342,7 +347,7 @@ body {
 				flex-flow:column;
 				padding-top: 10px;
         }
-        
+
 
         .header-menu{
         flex-flow:column;
@@ -410,13 +415,13 @@ body {
 				text-transform:uppercase;
 				font-weight:600;
 		}
-			
+
 			.mobile-menu:hover{
 					background:#3E4156;
 					color:#ffffff;
 					text-decoration:none;
 			}
-			
+
         @include media('<=phone') {
             display: inherit;
         }
@@ -459,7 +464,7 @@ body {
 								li {
 									padding-top:10px;
 									list-style-type: none;
-									
+
 								}
 								a {
 									color: black;
@@ -622,9 +627,9 @@ body {
 		.back-to img{
 			display: none;
 			@include media('<=phone') {
-				width: 50%; 
+				width: 50%;
 				display: block;
-			}		
+			}
 		}
 
     .main--title {

@@ -46,18 +46,23 @@ do ($=jQuery, window, document) ->
       minChars: 2
       maxHeight: 'auto'
       appendTo: searchBlock
+
       transformResult: (response) ->
         suggestions: $.map JSON.parse(response), (dataItem) ->
-          value: dataItem.title, data:
+          value: dataItem.title
+          data:
             link: dataItem.url
             price: dataItem.price_retail
-      formatResult: (suggestion, currentValue) ->
-        if not currentValue
-          return suggestion.value
+            category: dataItem.category
 
+      formatResult: (suggestion, currentValue) ->
         pattern = '(' + escapeRegExChars(currentValue) + ')'
-        result = '<div class="suggestion">' + suggestion.value + '</div><div class="price">' + suggestion.data.price + '</div>'
-        result.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
+        value = suggestion.value.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
+        return "<div class='suggestion'>
+                  #{value}
+                  <div class='category'>#{suggestion.data.category}</div>
+                </div>
+                <div class='price'>#{suggestion.data.price}</div>"
 
       onSelect: (suggestion) ->
           window.location.href = suggestion.data.link
