@@ -1,5 +1,8 @@
 ///* HTML=================================================================== */
 body {
+    @include media('<=phone') {
+        padding-top: 50px;
+    }
 }
 
 .colored-line {
@@ -370,186 +373,182 @@ body {
 /* NAV
 ============================================================================ */
 .navbar__section {
-		background-color: get($color, 'nav', 'background');
-		@include media('<=phone') {
-			position: absolute;
-			top:0;
-			z-index: 999;
-		}
+    background-color: get($color, 'nav', 'background');
 
-    .navbar-container {
-        @include responsive-block;
-        display: flex;
-        align-items: center;
-        flex-flow: row;
+    @include media('<=phone') {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        z-index: 10;
+    }
+}
 
-        .slide-toggle {
-            display:none;
-        }
+.navbar-container {
+    @include responsive-block;
+    display: flex;
+    align-items: center;
+
+    @include media('<=phone') {
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .menu-toggle {
+        display:none;
+        font-size: 26px;
+        color: white;
 
         @include media('<=phone') {
-            display: inherit;
+            display: block;
+        }
+    }
+}
 
-            .slide-toggle {
-                color: white;
-                font-size: 26px;
-                padding-top: 10px;
-								display: inherit;
-								padding-bottom: 10px;
+.navbar-cart--link {
+    display: inline-block;
+    width: 200px;
+    font: $fw-medium 14px/50px $ff-Roboto;
+    text-align: center;
+    text-decoration: none;
+    color: get($color, 'nav', 'text');
+    background-color: mix($color-secondary, #FFF, 90%);
+    transition: background-color $base-transition;
+
+    &:before {
+        @include fa-icon;
+        content: $fa-var-shopping-cart;
+        margin-right: 10px;
+        vertical-align: text-bottom;
+        font-size: 24px;
+        color: #FFF;
+    }
+
+    &:after {
+        @include fa-icon;
+        content: $fa-var-rub;
+        margin-left: 5px;
+        font-size: 14px;
+    }
+
+    &:hover {
+        background-color: darken(mix($color-secondary, #FFF, 90%), 10%);
+    }
+}
+
+.navbar-menu {
+    @include clear-list;
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+
+    @include media('<=phone') {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        background-color: #283d4b;
+    }
+
+    &.mobile-hide {
+        @include media('<=phone') {
+            display: none;
+        }
+    }
+}
+
+.navbar-menu--root-item {
+    margin-right: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    .sub-menu {
+        display: none;
+        position: absolute;
+        padding: 30px 30px;
+        width: 700px;
+        list-style: none;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        color: black;
+        background: white;
+        z-index:99;
+
+        a {
+            font-size: 12px !important;
+            color: black;
+
+            &:hover{
+                color: red;
+            }
+        }
+
+        li:hover {
+            .sub-menu-level-2 {
+                display: block;
+                top: 0;
+                left: 180px;
+                padding: 30px;
+                width: 300px;
+                font-size: 8px;
+
+                li {
+                    padding-top:10px;
+                    list-style-type: none;
+                }
+
+                a {
+                    color: black;
+                    line-height: 0.8;
+
+                    &:hover{
+                        color:red;
+                    }
+                }
+            }
+        }
+
+        ul {
+            background: white;
+
+            li {
+                color: black;
             }
         }
     }
 
-    .navbar-menu {
-        @include clear-list;
-        flex: 1;
-        display: flex;
-        flex-flow: row;
-				justify-content: flex-start;
-			.mobile-menu{
-				display:none;
-				width:100%;
-				padding:11px;
-				background:#3E4156;
-				color:#ffffff;
-				text-transform:uppercase;
-				font-weight:600;
-		}
+    .sub-menu-level-2 {
+        display:  none;
 
-			.mobile-menu:hover{
-					background:#3E4156;
-					color:#ffffff;
-					text-decoration:none;
-			}
-
-        @include media('<=phone') {
-            display: inherit;
-        }
-				.activ-catalog{
-					background: #D32F2F;
-					padding-left: 30px;
-					a{
-						font-size: 16px !important;
-					}
-				}
-        .navbar-menu--root-item {
-						margin-right: 30px;
-						padding-left: 10px;
-						padding-right: 10px;
-					.sub-menu{
-						display: none;
-						position: absolute;
-						background: white;
-						list-style: none;
-						z-index:99;
-						box-shadow: 0 0 10px rgba(0,0,0,0.5);
-						padding: 30px 30px;
-						color: black;
-						width: 700px;
-						a{
-							color: black;
-							font-size: 12px !important;
-						}
-						a:hover{
-							color: red;
-						}
-						li:hover{
-							.sub-menu-level-2{
-								display: block;
-								left:180px;
-								top:0;
-								padding: 30px;
-								width: 300px;
-								font-size: 8px;
-								li {
-									padding-top:10px;
-									list-style-type: none;
-
-								}
-								a {
-									color: black;
-									line-height: 0.8;
-								}
-								a:hover{
-									color:red;
-								}
-							}
-						}
-						ul{
-							background: white;
-							li {
-								color: black;
-							}
-						}
-					}
-					.sub-menu-level-2{
-						display:  none;
-						a{
-							font-size: 12px;
-						}
-					}
-
-					a {
-						font: $fw-medium 12px/50px $ff-Roboto;
-						text-decoration: none;
-						text-transform: uppercase;
-						color: get($color, 'nav', 'text');
-						@include media('<=phone') {
-							line-height: 2.5 !important;
-							font-size: 12px;
-						}
-						@include media('<=tablet') {
-							line-height: 1.5;
-						}
-						&:hover {
-								color: #FFF;
-						}
-					}
-
-            &:last-of-type {
-                margin-right: 0;
-						}
+        a {
+            font-size: 12px;
         }
     }
 
-    .navbar-cart {
-        .navbar-cart--link {
-            display: inline-block;
-            width: 200px;
-            font: $fw-medium 14px/50px $ff-Roboto;
-            text-align: center;
-            text-decoration: none;
-            color: get($color, 'nav', 'text');
-            background-color: mix($color-secondary, #FFF, 90%);
-						transition: background-color $base-transition;
-						@include media('<=phone') {
-							position: absolute;
-							top:0;
-							float: left;
-							width:70px;
-							margin-left:369%;
-						}
+    a {
+        font: $fw-medium 12px/50px $ff-Roboto;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: get($color, 'nav', 'text');
 
-            &:before {
-                @include fa-icon;
-                content: $fa-var-shopping-cart;
-                margin-right: 10px;
-                vertical-align: text-bottom;
-                font-size: 24px;
-                color: #FFF;
-            }
-
-            &:after {
-                @include fa-icon;
-                content: $fa-var-rub;
-                margin-left: 5px;
-                font-size: 14px;
-            }
-
-            &:hover {
-                background-color: darken(mix($color-secondary, #FFF, 90%), 10%);
-            }
+        @include media('<=phone') {
+            line-height: 2.5 !important;
+            font-size: 12px;
         }
+
+        @include media('<=tablet') {
+            line-height: 1.5;
+        }
+
+        &:hover {
+            color: #FFF;
+        }
+    }
+
+    &:last-of-type {
+        margin-right: 0;
     }
 }
 /* ------------------------------------------------------------------------- */

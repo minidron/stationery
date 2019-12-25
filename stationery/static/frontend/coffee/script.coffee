@@ -8,7 +8,7 @@ do ($=jQuery, window, document) ->
   # ---------------------------------------------------------------------------
   $.fn.extend animateCss: (animationName, callback) ->
     animationEnd = ((el) ->
-      animations = 
+      animations =
         animation: 'animationend'
         OAnimation: 'oAnimationEnd'
         MozAnimation: 'mozAnimationEnd'
@@ -206,17 +206,16 @@ do ($=jQuery, window, document) ->
 
   if $('[data-coords]').length
     ymaps.ready InitOfficeMap
-
   # ---------------------------------------------------------------------------
 
 
   # SLIDER
   # ---------------------------------------------------------------------------
-  swiper = new Swiper '.swiper-container', 
+  swiper = new Swiper '.swiper-container',
   navigation:
     nextEl: '.swiper-button-next'
     prevEl: '.swiper-button-prev'
-   pagination: 
+   pagination:
     el: '.swiper-pagination'
    clickable: true
    loop: true
@@ -228,15 +227,13 @@ do ($=jQuery, window, document) ->
 
   # POPUP FILTER
   # ---------------------------------------------------------------------------
-  $(document).ready ->
-		if ($(window).width() < 720)
-			$('.mobile-hide').hide()
-  $('.slide-toggle').click ->
-    $('.mobile-hide').slideToggle()
-    return
-  return
+  $ ->
+    $('.menu-toggle').click ->
+      $('.navbar-menu').toggleClass 'mobile-hide'
   # ---------------------------------------------------------------------------
-$(document).ready ->
+
+
+  $(document).ready ->
 		if ($(window).width() > 720)
 			$('.sub-menu').hide()
   $('.drop-down').click ->
@@ -252,14 +249,14 @@ $(document).ready ->
 	#----------------------------------------------------------------------------
 
 
-	# BREADCRUMS ON PHONE 
+	# BREADCRUMS ON PHONE
 	# ----------------------------------------------------------------------------
 	$(document).ready ->
 		if ((window.screen.width < 480) and ($('.breadcrumbs').children("li").length) == 0)
 			$('.breadcrumbs__section').css("display", "none")
-		else 
+		else
 			$('.breadcrumbs__section').css("display", "block")
-		return		
+		return
 	# ----------------------------------------------------------------------------
 
 

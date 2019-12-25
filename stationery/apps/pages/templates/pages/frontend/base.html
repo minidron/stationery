@@ -94,10 +94,10 @@
 
     <nav class="navbar__section">
         <div class="navbar-container">
-            <span class="slide-toggle"><i class="fa fa-bars"></i></span>
-            <ul class="navbar-menu mobile-menu drop-down">
+            <span class="menu-toggle"><i class="fa fa-bars"></i></span>
+
+            <ul class="navbar-menu mobile-hide drop-down">
                 <li class="navbar-menu--root-item activ-catalog">
-                    <!--<a href="{{ category.get_absolute_url }}">{{ category }}</a>-->
                     <a href="#" >Каталог <i class="fa fa-angle-down"></i></a>
                     <ul class="sub-menu">
                         {% recursetree full_categories %}
@@ -124,6 +124,7 @@
                     <a href="{% url 'pages:blog' %}">Мастер-классы</a>
                 </li>
             </ul>
+
             {% block navbar_cart %}
                 <div v-cloak id="navbar-cart-app" class="navbar-cart">
                     <cart-link
