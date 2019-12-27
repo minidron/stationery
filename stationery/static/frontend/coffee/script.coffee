@@ -41,7 +41,7 @@ do ($=jQuery, window, document) ->
       value.split(' ').filter((n) -> n != '').join '|'
 
     $('#header-search').devbridgeAutocomplete
-      serviceUrl: '/api/search_offer/'
+      serviceUrl: '/api/search_category/'
       paramName: 'title'
       minChars: 2
       maxHeight: 'auto'
@@ -52,20 +52,16 @@ do ($=jQuery, window, document) ->
           value: dataItem.title
           data:
             link: dataItem.url
-            price: dataItem.price_retail
-            category: dataItem.category
 
       formatResult: (suggestion, currentValue) ->
         pattern = '(' + escapeRegExChars(currentValue) + ')'
         value = suggestion.value.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
         return "<div class='suggestion'>
                   #{value}
-                  <div class='category'>#{suggestion.data.category}</div>
-                </div>
-                <div class='price'>#{suggestion.data.price}</div>"
+                </div>"
 
       onSelect: (suggestion) ->
-          window.location.href = suggestion.data.link
+        window.location.href = suggestion.data.link
   # ---------------------------------------------------------------------------
 
 

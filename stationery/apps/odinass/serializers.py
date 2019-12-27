@@ -71,7 +71,6 @@ class SearchOfferFilter(django_filters.FilterSet):
 class SearchOfferSerializer(serializers.ModelSerializer):
     url = serializers.CharField(source='get_absolute_url', read_only=True)
     category = serializers.CharField(source='product.category', read_only=True)
-    # price_retail = serializers.CharField(source='price', read_only=True)
     price_retail = serializers.SerializerMethodField(read_only=True)
     title = serializers.CharField(source='full_title', read_only=True)
 
@@ -85,3 +84,33 @@ class SearchOfferSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             user = request.user
         return obj.price(user=user)
+
+
+class CategoryTitleFilter(django_filters.Filter):
+    """
+    Поиск для автокомплита.
+    """
+    max_result = 10
+
+    def filter(self, qs, value):
+        bits = value.split(' ')
+        title_filters = reduce(
+            operator.and_,
+            [Q(title__iregex=r'(^|\s|\[)%s' % escape(v)) for v in bits])
+        return qs.filter(title_filters)[:self.max_result]
+
+
+class SearchCategoryFilter(django_filters.FilterSet):
+    title = CategoryTitleFilter()
+
+    class Meta:
+        fields = ('title', )
+        model = Category
+
+
+class SearchCategorySerializer(serializers.ModelSerializer):
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
+
+    class Meta:
+        fields = ['title', 'url']
+        model = Category
