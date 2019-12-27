@@ -226,6 +226,9 @@ do ($=jQuery, window, document) ->
   $ ->
     $('.menu-toggle').click ->
       $('.navbar-menu').toggleClass 'mobile-hide'
+
+    $('.filter-toggle').click ->
+      $('.category-filters').toggleClass 'mobile-hide'
   # ---------------------------------------------------------------------------
 
 
