@@ -460,10 +460,14 @@ body {
     }
 }
 
+.activ-catalog{
+	background-color: #D32F2F;
+}
+
 .navbar-menu--root-item {
     margin-right: 30px;
     padding-left: 10px;
-    padding-right: 10px;
+		padding-right: 10px;
 
     .sub-menu {
         display: none;
@@ -474,16 +478,26 @@ body {
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
         color: black;
         background: white;
-        z-index:99;
+				z-index:99;
+				
 
         a {
             font-size: 12px !important;
             color: black;
 
             &:hover{
-                color: red;
+								color: red;
             }
         }
+				@include media('<=phone'){
+					li:hover{
+						.sub-menu-level-2{
+							li{
+								display: none;
+							}
+						}
+					}
+				}
 
         li:hover {
             .sub-menu-level-2 {
