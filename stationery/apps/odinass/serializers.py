@@ -21,7 +21,7 @@ class OfferTitleFilter(django_filters.Filter):
     """
     Поиск для автокомплита.
     """
-    max_result = 10
+    max_result = 15
     uniq_category = True
 
     def filter(self, qs, value):
@@ -33,7 +33,7 @@ class OfferTitleFilter(django_filters.Filter):
         else:
             full_name_clauses = reduce(
                 operator.and_,
-                [Q(full_name__iregex=r'(^|\s|\[)%s' % escape(v))
+                [Q(full_name__iregex=r'(^|\s|\[|\"|\'|\()%s' % escape(v))
                  for v in bits])
 
         unpublished = Category.objects.get_queryset_descendants(
@@ -46,7 +46,8 @@ class OfferTitleFilter(django_filters.Filter):
         if self.uniq_category:
             products = (qs.order_by('product__category__title')
                           .distinct('product__category__title'))
-            qs = qs.filter(id__in=products).order_by('product__title')
+            qs = (qs.filter(id__in=products)
+                    .order_by('-product__category__views'))
 
         return qs[:self.max_result]
 
@@ -71,6 +72,7 @@ class SearchOfferFilter(django_filters.FilterSet):
 class SearchOfferSerializer(serializers.ModelSerializer):
     url = serializers.CharField(source='get_absolute_url', read_only=True)
     category = serializers.CharField(source='product.category', read_only=True)
+    # price_retail = serializers.CharField(source='price', read_only=True)
     price_retail = serializers.SerializerMethodField(read_only=True)
     title = serializers.CharField(source='full_title', read_only=True)
 
@@ -84,33 +86,3 @@ class SearchOfferSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             user = request.user
         return obj.price(user=user)
-
-
-class CategoryTitleFilter(django_filters.Filter):
-    """
-    Поиск для автокомплита.
-    """
-    max_result = 10
-
-    def filter(self, qs, value):
-        bits = value.split(' ')
-        title_filters = reduce(
-            operator.and_,
-            [Q(title__iregex=r'(^|\s|\[)%s' % escape(v)) for v in bits])
-        return qs.filter(title_filters)[:self.max_result]
-
-
-class SearchCategoryFilter(django_filters.FilterSet):
-    title = CategoryTitleFilter()
-
-    class Meta:
-        fields = ('title', )
-        model = Category
-
-
-class SearchCategorySerializer(serializers.ModelSerializer):
-    url = serializers.CharField(source='get_absolute_url', read_only=True)
-
-    class Meta:
-        fields = ['title', 'url']
-        model = Category

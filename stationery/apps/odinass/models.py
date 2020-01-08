@@ -51,6 +51,9 @@ class Category(MPTTModel):
     content = RichTextField(
         'описание',
         blank=True, default='')
+    views = models.IntegerField(
+        'кол-во просмотров',
+        default=0)
 
     class MPTTMeta:
         order_insertion_by = ['title']

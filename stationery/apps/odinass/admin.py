@@ -26,8 +26,9 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
     readonly_fields = [
         'id',
-        'title',
         'parent',
+        'title',
+        'views',
     ]
 
     fieldsets = (
@@ -42,6 +43,7 @@ class CategoryAdmin(DraggableMPTTAdmin):
         ('Дополнительно', {
             'fields': (
                 'id',
+                'views',
                 'parent',
                 'order',
             ),

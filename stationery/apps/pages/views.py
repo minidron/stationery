@@ -4,7 +4,7 @@ import operator
 from functools import reduce
 
 from django import forms
-from django.db.models import Q, Func, Max, Min, Prefetch
+from django.db.models import Q, Func, Max, Min, Prefetch, F
 from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, TemplateView
@@ -208,6 +208,11 @@ class CategoryView(DetailView):
         num_list = sorted(num_list, key=lambda tup: tup[1])
         str_list = sorted(str_list, key=lambda tup: tup[1])
         return num_list + str_list
+
+    def render_to_response(self, context, **response_kwargs):
+        (Category.objects.filter(pk=self.kwargs['pk'])
+                         .update(views=F('views') + 1))
+        return super().render_to_response(context, **response_kwargs)
 
 
 class ProductView(DetailView):
