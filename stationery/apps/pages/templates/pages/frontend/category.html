@@ -47,7 +47,7 @@
                                 {% if level == 1 %}
                                     <div class="recursetree--title">
                                         <span class="sub-category--icon">
-                                            {% thumbnail sub_category.image '36x36' as category_image %}
+                                            {% thumbnail node.image '36x36' as category_image %}
                                                 <img src="{{ category_image.url }}">
                                             {% empty %}
                                                 <img src="{% static 'frontend/images/category-placeholder.png' %}">
