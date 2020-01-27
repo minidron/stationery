@@ -491,7 +491,7 @@ background-color: #D32F2F;
 			}
 			@include media('<=phone'){
 				li:hover{
-					.sub-menu-level-2{
+					.sub-menu-level-2.hide{
 						li{
 							display: none;
 						}
