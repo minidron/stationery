@@ -105,8 +105,8 @@
                                 <li>
                                     <a href="{{ node.get_absolute_url }}">{{ node }}</a>
                                     {% if not node.is_leaf_node %}
-                                        <ul class="sub-menu-level-2">
-                                            {{ children }}
+                                        <ul class="sub-menu-level-2 hide">
+																					{{ children }}
                                         </ul>
                                     {% endif %}
                                 </li>

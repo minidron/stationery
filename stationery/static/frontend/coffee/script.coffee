@@ -235,14 +235,22 @@ do ($=jQuery, window, document) ->
       $('.category-filters').toggleClass 'mobile-hide'
   # ---------------------------------------------------------------------------
 
-
+	# TOGGLE MENU
+	# ---------------------------------------------------------------------------
   $(document).ready ->
 		if ($(window).width() > 720)
 			$('.sub-menu').hide()
-  $('.drop-down').click ->
+  $('.activ-catalog').click ->
     $('.sub-menu').slideToggle()
     return
   return
+
+	$(document).mouseup (e)->
+		container = $('.sub-menu')
+		if (!container.is(e.target) && container.has(e.target).length == 0)
+				container.hide();
+	# ---------------------------------------------------------------------------
+
 
 	# MASK PHONE
 	# ---------------------------------------------------------------------------
@@ -261,5 +269,6 @@ do ($=jQuery, window, document) ->
 			$('.breadcrumbs__section').css("display", "block")
 		return
 	# ----------------------------------------------------------------------------
+
 
 
