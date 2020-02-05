@@ -245,10 +245,11 @@ do ($=jQuery, window, document) ->
     return
   return
 
-	$(document).mouseup (e)->
-		container = $('.sub-menu')
-		if (!container.is(e.target) && container.has(e.target).length == 0)
-				container.hide();
+$(document).mouseup (e) ->
+  container = $('.sub-menu')
+  if !container.is(e.target) and container.has(e.target).length == 0
+    return container.hide()
+  return
 	# ---------------------------------------------------------------------------
 
 
@@ -258,6 +259,10 @@ do ($=jQuery, window, document) ->
 		$('#id_phone').mask("+7 (999) 99-99-999")
 		return
 	#----------------------------------------------------------------------------
+
+	# $('.sub-menu li').hover ->
+	#	$('.sub-menu-level-2').slideToggle()
+
 
 
 	# BREADCRUMS ON PHONE
