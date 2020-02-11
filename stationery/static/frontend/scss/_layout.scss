@@ -482,7 +482,9 @@ background-color: #D32F2F;
 			background: white;
 			z-index:99;
 			height: auto;
-
+		.show-item{
+			width:100%;
+		}
 			a {
 					font-size: 12px !important;
 					color: black;
@@ -501,33 +503,32 @@ background-color: #D32F2F;
 				}
 			}
 
-			li:hover {
-					.sub-menu-level-2 {
-							display: inline-grid;
-							position: absolute;
-							width: 400px;
-							padding-top: 30px;
-							margin-top: -30px;
-							margin-left: 60px;
-							li {
-								display: inline-grid;
-								padding-top:0;
-								list-style-type: none;
-								padding-bottom: 15px;
-							}
-							.hide{
-								display:none;
-							}
-							a {
-									color: black;
-									line-height: 0.8;
 
-									&:hover{
-											color:red;
-									}
-							}
-					}
-			}
+				.sub-menu-level-2 {
+						display: none;
+						position: absolute;
+						width: 400px;
+						padding-top: 30px;
+						margin-top: -30px;
+						margin-left: 60px;
+						li {
+							display: block;
+							padding-top:0;
+							list-style-type: none;
+						}
+						.hide{
+							display:none !important;
+						}
+						a {
+								color: black;
+								line-height: 0.8;
+
+								&:hover{
+										color:red;
+								}
+						}
+				}
+
 
 			ul {
 					background: white;

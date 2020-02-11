@@ -253,16 +253,18 @@ $(document).mouseup (e) ->
 	# ---------------------------------------------------------------------------
 
 
+	#$('.sub-menu li').hover ->
+	#	child = $('.sub-menu-level-2')
+	#	child.addClass('hide')
+	#	child.show()
+
+
 	# MASK PHONE
 	# ---------------------------------------------------------------------------
 	$(document).ready ->
 		$('#id_phone').mask("+7 (999) 99-99-999")
 		return
 	#----------------------------------------------------------------------------
-
-	# $('.sub-menu li').hover ->
-	#	$('.sub-menu-level-2').slideToggle()
-
 
 
 	# BREADCRUMS ON PHONE
