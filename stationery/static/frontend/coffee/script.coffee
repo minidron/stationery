@@ -253,10 +253,10 @@ $(document).mouseup (e) ->
 	# ---------------------------------------------------------------------------
 
 
-	$('.sub-menu li').hover ->
-		child = $('.sub-menu-level-2')
-		child.addClass('hide')
-		child.show()
+	#$('.sub-menu li').hover ->
+		#child = $('.sub-menu-level-2')
+		#child.addClass('hide')
+		#child.show()
 
 
 	# MASK PHONE
