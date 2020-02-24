@@ -253,11 +253,27 @@ $(document).mouseup (e) ->
 	# ---------------------------------------------------------------------------
 
 
-	#$('.sub-menu li').hover ->
-		#child = $('.sub-menu-level-2')
-		#child.addClass('hide')
-		#child.show()
+	$(document).ready ->
+		$('.sub-menu > *:nth-child(2)').hover ->
+			$('.sub-menu-level-2').hide()
+			$(this).find(".sub-menu-level-2:eq(0)").show()
+		$('.sub-menu > *:nth-child(1)').hover ->
+			$('.sub-menu-level-2').hide()
+			$(this).find(".sub-menu-level-2:eq(0)").show()
+		$('.sub-menu > *:nth-child(3)').hover ->
+			$('.sub-menu-level-2').hide()
+			$(this).find(".sub-menu-level-2:eq(0)").show()
+		$('.sub-menu > *:nth-child(4)').hover ->
+			$('.sub-menu-level-2').hide()
+			$(this).find(".sub-menu-level-2:eq(0)").show()
 
+
+
+
+
+		#$('.sub-menu').mouseup(a) ->
+			#if !child.is(a.target) and child.has(a.target).length == 0
+    		#return child.hide()
 
 	# MASK PHONE
 	# ---------------------------------------------------------------------------
