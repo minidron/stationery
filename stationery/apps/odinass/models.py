@@ -86,7 +86,7 @@ class Category(MPTTModel):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('pages:category', kwargs={'path': self.path})
+        return reverse('pages:catalog', kwargs={'path': self.path})
 
     def get_path(self):
         """
@@ -426,10 +426,8 @@ class Offer(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('pages:product', kwargs={
-            'slug': self.slug,
-            'category_path': self.product.category.path
-        })
+        path = '/'.join([self.product.category.path, self.slug])
+        return reverse('pages:catalog', kwargs={'path': path})
 
     def autoslug(self):
         if self.slug:

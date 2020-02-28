@@ -294,3 +294,16 @@ class BlogDetailView(DetailView):
     """
     model = Blog
     template_name = 'pages/frontend/blog.html'
+
+
+def catalog_view(request, *args, **kwargs):
+    path = kwargs['path']
+
+    if Category.objects.filter(path=path).exists():
+        return CategoryView.as_view()(request, *args, **kwargs)
+    else:
+        slugs = path.split('/')
+        category_path = '/'.join(slugs[:-1])
+        slug = slugs[-1]
+        new_kwargs = {'category_path': category_path, 'slug': slug}
+        return ProductView.as_view()(request, *args, **new_kwargs)
