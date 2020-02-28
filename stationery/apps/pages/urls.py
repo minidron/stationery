@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^search/$',
         views_pages.SearchOfferView.as_view(), name='search'),
     url(r'^contacts/$',
-        views_pages.OfficeListView.as_view(), name='contact'),
+        views_pages.OfficeListView.as_view(), name='contacts'),
     url(r'^workshop/$',
         views_pages.BlogListView.as_view(), name='blog'),
     url(r'^workshop/(?P<pk>[0-9a-f-]+)/$',
