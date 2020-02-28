@@ -23,9 +23,6 @@ class IndexView(TemplateView):
     """
     template_name = 'pages/frontend/index.html'
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
@@ -53,6 +50,8 @@ class CategoryView(DetailView):
     Страница категории.
     """
     model = Category
+    slug_field = 'path'
+    slug_url_kwarg = 'path'
     paginate_by = 15
     allow_empty = ListView.allow_empty
     get_allow_empty = ListView.get_allow_empty
@@ -73,15 +72,14 @@ class CategoryView(DetailView):
         if queryset is None:
             queryset = self.get_queryset()
 
-        pk = self.kwargs.get(self.pk_url_kwarg)
-        qs = (queryset.filter(pk=pk)
+        path = self.kwargs.get('path')
+        qs = (queryset.filter(path=path)
                       .get_ancestors(include_self=True)
                       .filter(is_published=False))
 
         if len(qs) > 0:
             raise Http404(_("No %(verbose_name)s found matching the query") %
                           {'verbose_name': queryset.model._meta.verbose_name})
-
         return super().get_object(queryset=queryset)
 
     def get_context_data(self, **kwargs):
@@ -210,7 +208,7 @@ class CategoryView(DetailView):
         return num_list + str_list
 
     def render_to_response(self, context, **response_kwargs):
-        (Category.objects.filter(pk=self.kwargs['pk'])
+        (Category.objects.filter(path=self.kwargs['path'])
                          .update(views=F('views') + 1))
         return super().render_to_response(context, **response_kwargs)
 

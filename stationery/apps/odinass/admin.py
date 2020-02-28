@@ -35,6 +35,8 @@ class CategoryAdmin(DraggableMPTTAdmin):
         (None, {
             'fields': (
                 'title',
+                'slug',
+                'path',
                 'is_published',
                 'image',
                 'content',

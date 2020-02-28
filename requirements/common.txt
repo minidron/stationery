@@ -3,6 +3,8 @@ Django==1.11.23
 pip==18.1
 setuptools==40.6.3
 
+git+https://github.com/last-partizan/pytils.git@1c570a3
+
 celery==4.1.0
 django-admin-sortable2==0.6.19
 django-bower==5.2.0

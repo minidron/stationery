@@ -2,21 +2,28 @@ import uuid
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Case, When
-from django.db.models import F, Sum, OuterRef, Prefetch, Subquery, Value
-from django.db.models import IntegerField
+from django.db.models import (
+    Case,
+    F,
+    IntegerField,
+    OuterRef,
+    Prefetch,
+    Subquery,
+    Sum,
+    Value,
+    When
+)
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.urls import reverse
 
 from ckeditor.fields import RichTextField
-
 from django_resized import ResizedImageField
+from mptt.models import MPTTModel, TreeForeignKey
+from pytils.translit import slugify
 
 from lib.email import create_email
-
-from mptt.models import MPTTModel, TreeForeignKey
 
 
 def generate_upload_path(instance, filename):
@@ -35,6 +42,12 @@ class Category(MPTTModel):
     title = models.CharField(
         'название',
         max_length=254, db_index=True)
+    slug = models.SlugField(
+        'slug',
+        blank=True, max_length=254)
+    path = models.TextField(
+        'полный путь',
+        null=True, blank=True, db_index=True)
     parent = TreeForeignKey(
         'self',
         verbose_name='родительская категория',
@@ -67,11 +80,28 @@ class Category(MPTTModel):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        self.autoslug()
+        self.path = self.get_path()
+        super().save(*args, **kwargs)
+
     def get_absolute_url(self):
-        return reverse('pages:category', args=[str(self.id)])
+        return reverse('pages:category', kwargs={'path': self.path})
+
+    def get_path(self):
+        """
+        Полный путь к категории.
+        """
+        slugs = [item.slug for item in self.get_ancestors(include_self=True)]
+        return '/'.join(slugs)
 
     def offers(self, user=None):
         return Offer.objects.offers(user=user, category=self)
+
+    def autoslug(self):
+        if self.slug:
+            return
+        self.slug = slugify(self.title.strip())
 
 
 class Warehouse(models.Model):
@@ -371,7 +401,11 @@ class Offer(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(
-        'наименование', max_length=254)
+        'наименование',
+        max_length=254)
+    slug = models.SlugField(
+        'slug',
+        blank=True, max_length=254)
     product = models.ForeignKey(
         'odinass.Product',
         verbose_name='товар')
@@ -387,8 +421,20 @@ class Offer(models.Model):
     def __str__(self):
         return self.full_title
 
+    def save(self, *args, **kwargs):
+        self.autoslug()
+        super().save(*args, **kwargs)
+
     def get_absolute_url(self):
-        return reverse('pages:product', args=[str(self.id)])
+        return reverse('pages:product', kwargs={
+            'slug': self.slug,
+            'category_path': self.product.category.path
+        })
+
+    def autoslug(self):
+        if self.slug:
+            return
+        self.slug = slugify(self.title)
 
     def price(self, user=None):
         price_params = {}
