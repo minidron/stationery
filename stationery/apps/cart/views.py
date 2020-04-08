@@ -105,17 +105,16 @@ class PaymentView(LoginRequiredMixin, FormView):
             })
         return kwargs
 
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
     def form_valid(self, form):
         """
         Если форма валидна, то нам нужно создать заказ и отправить клиента на
         оплату, если это физ. лицо. Если это юр. лицо, то сказать, что заказ
         обрабатывается.
         """
-        self.success_url = self.create_order(form)
         cart = Cart(self.request)
+        if cart.get_total_price() == 0:
+            return self.form_invalid(form)
+        self.success_url = self.create_order(form)
         cart.clear()  # очищаем корзину.
         return super().form_valid(form)
 
