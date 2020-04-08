@@ -243,6 +243,11 @@ class Order(models.Model):
         """
         Отправляем письмо менеджеру, что заказ клиента подтвержден.
         """
+        try:
+            payment = Payment.objects.get(order_id=self.pk)
+        except Payment.DoesNotExist:
+            payment = None
+
         body_html = render_to_string(
             'orders/mail_confirmed_manager.html',
             {
@@ -250,6 +255,7 @@ class Order(models.Model):
                 'site': settings.DEFAULT_DOMAIN,
                 'order': self,
                 'items': self.items.all(),
+                'payment': payment,
             }
         )
 
