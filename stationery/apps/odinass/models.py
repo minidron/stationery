@@ -92,7 +92,17 @@ class Category(MPTTModel):
         """
         Полный путь к категории.
         """
-        slugs = [item.slug for item in self.get_ancestors(include_self=True)]
+        created = not self._state.adding
+        if created:
+            slugs = (self.get_ancestors(ascending=False, include_self=True)
+                         .values_list('slug', flat=True))
+        else:
+            slug_list = []
+            instance = self
+            while instance is not None:
+                slug_list.append(instance.slug)
+                instance = instance.parent
+            slugs = reversed(slug_list)
         return '/'.join(slugs)
 
     def offers(self, user=None):
