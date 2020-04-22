@@ -244,7 +244,8 @@ class Order(models.Model):
         Отправляем письмо менеджеру, что заказ клиента подтвержден.
         """
         try:
-            payment = Payment.objects.get(order_id=self.pk)
+            payment = Payment.objects.filter(
+                order_id=self.pk).order_by('pk').last()
         except Payment.DoesNotExist:
             payment = None
 
