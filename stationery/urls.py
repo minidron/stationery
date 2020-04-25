@@ -36,6 +36,9 @@ urlpatterns = [
     url(r'^robots.txt$',
         TemplateView.as_view(
             template_name='robots.txt', content_type='text/plain')),
+		url(r'^success/$', 
+			TemplateView.as_view(
+					template_name='pages/frontend/success.html')),
     url(r'^favicon.ico$',
         RedirectView.as_view(
             url=staticfiles_storage.url('favicon.ico'), permanent=True)),
@@ -49,6 +52,7 @@ urlpatterns = [
         include('hijack.urls', namespace='hijack')),
     url(r'^',
         include('pages.urls', namespace='pages')),
+		
 ]
 
 

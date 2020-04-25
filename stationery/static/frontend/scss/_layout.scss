@@ -717,6 +717,36 @@ height: 400px;
 }
 
 
+	.text-in-box{
+		padding-top: 50px;
+		padding-bottom:50px;
+		color:#333;
+		font-size: 40px;
+		font-weight: 700;
+		display: block;
+		text-align: center; 
+		a {
+			background-color: #2C7FAE;
+			padding: 20px;
+			font-size: 18px;
+			color: white !important;
+			display: block;
+			width: 250px;
+			text-align: center;
+			margin-top: 50px !important;
+			margin: auto;
+			@include media('<=phone') {
+				font-size: 14px;
+				width: 150px;
+				margin-top: 20px;
+			}
+		}
+		@include media('<=phone') {
+			font-size: 18px;
+		}
+	}
+
+
 /* ELEMENTS
 ============================================================================ */
 .offer-in-cart {
