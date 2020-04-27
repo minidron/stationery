@@ -224,8 +224,7 @@ class YaPaymentForm(BasePaymentForm):
         url = '{scheme}://{host}{order_url}'.format(
             scheme=self.request.scheme,
             host=self.request.get_host(),
-            order_url=reverse('account:history_detail',
-                              kwargs={'pk': self.order.pk}))
+            order_url=reverse('account:success'))
         return {
             'confirmation': {
                 'type': 'redirect',

@@ -419,3 +419,10 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
         else:
             context = self.get_context_data(object=self.object, form=form)
             return self.render_to_response(context)
+
+
+class SuccessPageView(TemplateView):
+    """
+    Страница "Спасибо за заявку".
+    """
+    template_name = 'pages/frontend/success.html'

@@ -31,4 +31,6 @@ urlpatterns = [
         orders_views.HistoryListView.as_view(), name='history'),
     url(r'^history/(?P<pk>\d+)/$',
         orders_views.HistoryDetailView.as_view(), name='history_detail'),
+    url(r'^success/$',
+        orders_views.SuccessPageView.as_view(), name='success'),
 ]
