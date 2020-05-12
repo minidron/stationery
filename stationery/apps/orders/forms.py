@@ -221,10 +221,11 @@ class YaPaymentForm(BasePaymentForm):
         }
 
     def get_payment_confirmation(self):
-        url = '{scheme}://{host}{order_url}'.format(
+        url = '{scheme}://{host}{thanks}?orderId={order_id}'.format(
             scheme=self.request.scheme,
             host=self.request.get_host(),
-            order_url=reverse('account:success'))
+            thanks=reverse('account:success'),
+            order_id=self.order.pk)
         return {
             'confirmation': {
                 'type': 'redirect',

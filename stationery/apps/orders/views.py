@@ -426,3 +426,22 @@ class SuccessPageView(TemplateView):
     Страница "Спасибо за заявку".
     """
     template_name = 'pages/frontend/success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'order': self.get_order(),
+        })
+        return context
+
+    def get_order(self):
+        """
+        Получить оплаченные заказ клиента.
+        """
+        payer = self.request.user
+        order_id = self.request.GET.get('orderId')
+        try:
+            return Order.objects.get(
+                pk=order_id, user=payer, status=OrderStatus.CONFIRMED)
+        except Order.DoesNotExist:
+            return None
