@@ -26,6 +26,8 @@ Vue.component('cart-link', {
 Vue.component('offer-price', {
     props: {
         offerId: String,
+        offerArticle: String,
+        offerPrice: Number,
     },
 
     data: function () {
@@ -37,6 +39,13 @@ Vue.component('offer-price', {
     methods: {
         addOffer: function (e) {
             let vm = this;
+
+            window.fbq('track', 'AddToCart', {
+                value: this.offerPrice,
+                currency: 'RUB',
+                content_ids: [this.offerArticle],
+                content_type: 'product'
+            });
 
             vm.$http({
                 method: 'post',

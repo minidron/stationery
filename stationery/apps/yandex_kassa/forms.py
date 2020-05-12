@@ -60,8 +60,8 @@ class BasePaymentForm(forms.Form):
         Возвращает dict `amount`.
         """
         raise NotImplementedError(
-                'Необходимо определить get_payment_amount() в `%s`.' %
-                type(self).__name__)
+            'Необходимо определить get_payment_amount() в `%s`.' %
+            type(self).__name__)
 
     def get_payment_description(self):
         """
@@ -74,16 +74,16 @@ class BasePaymentForm(forms.Form):
         Возвращает dict `confirmation`.
         """
         raise NotImplementedError(
-                'Необходимо определить get_payment_confirmation() в `%s`.' %
-                type(self).__name__)
+            'Необходимо определить get_payment_confirmation() в `%s`.' %
+            type(self).__name__)
 
     def get_payment_method_data(self):
         """
         Возвращает dict `payment_method_data`.
         """
         raise NotImplementedError(
-                'Необходимо определить get_payment_method_data() в `%s`.' %
-                type(self).__name__)
+            'Необходимо определить get_payment_method_data() в `%s`.' %
+            type(self).__name__)
 
     def get_payment_receipt(self):
         """

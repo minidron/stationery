@@ -23,7 +23,7 @@
 
 
 {% block content %}
-		<div class="back-to"><a href="{{ category.get_absolute_url }}"><img src="/static/frontend/images/back.png" alt=""></a></div>
+    <div class="back-to"><a href="{{ category.get_absolute_url }}"><img src="/static/frontend/images/back.png" alt=""></a></div>
     <h1 class="main--title">{{ offer.full_title }}</h1>
     <div class="offer--wrapper">
         <div class="offer-code">Код: {{ offer.product.article }}</div>
@@ -65,6 +65,8 @@
 
                 <offer-price
                     offer-id="{{ offer.id }}"
+                    offer-article="{{ offer.product.article }}"
+                    :offer-price="{{ offer.retail_price | stringformat:'g' }}"
                     @offer-added="updateNavbarCart"
                     @offer-limit-error="showLimitError"
                 ></offer-price>
@@ -86,3 +88,15 @@
         {% endif %}
     </div>
 {% endblock content %}
+
+{% block scripts %}
+    <script>
+        fbq('track', 'ViewContent', {
+            value: {{ offer.retail_price | stringformat:'g' }},
+            currency: 'RUB',
+            content_ids: ['{{ offer.product.article }}'],
+            content_type: 'product'
+        });
+    </script>
+    {{ block.super }}
+{% endblock %}

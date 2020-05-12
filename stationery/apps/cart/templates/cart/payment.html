@@ -162,3 +162,16 @@
         </form>
     </div>
 {% endblock %}
+
+
+{% block scripts %}
+    <script>
+        fbq('track', 'InitiateCheckout', {
+            value: {{ cart.get_total_price | stringformat:'g' }},
+            currency: 'RUB',
+            content_ids: [{% for item in cart %}'{{ item.instance.product.article }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+            content_type: 'product'
+        });
+    </script>
+    {{ block.super }}
+{% endblock %}

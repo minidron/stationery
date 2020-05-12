@@ -1,4 +1,3 @@
-{% load static pipeline pages_tag %}
 {% load static pipeline pages_tag mptt_tags %}
 
 <!DOCTYPE html>
@@ -8,62 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
     <meta name="description" content="{% block meta_description %}{% endblock %}">
-		<meta name="yandex-verification" content="0dd9f4133d1c19ee" />
-
-		<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter47749003 = new Ya.Metrika({ id:47749003, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/47749003" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
-		
-		<!-- Rating Mail.ru counter -->
-<script type="text/javascript">
-	var _tmr = window._tmr || (window._tmr = []);
-	_tmr.push({id: "3170906", type: "pageView", start: (new Date()).getTime()});
-	(function (d, w, id) {
-		if (d.getElementById(id)) return;
-		var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
-		ts.src = "https://top-fwz1.mail.ru/js/code.js";
-		var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
-		if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
-	})(document, window, "topmailru-code");
-	</script><noscript><div>
-	<img src="https://top-fwz1.mail.ru/counter?id=3170906;js=na" style="border:0;position:absolute;left:-9999px;" alt="Top.Mail.Ru" />
-	</div></noscript>
-	<!-- //Rating Mail.ru counter -->
-
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-164166749-1"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'UA-164166749-1');
-		</script>
-		<!-- Facebook Pixel Code -->
-			<script>
-				!function(f,b,e,v,n,t,s)
-				{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-				n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-				if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-				n.queue=[];t=b.createElement(e);t.async=!0;
-				t.src=v;s=b.getElementsByTagName(e)[0];
-				s.parentNode.insertBefore(t,s)}(window,document,'script',
-				'https://connect.facebook.net/en_US/fbevents.js');
-				fbq('init', '2287612807939758'); 
-				fbq('track', 'PageView');
-				</script>
-				<noscript>
-				<img height="1" width="1" 
-				src="https://www.facebook.com/tr?id=2287612807939758&ev=PageView
-				&noscript=1"/>
-				</noscript>
-				<!-- End Facebook Pixel Code -->
-
-
-
+    <meta name="yandex-verification" content="0dd9f4133d1c19ee" />
     <title>{% block page_title %}{% endblock %}</title>
 
     {% block styles %}
         {% stylesheet 'libs' %}
         {% stylesheet 'frontend' %}
     {% endblock styles %}
+
+    {% include 'pages/frontend/counters.html' %}
 </head>
 
 <body class="{% spaceless %}{% block body_class %}{% endblock %}{% endspaceless %}">
@@ -101,8 +53,8 @@
                 </div>
 
                 <div class="header-phone">
-										<a class="header-phone--link" href="tel:84997146574">8(499)714-65-74</a>
-										<a class="header-phone--link" href="tel:84967128194">8 (4967) 12-81-94</a>
+                    <a class="header-phone--link" href="tel:84997146574">8(499)714-65-74</a>
+                    <a class="header-phone--link" href="tel:84967128194">8 (4967) 12-81-94</a>
                 </div>
             </div>
         </div>
@@ -122,7 +74,7 @@
                                     <a href="{{ node.get_absolute_url }}">{{ node }}</a>
                                     {% if not node.is_leaf_node %}
                                         <ul class="sub-menu-level-2 hide">
-																					{{ children }}
+                                            {{ children }}
                                         </ul>
                                     {% endif %}
                                 </li>
@@ -184,39 +136,44 @@
     </main>
 
     <footer class="footer__section">
-      <div class="footer-container">
-        <div class="footer-col">
-              <span><a href="{% url 'pages:static' 'как-сделать-заказ' %}">Как сделать заказ</a></span>
-              <span><a href="{% url 'pages:static' 'как-зарегистрироваться' %}">Как зарегистрироваться</a></span>
-              <span><a href="{% url 'pages:static' 'оплата' %}">Оплата</a> </span>
-              <span><a href="{% url 'pages:static' 'доставка' %}">Доставка</a></span>
-        </div>
-        <div class="footer-col">
-          <span><a href="{% url 'pages:static' 'политика-конфенденциальности' %}">Политика конфеденциальности</a></span>
-          <span><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></span>
-          <span><a href="{% url 'pages:static' 'покупателям' %}">Покупателям</a></span>
-        </div>
-        <div class="footer-col about-company">
-          <span><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></span>
-          <span><a href="{% url 'pages:static' 'о-компании' %}">Почему мы?</a></span>
-        </div>
-        <div class="footer-col">
-            <div class="footer-contact">
-              <p><a href="mailto:info@kancmiropt.ru">Info@kancmiropt.ru</a></p>
-							<p><a href="tel:+74967128194">8 (4967) 12-81-94</a></p>
-							<div class="social">
-								<h2>Мы в социальных сетях</h2>
-								<p><a href="https://ok.ru/group/58302774575161" title="Группа в одноклассниках"><i class="fa fa-odnoklassniki"></i></a> <a href="https://www.facebook.com/%D0%9C%D0%B0%D0%B3%D0%B0%D0%B7%D0%B8%D0%BD-%D0%9A%D0%B0%D0%BD%D1%86%D0%B5%D0%BB%D1%8F%D1%80%D1%81%D0%BA%D0%B8%D0%B9-%D0%BC%D0%B8%D1%80-303562077033229/" title="Группа Вконтакте"><i class="fa fa-facebook"></i></a> <a href="https://vk.com/kancmiropt" title="Группа в вконтакте"><i class="fa fa-vk"></i></a></p>
-								
+        <div class="footer-container">
+            <div class="footer-col">
+                <span><a href="{% url 'pages:static' 'как-сделать-заказ' %}">Как сделать заказ</a></span>
+                <span><a href="{% url 'pages:static' 'как-зарегистрироваться' %}">Как зарегистрироваться</a></span>
+                <span><a href="{% url 'pages:static' 'оплата' %}">Оплата</a> </span>
+                <span><a href="{% url 'pages:static' 'доставка' %}">Доставка</a></span>
+            </div>
 
-						</div>
-          </div>
+            <div class="footer-col">
+                <span><a href="{% url 'pages:static' 'политика-конфенденциальности' %}">Политика конфеденциальности</a></span>
+                <span><a href="{% url 'pages:static' 'оптовикам' %}">Оптовикам</a></span>
+                <span><a href="{% url 'pages:static' 'покупателям' %}">Покупателям</a></span>
+            </div>
+
+            <div class="footer-col about-company">
+                <span><a href="{% url 'pages:static' 'контакты' %}">Контакты</a></span>
+                <span><a href="{% url 'pages:static' 'о-компании' %}">Почему мы?</a></span>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-contact">
+                    <p><a href="mailto:info@kancmiropt.ru">Info@kancmiropt.ru</a></p>
+                    <p><a href="tel:+74967128194">8 (4967) 12-81-94</a></p>
+                    <div class="social">
+                        <h2>Мы в социальных сетях</h2>
+                        <p>
+                            <a href="https://ok.ru/group/58302774575161" title="Группа в одноклассниках"><i class="fa fa-odnoklassniki"></i></a>
+                            <a href="https://www.facebook.com/%D0%9C%D0%B0%D0%B3%D0%B0%D0%B7%D0%B8%D0%BD-%D0%9A%D0%B0%D0%BD%D1%86%D0%B5%D0%BB%D1%8F%D1%80%D1%81%D0%BA%D0%B8%D0%B9-%D0%BC%D0%B8%D1%80-303562077033229/" title="Группа Вконтакте"><i class="fa fa-facebook"></i></a>
+                            <a href="https://vk.com/kancmiropt" title="Группа в вконтакте"><i class="fa fa-vk"></i></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-			</div>
-					<!-- Kanzoboz.ru counter-->
-<a href="https://kanzoboz.ru/?rate=504730"><img src="http://rating.kanzoboz.ru/?id=504730" width="88" height="31" border="0" alt="Рейтинг канцелярских компаний" style="float: right; margin-right: 5%"></a>
-<!--/ Kanzoboz.ru counter-->
+        <!-- Kanzoboz.ru counter-->
+        <a href="https://kanzoboz.ru/?rate=504730"><img src="http://rating.kanzoboz.ru/?id=504730" width="88" height="31" border="0" alt="Рейтинг канцелярских компаний" style="float: right; margin-right: 5%"></a>
+        <!--/ Kanzoboz.ru counter-->
     </footer>
 
     {% block scripts %}
@@ -224,7 +181,6 @@
         {% javascript 'libs' %}
         {% javascript 'vuecart' %}
         {% javascript 'frontend' %}
-		{% endblock %}
-
+    {% endblock %}
 </body>
 </html>

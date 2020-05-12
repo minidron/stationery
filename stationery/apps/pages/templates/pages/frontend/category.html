@@ -153,6 +153,8 @@
 
                             <offer-price
                                 offer-id="{{ offer.id }}"
+                                offer-article="{{ offer.product.article }}"
+                                :offer-price="{{ offer.retail_price | stringformat:'g' }}"
                                 @offer-added="updateNavbarCart"
                                 @offer-limit-error="showLimitError"
                             ></offer-price>
