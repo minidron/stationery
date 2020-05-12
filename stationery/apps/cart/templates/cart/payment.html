@@ -12,7 +12,7 @@
 {% block content %}
     <h1 class="main--title">Оплата и доставка</h1>
     <div class="cart-container rounded">
-        <form method="POST">{% csrf_token %}
+        <form method="POST" id="payment-form">{% csrf_token %}
             <div class="field-row order-form">
                 {{ form.non_field_errors }}
 
@@ -165,6 +165,8 @@
 
 
 {% block scripts %}
+    {{ block.super }}
+
     <script>
         fbq('track', 'InitiateCheckout', {
             value: {{ cart.get_total_price | stringformat:'g' }},
@@ -173,5 +175,21 @@
             content_type: 'product'
         });
     </script>
-    {{ block.super }}
+
+    <script>
+        const paymentForm = document.getElementById('payment-form');
+
+        paymentForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            fbq('track', 'Lead', {
+                value: {{ cart.get_total_price | stringformat:'g' }},
+                currency: 'RUB',
+                content_ids: [{% for item in cart %}'{{ item.instance.product.article }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+                content_type: 'product'
+            });
+
+            event.target.submit();
+        });
+    </script>
 {% endblock %}
