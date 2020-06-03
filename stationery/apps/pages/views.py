@@ -85,7 +85,8 @@ class CategoryView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         category = context['category']
-        offers = category.offers(user=self.request.user)
+        offers = (category.offers(user=self.request.user)
+                          .filter(retail_price__gt=0))
         has_offers = True
         if not offers:
             has_offers = False

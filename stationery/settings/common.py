@@ -224,7 +224,7 @@ PIPELINE = {
                 'orders/frontend/js/cart/components.js',
                 'orders/frontend/js/cart/app.js',
             ),
-            'output_filename': 'frontend/js/vuecart-2020-05-12.js',
+            'output_filename': 'frontend/js/vuecart-2020-06-03.js',
         },
         'frontend': {
             'source_filenames': (

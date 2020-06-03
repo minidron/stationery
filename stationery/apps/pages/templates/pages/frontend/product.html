@@ -63,6 +63,7 @@
                     {% endspaceless %}
                 </div>
 
+                {% if offer.retail_price %}
                 <offer-price
                     offer-id="{{ offer.id }}"
                     offer-article="{{ offer.product.article }}"
@@ -70,6 +71,7 @@
                     @offer-added="updateNavbarCart"
                     @offer-limit-error="showLimitError"
                 ></offer-price>
+                {% endif %}
 
                 <div class="likely-on-page">
                     <div class="likely" data-url="{{ request.scheme }}://{{ request.get_host }}{{ offer.get_absolute_url }}" data-media="{{ request.scheme }}://{{ request.get_host }}{% if offer.product.image %}{{ offer.product.image.url }}{% endif %}" data-title="{{ offer.full_title }}">
@@ -92,7 +94,7 @@
 {% block scripts %}
     <script>
         fbq('track', 'ViewContent', {
-            value: {{ offer.retail_price | stringformat:'g' }},
+            value: {{ offer.retail_price | stringformat:'g' | default:'0' }},
             currency: 'RUB',
             content_ids: ['{{ offer.product.article }}'],
             content_type: 'product'
