@@ -70,8 +70,7 @@ class SearchOfferFilter(django_filters.FilterSet):
 
 
 class SearchOfferSerializer(serializers.ModelSerializer):
-    url = serializers.CharField(source='product.category.get_absolute_url',
-                                read_only=True)
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
     category = serializers.CharField(source='product.category', read_only=True)
     # price_retail = serializers.CharField(source='price', read_only=True)
     price_retail = serializers.SerializerMethodField(read_only=True)
