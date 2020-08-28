@@ -1,9 +1,10 @@
-Django==1.11.23
+Django==1.11.29
 
-pip==18.1
-setuptools==40.6.3
+pip==20.2.2
+setuptools==49.6.0
 
 git+https://github.com/last-partizan/pytils.git@1c570a3
+git+https://github.com/minidron/fabric_class.git@0.0.3
 
 celery==4.1.0
 django-admin-sortable2==0.6.19
@@ -18,26 +19,25 @@ django-filter==1.1.0
 django-hijack-admin==2.1.10
 django-hijack==2.1.10
 django-logentry-admin==1.0.4
-django-mptt==0.10.0
+django-mptt==0.11.0
 django-password-reset==2.0
 django-picklefield==2.0
 django-pipeline==1.6.14
+django-resized==0.3.11
 djangorestframework==3.8.2
 ipdb==0.10.3
 ipython==4.2.1
 jupyter==1.0.0
-libsass==0.13.4
+libsass==0.20.1
 lxml==4.1.0
 Markdown==2.6.9
 Pillow==6.2.0
-psycopg2==2.7.3.2
+psycopg2==2.8.5
 python-dateutil==2.6.1
-pytz==2018.7
+pytz==2020.1
 pyyaml==3.12
 raven==6.2.1
 requests==2.21.0
 sorl-thumbnail==12.5.0
-Werkzeug==0.14.1
+Werkzeug==1.0.1
 yandex-checkout==1.0.11
-
-git+https://github.com/yandex-money/yandex-money-kit-django@b2114b1

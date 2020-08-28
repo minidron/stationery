@@ -1,3 +1,1 @@
 -r common.txt
-
-git+https://github.com/minidron/django-resized@0.3.9.1

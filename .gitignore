@@ -20,6 +20,7 @@ Procfile.local
 # Celery
 celerybeat.pid
 celeryev.pid
+celerybeat-schedule
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
