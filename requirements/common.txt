@@ -39,5 +39,5 @@ pyyaml==3.12
 raven==6.2.1
 requests==2.21.0
 sorl-thumbnail==12.5.0
-Werkzeug==1.0.1
+Werkzeug==0.16.1
 yandex-checkout==1.0.11
