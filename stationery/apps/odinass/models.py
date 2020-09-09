@@ -24,6 +24,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from pytils.translit import slugify
 
 from lib.email import create_email
+from odinass.utils import remove_specialcharacters
 
 
 def generate_upload_path(instance, filename):
@@ -204,6 +205,10 @@ class Product(models.Model):
         primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(
         'название', max_length=508)
+    search_title = models.CharField(
+        'название для поиска',
+        default='',
+        max_length=500, blank=True)
     article = models.CharField(
         'артикул', blank=True, max_length=254)
     category = models.ForeignKey(
@@ -238,6 +243,7 @@ class Product(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        self.search_title = remove_specialcharacters(self.title)
         super().save(*args, **kwargs)
 
         order = getattr(self, 'order', None)

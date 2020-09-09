@@ -14,6 +14,13 @@ from mptt.exceptions import InvalidMove
 from odinass import models as odinass_models
 
 
+def remove_specialcharacters(value):
+    """
+    Очищает все возможные знаки и специальные символы.
+    """
+    return re.sub(r'\W+', ' ', value).strip()
+
+
 def format_price(value):
     if not value:
         value = 0

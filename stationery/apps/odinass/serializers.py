@@ -25,15 +25,17 @@ class OfferTitleFilter(django_filters.Filter):
     uniq_category = True
 
     def filter(self, qs, value):
-        qs = qs.annotate(full_name=Concat('product__article', Value(' '),
-                                          'product__title'))
+        qs = qs.annotate(full_name=Concat(
+            'product__article', Value(' '),
+            'product__title', Value(' '),
+            'product__search_title'))
         bits = value.split(' ')
         if len(bits) is 1 and bits[0].isdecimal():
             full_name_clauses = Q(full_name__icontains=bits[0])
         else:
             full_name_clauses = reduce(
                 operator.and_,
-                [Q(full_name__iregex=r'(^|\s|\[|\"|\'|\()%s' % escape(v))
+                [Q(full_name__iregex=r'(^|\s)%s' % escape(v))
                  for v in bits])
 
         unpublished = Category.objects.get_queryset_descendants(
