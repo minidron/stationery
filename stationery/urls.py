@@ -6,21 +6,16 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic import RedirectView, TemplateView
 
 from filebrowser.sites import site
-
 from rest_framework import routers
 
+from api.urls import router as api_router
+from odinass.views import SearchCategoryViewSet, SearchOfferViewSet
+from pages.views import IndexView
 from yandex_kassa.views import notification
 
-from api.urls import router as api_router
-
-from pages.views import IndexView
-
-from odinass.views import SearchOfferViewSet
-
-
 router = routers.DefaultRouter()
+router.register(r'search_category', SearchCategoryViewSet)
 router.register(r'search_offer', SearchOfferViewSet)
-
 
 urlpatterns = [
     url(r'^$',

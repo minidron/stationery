@@ -33,7 +33,6 @@ __pycache__/
 *.egg
 *.egg-info
 *.ipynb
-dist
 build
 eggs
 parts

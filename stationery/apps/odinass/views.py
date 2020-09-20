@@ -12,10 +12,14 @@ from django.views.generic import View
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from odinass.conf import settings as odinass_settings
-from odinass.models import ActionLog, StatusLog, Log, Offer
-from odinass.serializers import SearchOfferSerializer, SearchOfferFilter
+from odinass.models import ActionLog, Category, Log, Offer, StatusLog
+from odinass.serializers import (
+    SearchCategoryFilter,
+    SearchCategorySerializer,
+    SearchOfferFilter,
+    SearchOfferSerializer
+)
 from odinass.tasks import import_file
-
 
 logger = logging.getLogger(__name__)
 
@@ -155,6 +159,18 @@ class ExchangeView(View):
 
 
 class SearchOfferViewSet(ReadOnlyModelViewSet):
+    """
+    ViewSet для подсказок товаров.
+    """
     filter_class = SearchOfferFilter
     queryset = Offer.objects.select_related('product').all()
     serializer_class = SearchOfferSerializer
+
+
+class SearchCategoryViewSet(ReadOnlyModelViewSet):
+    """
+    ViewSet для подсказок категорий.
+    """
+    filter_class = SearchCategoryFilter
+    queryset = Category.objects.all()
+    serializer_class = SearchCategorySerializer

@@ -198,19 +198,24 @@ PIPELINE = {
             ),
             'output_filename': 'frontend/css/style-2020-02-24.css',
         },
+        'vue': {
+            'source_filenames': (
+                'kancmir/dist/css/app.css',
+            ),
+            'output_filename': 'frontend/css/kancmir-2020-09-20.css',
+        },
     },
     'JAVASCRIPT': {
         'libs': {
             'source_filenames': (
                 'bower_components/jquery/dist/jquery.min.js',
-                'bower_components/devbridge-autocomplete/dist/jquery.autocomplete.min.js',  # NOQA
                 'bower_components/nouislider/distribute/nouislider.min.js',
                 'bower_components/swiper/dist/js/swiper.min.js',
                 'bower_components/jquery.maskedinput/dist/jquery.maskedinput.min.js',  # NOQA
                 'bower_components/Likely/release/likely.js',
                 'frontend/js/jquery.popmenu.js',
             ),
-            'output_filename': 'frontend/js/libs.js',
+            'output_filename': 'frontend/js/libs-2020-09-20.js',
         },
         'vuecart': {
             'source_filenames': (
@@ -230,7 +235,19 @@ PIPELINE = {
             'source_filenames': (
                 'frontend/coffee/script.coffee',
             ),
-            'output_filename': 'frontend/js/script-2020-02-24.js',
+            'output_filename': 'frontend/js/script-2020-09-20.js',
+        },
+        'vue-vendors': {
+            'source_filenames': (
+                'kancmir/dist/js/chunk-vendors.js',
+            ),
+            'output_filename': 'frontend/js/vendors-2020-09-20.js',
+        },
+        'vue': {
+            'source_filenames': (
+                'kancmir/dist/js/app.js',
+            ),
+            'output_filename': 'frontend/js/kancmir-2020-09-20.js',
         },
     },
     'COMPILERS': (

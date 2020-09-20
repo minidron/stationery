@@ -12,6 +12,7 @@
 
     {% block styles %}
         {% stylesheet 'libs' %}
+        {% stylesheet 'vue' %}
         {% stylesheet 'frontend' %}
     {% endblock styles %}
 
@@ -42,14 +43,7 @@
                 </div>
 
                 <div class="header-search--wrapper">
-                    <div class="header-search">
-                        {% spaceless %}
-                            <form action="{% url 'pages:search' %}" method="GET">
-                                <input id="header-search" type="text" name="q" placeholder="Введите код или название товара..." autocomplete="off">
-                                <button class="header-search--button"></button>
-                            </form>
-                        {% endspaceless %}
-                    </div>
+                    <div id="search_app"></div>
                 </div>
 
                 <div class="header-phone">
@@ -180,6 +174,8 @@
         {% csrf_token %}
         {% javascript 'libs' %}
         {% javascript 'vuecart' %}
+        {% javascript 'vue-vendors' %}
+        {% javascript 'vue' %}
         {% javascript 'frontend' %}
     {% endblock %}
 </body>

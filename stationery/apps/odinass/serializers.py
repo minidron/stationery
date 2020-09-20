@@ -21,7 +21,7 @@ class OfferTitleFilter(django_filters.Filter):
     """
     Поиск для автокомплита.
     """
-    max_result = 15
+    max_result = 5
     uniq_category = True
 
     def filter(self, qs, value):
@@ -54,6 +54,25 @@ class OfferTitleFilter(django_filters.Filter):
         return qs[:self.max_result]
 
 
+class CategoryTitleFilter(django_filters.Filter):
+    """
+    Фильтр категорий по названию.
+    """
+    max_result = 10
+
+    def filter(self, qs, value):
+        bits = value.split(' ')
+        search_clauses = reduce(operator.and_,
+                                [Q(title__icontains=v) for v in bits])
+        unpublished = Category.objects.get_queryset_descendants(
+            Category.objects.filter(is_published=False), include_self=True)
+        qs = (qs
+              .exclude(pk__in=unpublished)
+              .filter(search_clauses)
+              .order_by('-views'))
+        return qs[:self.max_result]
+
+
 class OfferQFilter(OfferTitleFilter):
     """
     Поиск для страницы поиска.
@@ -69,6 +88,17 @@ class SearchOfferFilter(django_filters.FilterSet):
     class Meta:
         fields = ('title', 'q')
         model = Offer
+
+
+class SearchCategoryFilter(django_filters.FilterSet):
+    """
+    Фильтры для поиска категорий.
+    """
+    title = CategoryTitleFilter()
+
+    class Meta:
+        fields = ('title',)
+        model = Category
 
 
 class SearchOfferSerializer(serializers.ModelSerializer):
@@ -88,3 +118,15 @@ class SearchOfferSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             user = request.user
         return obj.price(user=user)
+
+
+class SearchCategorySerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для результата поиска категории.
+    """
+    url = serializers.CharField(
+        source='get_absolute_url', read_only=True)
+
+    class Meta:
+        fields = ['id', 'url', 'title']
+        model = Category
