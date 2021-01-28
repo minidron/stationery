@@ -330,7 +330,7 @@ class SearchOfferView(ListView):
 
         fields.update({
             'q': forms.CharField(widget=forms.HiddenInput()),
-            'category': forms.ModelChoiceField(queryset=self.categories),
+            'category': forms.ModelChoiceField(queryset=self.categories, required=False, widget=forms.HiddenInput()),
             'minCost': forms.IntegerField(required=False),
             'maxCost': forms.IntegerField(required=False),
             'has_rests': forms.BooleanField(label='Есть в наличии',

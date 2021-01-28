@@ -8,6 +8,7 @@
 
 <form id="offer-filter" action="" method="GET">
     {% if categories %}
+    {{ form_search.category }}
     <div class="category-filter-container">
         {% for cat in categories %}
             <button class="category-filter-button rounded clickable{% if cat.id|stringformat:'s' == form_search.category.value %} category-filter-button--selected{% endif %}" type="submit" name="category" value="{{ cat.id }}">{{ cat.title }}</button>
