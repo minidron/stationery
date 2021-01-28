@@ -28,7 +28,7 @@ ADMINS = [
 
 SERVER_EMAIL = 'no-reply@kancmiropt.ru'
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'filebrowser',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -60,7 +60,7 @@ INSTALLED_APPS = (
     'pages',
     'orders',
     'cart',
-)
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
@@ -351,5 +351,16 @@ CONSTANCE_CONFIG = {
 CONSTANCE_CONFIG_FIELDSETS = {
     'Фон': ('BACKGROUND_COLOR', 'BACKGROUND_REPEAT', 'BACKGROUND_IMAGE',
             'BACKGROUND_ATTACHMENT'),
+}
+# -----------------------------------------------------------------------------
+
+# Elasticsearch ---------------------------------------------------------------
+INSTALLED_APPS += ['django_elasticsearch_dsl']
+
+ELASTICSEARCH_HOST = 'localhost:9200'
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': ELASTICSEARCH_HOST
+    },
 }
 # -----------------------------------------------------------------------------

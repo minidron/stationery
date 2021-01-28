@@ -251,22 +251,113 @@ class SearchOfferView(ListView):
     paginate_by = 20
     template_name = 'pages/frontend/search.html'
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if self.request.GET:
-            pks = SearchOfferFilter(self.request.GET).qs.values_list(
-                'pk', flat=True)
-            qs = Offer.objects.offers(self.request.user).filter(pk__in=pks)
-        else:
-            qs = qs.none()
-        return qs
+    def __init__(self, *args, **kwargs):
+        self.categories = None
+        self.order_by = None
+        super().__init__(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'page_kwarg': 'page',
         })
+        offers = self.object_list
+        order = self.order_by or 'title'
+
+        prices = None
+        has_offers = False
+
+        form_search = self.get_search_form()(
+            self.request.GET or None)
+
+        if offers:
+            offers = offers.filter(retail_price__gt=0)
+
+            has_offers = True
+            prices = offers.aggregate(
+                retail_price__min=Floor(Min('retail_price')),
+                retail_price__max=Ceiling(Max('retail_price')))
+
+            # Фильтрация
+            if form_search.is_valid():
+                data = form_search.cleaned_data
+                if data:
+                    context['is_filtered'] = True
+
+                if data.get('minCost') and data.get('maxCost'):
+                    offers = offers.filter(
+                        Q(retail_price__gte=data['minCost']) &
+                        Q(retail_price__lte=data['maxCost']))
+
+                if data.get('has_rests'):
+                    offers = offers.filter(rests_count__gt=0)
+
+                if data.get('category'):
+                    offers = offers.filter(product__category=data.get('category'))
+
+                if data.get('order'):
+                    if data.get('order') == 'aprice':
+                        order = 'retail_price'
+                    elif data.get('order') == 'dprice':
+                        order = '-retail_price'
+
+        # Сортировка
+        offers = offers.order_by(order)
+
+        # Пагинация
+        page_size = self.get_paginate_by(offers)
+        if page_size:
+            paginator, page, offers, is_paginated = self.paginate_queryset(
+                offers, page_size)
+            context.update({
+                'is_paginated': is_paginated,
+                'page_kwarg': self.page_kwarg,
+                'page_obj': page,
+                'paginator': paginator,
+            })
+
+        context.update({
+            'has_offers': has_offers,
+            'prices': prices,
+            'offers': offers,
+            'form_search': form_search,
+            'categories': self.categories
+        })
         return context
+
+    def get_search_form(self):
+        fields = collections.OrderedDict()
+
+        fields.update({
+            'q': forms.CharField(widget=forms.HiddenInput()),
+            'category': forms.ModelChoiceField(queryset=self.categories),
+            'minCost': forms.IntegerField(required=False),
+            'maxCost': forms.IntegerField(required=False),
+            'has_rests': forms.BooleanField(label='Есть в наличии',
+                                            required=False),
+            'order': forms.ChoiceField(
+                label='Сортировка', required=False, choices=(
+                    ('', 'нет'),
+                    ('aprice', 'По возрастанию цены'),
+                    ('dprice', 'По убыванию цены'),
+                )),
+        })
+
+        SearchForm = type('SearchForm', (forms.BaseForm, ),
+                          {'base_fields': fields})
+        return SearchForm
+
+    def get_queryset(self):
+        qs = Offer.objects.none()
+        if self.request.GET:
+            filter = SearchOfferFilter(self.request.GET)
+            filter.qs  # обращение к этому свойству запускает все фильтры из сета
+            ids = filter.filters['q'].hits_list  # queryset, возвращаемый фильтром, тут не нужен, только хиты
+            if ids:
+                self.order_by = filter.filters['q'].hits_order
+                self.categories = Category.objects.filter(products__offers__id__in=ids).distinct()
+                qs = Offer.objects.offers(user=self.request.user, ids=ids)
+        return qs
 
 
 class OfficeListView(ListView):
@@ -299,7 +390,6 @@ class BlogDetailView(DetailView):
 
 def catalog_view(request, *args, **kwargs):
     path = kwargs['path']
-
     if Category.objects.filter(path=path).exists():
         return CategoryView.as_view()(request, *args, **kwargs)
     else:

@@ -2,94 +2,137 @@
 
 {% load static thumbnail pages_tag %}
 
-
 {% block content %}
-    <h1 class="main--title">Поиск</h1>
+<h1 class="main--title">Поиск по запросу "{{ form_search.q.value }}"</h1>
 
-    <form id="offer-filter" action="" method="GET">
+
+<form id="offer-filter" action="" method="GET">
+    {% if categories %}
+    <div class="category-filter-container">
+        {% for cat in categories %}
+            <button class="category-filter-button rounded clickable{% if cat.id|stringformat:'s' == form_search.category.value %} category-filter-button--selected{% endif %}" type="submit" name="category" value="{{ cat.id }}">{{ cat.title }}</button>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {{ form_search.q }}
     <div class="category-container">
+        {% if prices %}
+        <span class="filter-toggle"><i class="fa fa-sliders"></i></span>
+
+        <div class="category-filters rounded mobile-hide">
+            <div class="category-filters--filters">
+                <div class="offer-filter--wrapper">
+                    <h3 class="offer-filter--title">Цена</h3>
+                    <div class="offer-filter--price">
+                        <div class="offer-filter--price-min">
+                            <input id="offer-filter--price-min"
+                                   data-price="{{ prices.retail_price__min }}"
+                                   type="text" name="minCost"
+                                   value="{{ form_search.minCost.value|default:prices.retail_price__min }}">
+                        </div>
+                        <div class="offer-filter--price-max">
+                            <input id="offer-filter--price-max"
+                                   data-price="{{ prices.retail_price__max }}"
+                                   type="text" name="maxCost"
+                                   value="{{ form_search.maxCost.value|default:prices.retail_price__max }}"></div>
+                    </div>
+                    <div id="offer-filter--price-slider"></div>
+                </div>
+            </div>
+            <div class="category-filters--button"><button class="submit" type="submit">Найти</button></div>
+        </div>
+        {% endif %}
         <div class="category-content">
+            <div class="category-filters--has-rest">
+                <label for="id_order">{{ form_search.order.label }} {{ form_search.order }}</label>
+                <label for="id_has_rests">{{ form_search.has_rests }} Наличие на складе</label>
+            </div>
+            {% if has_offers %}
             <div class="category-offers">
                 {% for offer in offers %}
-                    <div class="category-offers--item rounded clickable">
-                        <div class="offer-image">
-                            <a href="{{ offer.get_absolute_url }}">
-                                {% thumbnail offer.product.image '160x160' as offer_image %}
-                                    <img src="{{ offer_image.url }}" alt="{{ offer.full_title }}" class="product-item">
-                                {% empty %}
-                                    <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.full_title }}" class="product-item">
-                                {% endthumbnail %}
-                            </a>
+                <div class="category-offers--item rounded clickable">
+                    <div class="offer-image">
+                        <a href="{{ offer.get_absolute_url }}">
+                            {% thumbnail offer.product.image '160x160' as offer_image %}
+                            <img src="{{ offer_image.url }}" alt="{{ offer.full_title }}" class="product-item">
+                            {% empty %}
+                            <img src="{% static 'frontend/images/placeholder.png' %}" alt="{{ offer.full_title }}" class="product-item">
+                            {% endthumbnail %}
+                        </a>
+                    </div>
+                    <div class="offer-info">
+                        <h3 class="offer-info--title"><a class="offer-info--title--link" href="{{ offer.get_absolute_url }}">{{ offer.full_title }}</a></h3>
+                        <div class="offer-info--offer-code">Код: {{ offer.product.article }}</div>
+                        {% if offer.product.property_values.all %}
+                        <div class="offer-info--offer-properties">
+                            {% for prop in offer.product.property_values.all %}
+                            <div class="offer-info--offer-property">{{ prop.property }}: {{ prop }}</div>
+                            {% endfor %}
                         </div>
-                        <div class="offer-info">
-                            <h3 class="offer-info--title"><a class="offer-info--title--link" href="{{ offer.get_absolute_url }}">{{ offer.full_title }}</a></h3>
-                            <div class="offer-info--offer-code">Код: {{ offer.product.article }}</div>
-                            {% if offer.product.property_values.all %}
-                                <div class="offer-info--offer-properties">
-                                    {% for prop in offer.product.property_values.all %}
-                                        <div class="offer-info--offer-property">{{ prop.property }}: {{ prop }}</div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="offer-price">
+                        <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
+                        <div class="offer-price--availability">
+                            Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
                         </div>
-                        <div class="offer-price">
-                            <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
-                            <div class="offer-price--availability">
-                                Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
-                            </div>
 
-                            <offer-price
+                        <offer-price
                                 offer-id="{{ offer.id }}"
+                                offer-article="{{ offer.product.article }}"
+                                :offer-price="{{ offer.retail_price | stringformat:'g' }}"
                                 @offer-added="updateNavbarCart"
                                 @offer-limit-error="showLimitError"
-                            ></offer-price>
+                        ></offer-price>
 
-                            <div class="likely-on-page">
-                                <div class="likely" data-url="{{ request.scheme }}://{{ request.get_host }}{{ offer.get_absolute_url }}" data-media="{{ request.scheme }}://{{ request.get_host }}{% if offer.product.image %}{{ offer.product.image.url }}{% endif %}" data-title="{{ offer.full_title }}">
-                                    <div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
-                                    <div class="facebook" title="Поделится facebook">facebook</div>
-                                    <div class="odnoklassniki" title="Класснуть">Класснуть</div>
-                                </div>
+                        <div class="likely-on-page">
+                            <div class="likely" data-url="{{ request.scheme }}://{{ request.get_host }}{{ offer.get_absolute_url }}" data-media="{{ request.scheme }}://{{ request.get_host }}{% if offer.product.image %}{{ offer.product.image.url }}{% endif %}" data-title="{{ offer.full_title }}">
+                                <div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
+                                <div class="facebook" title="Поделится facebook">facebook</div>
+                                <div class="odnoklassniki" title="Класснуть">Класснуть</div>
                             </div>
                         </div>
                     </div>
+                </div>
                 {% endfor %}
             </div>
-
-            {% if is_paginated %}
-                <div class="category-offers--paginator--wrapper">
-                    {% spaceless %}
-                    <ul class="category-offers--paginator rounded">
-                        <li class="category-offers--paginator--page previous-page">
-                            {% if page_obj.has_previous %}
+                {% if is_paginated %}
+                    <div class="category-offers--paginator--wrapper">
+                        {% spaceless %}
+                        <ul class="category-offers--paginator rounded">
+                            <li class="category-offers--paginator--page previous-page">
+                                {% if page_obj.has_previous %}
                                 <a href="?{% pagination_url page_obj.previous_page_number %}"></a>
-                            {% else %}
-                                <span></span>
-                            {% endif %}
-                        </li>
-
-                        {% for page_num in paginator.page_range %}
-                            <li class="category-offers--paginator--page">
-                                {% if page_obj.number == page_num %}
-                                    <span>{{ page_num }}</span>
                                 {% else %}
-                                    <a href="?{% pagination_url page_num %}">{{ page_num }}</a>
+                                <span></span>
                                 {% endif %}
                             </li>
-                        {% endfor %}
 
-                        <li class="category-offers--paginator--page next-page">
-                            {% if page_obj.has_next %}
+                            {% for page_num in paginator.page_range %}
+                            <li class="category-offers--paginator--page">
+                                {% if page_obj.number == page_num %}
+                                <span>{{ page_num }}</span>
+                                {% else %}
+                                <a href="?{% pagination_url page_num %}">{{ page_num }}</a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+
+                            <li class="category-offers--paginator--page next-page">
+                                {% if page_obj.has_next %}
                                 <a href="?{% pagination_url page_obj.next_page_number %}"></a>
-                            {% else %}
+                                {% else %}
                                 <span></span>
-                            {% endif %}
-                        </li>
-                    </ul>
-                    {% endspaceless %}
-                </div>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% endspaceless %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <p>По заданным параметрам ничего не найдено</p>
             {% endif %}
         </div>
     </div>
-    </form>
+</form>
 {% endblock content %}
