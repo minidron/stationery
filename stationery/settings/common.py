@@ -247,7 +247,7 @@ PIPELINE = {
             'source_filenames': (
                 'kancmir/dist/js/app.js',
             ),
-            'output_filename': 'frontend/js/kancmir-2020-09-20.js',
+            'output_filename': 'frontend/js/kancmir-2021-02-02.js',
         },
     },
     'COMPILERS': (
