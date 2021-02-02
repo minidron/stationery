@@ -580,4 +580,28 @@
         display:none;
     }
 }
+
+.category-filter-container {
+    display: flex;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.category-filter-button {
+    height: 38px;
+    font: $fw-medium 12px/38px $ff-Roboto;
+    padding: 0px 15px;
+    margin: 10px 10px 0 0;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color $base-transition;
+    border: none;
+    &--selected {
+        color: #fff;
+        background: #0085CF;
+    }
+}
 /* ------------------------------------------------------------------------- */
