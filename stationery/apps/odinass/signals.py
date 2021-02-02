@@ -27,9 +27,11 @@ def delete_offer_index(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Category)
 def update_category_index(sender, instance, **kwargs):
+    OfferDocType().update(thing=instance.offers())
     CategoryDocType().update(thing=instance)
 
 
 @receiver(post_delete, sender=Category)
 def delete_category_index(sender, instance, **kwargs):
+    OfferDocType().update(thing=instance.offers(), action='refresh')
     CategoryDocType().update(thing=instance, action='refresh')

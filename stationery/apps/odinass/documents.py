@@ -86,7 +86,7 @@ class OfferDocType(DocType):
         return translit(result, 'ru')
 
     def prepare_is_published(self, instance):
-        return instance.product.category.is_published
+        return instance.product.category.is_published and instance.product.category.get_root().is_published
 
     def prepare_views(self, instance):
         return instance.product.category.views
@@ -138,7 +138,7 @@ class CategoryDocType(DocType):
         return instance.title
 
     def prepare_is_published(self, instance):
-        return instance.is_published
+        return instance.is_published and instance.get_root().is_published
 
     def prepare_views(self, instance):
         return instance.views
