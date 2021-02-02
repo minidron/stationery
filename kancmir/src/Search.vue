@@ -17,7 +17,7 @@
         <div class="header-search--button"
             @click="search(query)"></div>
 
-        <div class="autocomplete-suggestions">
+        <div class="autocomplete-suggestions" v-if="isInputisFocus">
             <div class="autocomplete-suggestion"
                 v-for="product in productSet"
                 :key="product.id"
