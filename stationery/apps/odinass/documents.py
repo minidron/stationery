@@ -86,7 +86,8 @@ class OfferDocType(DocType):
         return translit(result, 'ru')
 
     def prepare_is_published(self, instance):
-        return instance.product.category.is_published
+        return not instance.product.category.get_ancestors(
+            include_self=True).filter(is_published=False).exists()
 
     def prepare_views(self, instance):
         return instance.product.category.views
@@ -138,7 +139,8 @@ class CategoryDocType(DocType):
         return instance.title
 
     def prepare_is_published(self, instance):
-        return instance.is_published
+        return not instance.get_ancestors(
+            include_self=True).filter(is_published=False).exists()
 
     def prepare_views(self, instance):
         return instance.views
