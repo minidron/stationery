@@ -1,10 +1,12 @@
 from django_elasticsearch_dsl import Document, fields
+from django_elasticsearch_dsl import Index, IntegerField, KeywordField
 from django_elasticsearch_dsl.documents import DocType
 from django_elasticsearch_dsl.registries import registry
-from django_elasticsearch_dsl import Index, KeywordField, IntegerField
 from elasticsearch_dsl import analyzer
-from odinass.models import Offer, Category
 from transliterate import translit
+
+from odinass.models import Category, Offer
+
 
 # Создание индекса
 OfferDocument = Index('offer')
@@ -58,38 +60,36 @@ OfferDocument.settings(
 @OfferDocument.doc_type
 class OfferDocType(DocType):
     fullname = fields.TextField(
-        analyzer='with_morphology'
-    )
-
+        analyzer='with_morphology')
     category_name = fields.TextField(
-        analyzer='with_morphology'
-    )
-
+        analyzer='with_morphology')
     fullname_translit = fields.TextField(
-        analyzer='autocomplete'
-    )
-
+        analyzer='autocomplete')
     is_published = fields.BooleanField()
-
     views = fields.IntegerField()
 
+    class Django:
+        model = Offer
+
     def prepare_fullname(self, instance):
-        return f'{instance.product.article} {instance.product.search_title} {instance.product.title}'
+        return ' '.join([instance.product.article,
+                         instance.product.search_title,
+                         instance.product.title])
 
     def prepare_category_name(self, instance):
-        return f'{instance.product.category.title}'
+        return instance.product.category.title
 
     def prepare_fullname_translit(self, instance):
-        return translit(f'{instance.product.article} {instance.product.search_title} {instance.product.title}', 'ru')
+        result = ' '.join([instance.product.article,
+                           instance.product.search_title,
+                           instance.product.title])
+        return translit(result, 'ru')
 
     def prepare_is_published(self, instance):
         return instance.product.category.is_published
 
     def prepare_views(self, instance):
         return instance.product.category.views
-
-    class Django:
-        model = Offer
 
 
 # Всё тож самое, ток для разделов
@@ -127,21 +127,18 @@ CategoryDocument.settings(
 @CategoryDocument.doc_type
 class CategoryDocType(DocType):
     category_name = fields.TextField(
-        analyzer='with_morphology'
-    )
-
+        analyzer='with_morphology')
     is_published = fields.BooleanField()
-
     views = fields.IntegerField()
 
+    class Django:
+        model = Category
+
     def prepare_category_name(self, instance):
-        return f'{instance.title}'
+        return instance.title
 
     def prepare_is_published(self, instance):
         return instance.is_published
 
     def prepare_views(self, instance):
         return instance.views
-
-    class Django:
-        model = Category

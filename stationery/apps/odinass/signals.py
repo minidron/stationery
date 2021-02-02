@@ -1,8 +1,8 @@
-from odinass.models import Offer, Product, Category
-from odinass.documents import OfferDocType, CategoryDocType
-
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+
+from odinass.documents import OfferDocType, CategoryDocType
+from odinass.models import Offer, Product, Category
 
 
 @receiver(post_save, sender=Product)

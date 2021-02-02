@@ -2,14 +2,15 @@ import operator
 import re
 from functools import reduce
 
-import django_filters
 from django.conf import settings
-from django.db.models import Case, When
-from django.db.models import Q
+from django.db.models import Case, Q, When
+
+import django_filters
 from django_elasticsearch_dsl.search import Search
 from elasticsearch.client import Elasticsearch
-from odinass.models import Category, Offer
 from rest_framework import serializers
+
+from odinass.models import Category, Offer
 
 
 def escape(s):
@@ -82,7 +83,8 @@ class OfferTitleFilter(django_filters.Filter):
             for item in items:
                 self.hits_list.append(item.meta.id)
             # нужно для того, чтобы у выборки из пусгреса сохранился порядок, который вернул эластик
-            self.hits_order = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(self.hits_list)])
+            self.hits_order = Case(*[When(pk=pk, then=pos)
+                                     for pos, pk in enumerate(self.hits_list)])
             qs = qs.filter(id__in=self.hits_list).order_by(self.hits_order)
         else:
             qs = qs.none()
@@ -159,7 +161,8 @@ class CategoryTitleFilter(django_filters.Filter):
         if items:
             for item in items:
                 hits_list.append(item.meta.id)
-            hits_order = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(hits_list)])
+            hits_order = Case(*[When(pk=pk, then=pos)
+                                for pos, pk in enumerate(hits_list)])
             qs = qs.filter(id__in=hits_list).order_by(hits_order)
         else:
             qs = qs.none()

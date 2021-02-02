@@ -4,7 +4,7 @@ import operator
 from functools import reduce
 
 from django import forms
-from django.db.models import Q, Func, Max, Min, Prefetch, F
+from django.db.models import F, Func, Max, Min, Prefetch, Q
 from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, TemplateView
@@ -330,7 +330,9 @@ class SearchOfferView(ListView):
 
         fields.update({
             'q': forms.CharField(widget=forms.HiddenInput()),
-            'category': forms.ModelChoiceField(queryset=self.categories, required=False, widget=forms.HiddenInput()),
+            'category': forms.ModelChoiceField(queryset=self.categories,
+                                               required=False,
+                                               widget=forms.HiddenInput()),
             'minCost': forms.IntegerField(required=False),
             'maxCost': forms.IntegerField(required=False),
             'has_rests': forms.BooleanField(label='Есть в наличии',
@@ -355,7 +357,8 @@ class SearchOfferView(ListView):
             ids = filter.filters['q'].hits_list  # queryset, возвращаемый фильтром, тут не нужен, только хиты
             if ids:
                 self.order_by = filter.filters['q'].hits_order
-                self.categories = Category.objects.filter(products__offers__id__in=ids).distinct()
+                self.categories = Category.objects.filter(
+                    products__offers__id__in=ids).distinct()
                 qs = Offer.objects.offers(user=self.request.user, ids=ids)
         return qs
 
