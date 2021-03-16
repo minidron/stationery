@@ -7,31 +7,32 @@ from odinass.models import Offer, Product, Category
 
 @receiver(post_save, sender=Product)
 def update_product_offer_index(sender, instance, **kwargs):
-    OfferDocType().update(thing=instance.offers.all())
+    OfferDocType().update(instance.offers.all())
 
 
 @receiver(post_delete, sender=Product)
 def delete_product_offer_index(sender, instance, **kwargs):
-    OfferDocType().update(thing=instance.offers.all(), action='refresh')
+    OfferDocType().update(instance.offers.all(), action='delete')
 
 
 @receiver(post_save, sender=Offer)
 def update_offer_index(sender, instance, **kwargs):
-    OfferDocType().update(thing=instance)
+    OfferDocType().update(instance)
 
 
 @receiver(post_delete, sender=Offer)
 def delete_offer_index(sender, instance, **kwargs):
-    OfferDocType().update(thing=instance, action='refresh')
+    OfferDocType().update(instance, action='delete')
 
 
 @receiver(post_save, sender=Category)
 def update_category_index(sender, instance, **kwargs):
-    OfferDocType().update(thing=instance.offers())
-    CategoryDocType().update(thing=instance)
+    OfferDocType().update(instance.offers())
+    CategoryDocType().update(instance)
 
 
 @receiver(post_delete, sender=Category)
 def delete_category_index(sender, instance, **kwargs):
-    OfferDocType().update(thing=instance.offers(), action='refresh')
-    CategoryDocType().update(thing=instance, action='refresh')
+    OfferDocType().update(Offer.objects.filter(product__category=instance),
+                          action='delete')
+    CategoryDocType().update(instance, action='delete')
