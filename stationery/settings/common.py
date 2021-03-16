@@ -241,13 +241,13 @@ PIPELINE = {
             'source_filenames': (
                 'kancmir/dist/js/chunk-vendors.js',
             ),
-            'output_filename': 'frontend/js/vendors-2020-09-20.js',
+            'output_filename': 'frontend/js/vendors-2021-03-16.js',
         },
         'vue': {
             'source_filenames': (
                 'kancmir/dist/js/app.js',
             ),
-            'output_filename': 'frontend/js/kancmir-2021-02-02.js',
+            'output_filename': 'frontend/js/kancmir-2021-03-16.js',
         },
     },
     'COMPILERS': (

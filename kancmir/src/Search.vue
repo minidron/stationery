@@ -1,5 +1,6 @@
 <template>
     <div :class="['header-search', {focus: isFocus}]"
+        v-click-outside="onClickOutside"
         @mouseover="isBlockHover=true"
         @mouseout="isBlockHover=false">
 
@@ -17,7 +18,7 @@
         <div class="header-search--button"
             @click="search(query)"></div>
 
-        <div class="autocomplete-suggestions" v-if="isInputisFocus">
+        <div class="autocomplete-suggestions">
             <div class="autocomplete-suggestion"
                 v-for="product in productSet"
                 :key="product.id"
@@ -47,6 +48,8 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 
+import vClickOutside from 'v-click-outside'
+
 import { SEARCH_MODULE } from './const'
 import { escapeRegExChars } from './utils'
 import searchModule from './store/modules/search'
@@ -57,6 +60,9 @@ if (!store.state[SEARCH_MODULE]) store.registerModule(SEARCH_MODULE, searchModul
 
 export default {
     name: 'Search',
+    directives: {
+        clickOutside: vClickOutside.directive
+    },
     filters: {
         selectMatch: function (value, query) {
             return value.replace(
@@ -88,6 +94,9 @@ export default {
         },
         search (query) {
             if (query.length > 0) window.location.href = `/search/?q=${query}`
+        },
+        onClickOutside () {
+            this.updateQuery('')
         },
         ...mapActions(SEARCH_MODULE, ['fetchHints', 'updateQuery'])
     }
