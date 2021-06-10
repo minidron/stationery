@@ -1,4 +1,4 @@
-Django==1.11.29
+Django==2.2.24
 
 pip==20.2.2
 setuptools==49.6.0
