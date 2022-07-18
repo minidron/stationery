@@ -1,7 +1,9 @@
 import collections
+from email.policy import HTTP
 import operator
 
 from functools import reduce
+from urllib import request
 
 from django import forms
 from django.db.models import F, Func, Max, Min, Prefetch, Q
@@ -9,7 +11,7 @@ from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, TemplateView
 
-from odinass.models import Category, Offer, Property, PropertyValue
+from odinass.models import Category, Offer, Property, PropertyValue, Product, Tags
 from odinass.serializers import SearchOfferFilter
 
 from orders.models import Office
@@ -27,9 +29,9 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'favorite_offers': (Offer.objects
-                                     .offers(user=self.request.user)
-                                     .filter(product__is_favorite=True)
-                                     .order_by('product__order')),
+                                .offers(user=self.request.user)
+                                .filter(product__is_favorite=True)
+                                .order_by('product__order')),
             'slider_list': Slider.objects.all(),
         })
         return context
@@ -74,8 +76,8 @@ class CategoryView(DetailView):
 
         path = self.kwargs.get('path')
         qs = (queryset.filter(path=path)
-                      .get_ancestors(include_self=True)
-                      .filter(is_published=False))
+              .get_ancestors(include_self=True)
+              .filter(is_published=False))
 
         if len(qs) > 0:
             raise Http404(_("No %(verbose_name)s found matching the query") %
@@ -83,10 +85,11 @@ class CategoryView(DetailView):
         return super().get_object(queryset=queryset)
 
     def get_context_data(self, **kwargs):
+        stockpath = self.request.path
         context = super().get_context_data(**kwargs)
         category = context['category']
         offers = (category.offers(user=self.request.user)
-                          .filter(retail_price__gt=0))
+                  .filter(retail_price__gt=0))
         has_offers = True
         if not offers:
             has_offers = False
@@ -98,15 +101,15 @@ class CategoryView(DetailView):
         property_values = Prefetch(
             'property_values',
             queryset=(PropertyValue.objects
-                                   .filter(products__category=category)
-                                   .distinct()))
+                      .filter(products__category=category)
+                      .distinct()))
 
         properties = (
             Property.objects
-                    .filter(property_values__products__offers__in=offers)
-                    .prefetch_related(property_values)
-                    .order_by('title')
-                    .distinct())
+            .filter(property_values__products__offers__in=offers)
+            .prefetch_related(property_values)
+            .order_by('title')
+            .distinct())
         properties_ids = [str(property.pk) for property in properties]
 
         # Форма поиска
@@ -188,7 +191,7 @@ class CategoryView(DetailView):
                 choices=self.sort_choices(choices),
                 widget=forms.CheckboxSelectMultiple)
 
-        SearchForm = type('SearchForm', (forms.BaseForm, ),
+        SearchForm = type('SearchForm', (forms.BaseForm,),
                           {'base_fields': fields})
         return SearchForm
 
@@ -210,7 +213,7 @@ class CategoryView(DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         (Category.objects.filter(path=self.kwargs['path'])
-                         .update(views=F('views') + 1))
+         .update(views=F('views') + 1))
         return super().render_to_response(context, **response_kwargs)
 
 
@@ -345,7 +348,7 @@ class SearchOfferView(ListView):
                 )),
         })
 
-        SearchForm = type('SearchForm', (forms.BaseForm, ),
+        SearchForm = type('SearchForm', (forms.BaseForm,),
                           {'base_fields': fields})
         return SearchForm
 
@@ -401,3 +404,29 @@ def catalog_view(request, *args, **kwargs):
         slug = slugs[-1]
         new_kwargs = {'category_path': category_path, 'slug': slug}
         return ProductView.as_view()(request, *args, **new_kwargs)
+
+
+class TagsView(TemplateView):
+    """ Вьюха генерящая выборку товаров по тегу """
+    template_name = 'pages/frontend/category_tags.html'
+
+    def get(self, request, *args, **kwargs):
+        print(kwargs)
+        tag = request.GET.get('tag')
+        kwargs['tag'] = tag
+        context = self.get_context_data(**kwargs)
+        tags_title = Tags.objects.filter(tegs=tag).first()
+        if tags_title:
+            context['tags_title'] = tags_title
+            return self.render_to_response(context) 
+        else:
+            raise Http404()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'favorite_offers': (Offer.objects
+                                .offers(user=self.request.user)
+                                .filter(offer_tags__tegs=kwargs['tag'])[:20]),
+        })
+        return context

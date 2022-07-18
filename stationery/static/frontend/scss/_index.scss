@@ -11,10 +11,24 @@
         justify-content: space-between;
 
         .index-catalog--category {
-            flex-basis: calc(50% - 10px);
+            flex-basis: calc(50% - 20px);
             position: relative;
             margin-bottom: 20px;
-            padding-top: 30%;
+            padding-top: 27%;
+
+            &:nth-of-type(2n) {
+                margin-left: 10px;
+            }
+
+            &:nth-of-type(2n+1) {
+                margin-right: 10px;
+            }
+        }
+        .index-catalog--category-video {
+            flex-basis: calc(50% - 20px);
+            position: relative;
+            margin-bottom: 20px;
+            padding-top: 0;
 
             &:nth-of-type(2n) {
                 margin-left: 10px;
@@ -44,40 +58,14 @@
         .index-catalog--category-bg {
             position: absolute;
             z-index: 1;
-            top: 0;
+            top: -1px;
             right: 0;
             bottom: 0;
             left: 0;
             background-size: cover;
         }
 
-        .id-eb694445-9016-11e4-becf-001e6702ee3e {
-            .index-catalog--category-bg {
-                background-image: url('../images/paper.jpg');
-            }
-        }
 
-        .id-482be32a-a2ac-11e3-a4a4-001e6702ee3e {
-            .index-catalog--category-link {
-                color: #FFF;
-            }
-
-            .index-catalog--category-bg {
-                background-image: url('../images/furniture.jpg');
-            }
-        }
-
-        .id-dc611350-8ff9-11e4-b5d8-001e6702ee3e {
-            .index-catalog--category-bg {
-                background-image: url('../images/needlework.jpg');
-            }
-        }
-
-        .id-43ea0dcb-ad21-11db-a2b2-00c09fa8f069 {
-            .index-catalog--category-bg {
-                background-image: url('../images/household.jpg');
-            }
-        }
     }
 }
 /* ------------------------------------------------------------------------- */

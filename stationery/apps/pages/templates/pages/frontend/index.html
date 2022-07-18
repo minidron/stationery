@@ -35,16 +35,106 @@
         </div>
     </div>
 
+    <style>
+        .video__iframe {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.video__iframe video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -o-object-fit: cover;
+    object-fit: cover;
+    min-width: 100%;
+    min-height: 100%;
+}
+    </style>
+
     <div class="index-catalog__section">
         <ul class="index-catalog">
-            {% for category in categories %}
-                <li class="index-catalog--category id-{{ category.pk }}">
-                    <a class="index-catalog--category-link" href="{{ category.get_absolute_url }}">
-                        <span class="link-title">{{ category }}</span>
-                        <div class="index-catalog--category-bg"></div>
+                {% if imgcategory.0.video %}
+                <li class="index-catalog--category-video id-eb694445-9016-11e4-becf-001e6702ee3e">
+                    <a class="index-catalog--category-link" href="/catalog/bumaga-i-kantstovaryi/">
+                        <span class="link-title"> БУМАГА  и  КАНЦТОВАРЫ</span>
+			<div class="index-catalog--category-bg">
+			<video controls width="100%" height="auto">
+                               <source src="{{ imgcategory.0.video.url }}" type="video/mp4">
+  			       <source src="{{ imgcategory.0.video.url }}" type="video/webm">
+  			       <source src="{{ imgcategory.0.video.url }}" type="video/ogg">
+			</video>
+                        </div>
                     </a>
                 </li>
-            {% endfor %}
+                {% else %}
+                <li class="index-catalog--category id-eb694445-9016-11e4-becf-001e6702ee3e">
+                    <a class="index-catalog--category-link" href="/catalog/bumaga-i-kantstovaryi/">
+                        <span class="link-title"> БУМАГА  и  КАНЦТОВАРЫ</span>
+                        <div class="index-catalog--category-bg" style="background-image: url({{ imgcategory.0.img.url }})"></div>
+                    </a>
+                </li>
+                {% endif %}
+                {% if imgcategory.1.video %}
+                <li class="index-catalog--category-video id-482be32a-a2ac-11e3-a4a4-001e6702ee3e">
+                    <a class="index-catalog--category-link" href="/catalog/kresla-i-stulya/">
+                        <span class="link-title"> КРЕСЛА И СТУЛЬЯ</span>
+                        <video controls width="100%" height="auto" >
+                               <source src="{{ imgcategory.1.video.url }}" type="video/mp4">
+  			       <source src="{{ imgcategory.1.video.url }}" type="video/webm">
+  			       <source src="{{ imgcategory.1.video.url }}" type="video/ogg">
+			</video>
+                    </a>
+                </li>
+                {% else %}
+                <li class="index-catalog--category id-482be32a-a2ac-11e3-a4a4-001e6702ee3e">
+                    <a class="index-catalog--category-link" href="/catalog/kresla-i-stulya/">
+                        <span class="link-title"> КРЕСЛА И СТУЛЬЯ</span>
+                        <div class="index-catalog--category-bg" style="background-image: url({{ imgcategory.1.img.url }})"></div>
+                    </a>
+                </li>
+                {% endif %}
+                {% if imgcategory.2.video %}
+                <li class="index-catalog--category-video id-dc611350-8ff9-11e4-b5d8-001e6702ee3e">
+                    <a class="index-catalog--category-link" href="/catalog/hobbi-i-tvorchestvo/">
+                        <span class="link-title"> ХОББИ  и ТВОРЧЕСТВО</span>
+                        <video controls width="100%" height="auto" >
+                               <source src="{{ imgcategory.2.video.url }}" type="video/mp4">
+  			       <source src="{{ imgcategory.2.video.url }}" type="video/webm">
+  			       <source src="{{ imgcategory.2.video.url }}" type="video/ogg">
+			</video>
+                    </a>
+                </li>
+                {% else %}
+                <li class="index-catalog--category id-dc611350-8ff9-11e4-b5d8-001e6702ee3e">
+                    <a class="index-catalog--category-link" href="/catalog/hobbi-i-tvorchestvo/">
+                        <span class="link-title"> ХОББИ  и ТВОРЧЕСТВО</span>
+                        <div class="index-catalog--category-bg" style="background-image: url({{ imgcategory.2.img.url }})"></div>
+                    </a>
+                </li>
+                {% endif %}
+                {% if imgcategory.3.video %}
+                <li class="index-catalog--category-video id-43ea0dcb-ad21-11db-a2b2-00c09fa8f069">
+                    <a class="index-catalog--category-link" href="/catalog/hoztovaryi-ofisnaya-kuhnya/">
+                        <span class="link-title"> ХОЗТОВАРЫ</span>
+                        <video controls width="100%" height="auto" >
+                               <source src="{{ imgcategory.3.video.url }}" type="video/mp4">
+  			       <source src="{{ imgcategory.3.video.url }}" type="video/webm">
+  			       <source src="{{ imgcategory.3.video.url }}" type="video/ogg">
+			</video>
+                    </a>
+                </li>
+                {% else %}
+                <li class="index-catalog--category id-43ea0dcb-ad21-11db-a2b2-00c09fa8f069">
+                    <a class="index-catalog--category-link" href="/catalog/hoztovaryi-ofisnaya-kuhnya/">
+                        <span class="link-title"> ХОЗТОВАРЫ</span>
+                        <div class="index-catalog--category-bg" style="background-image: url({{ imgcategory.3.img.url }})"></div>
+                    </a>
+                </li>
+                {% endif %}
         </ul>
     </div>
 

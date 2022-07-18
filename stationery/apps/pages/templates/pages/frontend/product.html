@@ -1,5 +1,7 @@
 {% extends "pages/frontend/base.html" %}
-
+{% block page_title %}{{ offer.full_title }}{% endblock %}
+{% block meta_description %}{% if offer.description %}{{ offer.description }} {% else %} Купить {{ offer.product.category|lower }} в Cерпухове {% endif %}{% endblock %}
+{% block meta_keywords %}{% if offer.keywords %}{{ offer.keywords }}{% else %} канцтовары, rfywnjdfhs, канцелярские товары, магазин канцтоваров, пряжа, рукоделие, вязание, папка, купить в серпухове, рюкзак, канцелярский магазин, сайты канцтоваров оптом, канцтовары оптом, канцелярские принадлежности, канцелярия купить, канцелярский{% endif %}{% endblock %}
 {% load static thumbnail pages_tag %}
 
 
@@ -51,6 +53,12 @@
                 {% endif %}
             </div>
             <div class="offer-price">
+                {% if offer.product.new_price %}
+                      <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}" style="color:red"><s>{{ offer.product.new_price }}</s></div>
+                {% endif %}
+                {% if offer.product.stock %}
+                      <div class="offer-info--offer-code" style="color:#0085CF">{{ offer.product.stock }}</div>
+                {% endif %}
                 <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
                 <div class="offer-price--availability">
                     {% spaceless %}
@@ -73,10 +81,21 @@
                 ></offer-price>
                 {% endif %}
 
+
+                <div class="tags">
+                    {% for item in offer.offer_tags.all %}
+                    <a href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}/catalog?tag={{ item.tegs }}"> 
+                        <div class="bg-tag">
+                            <div class="tag-link">{{ item.tegs }}</div>     
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+               
+
                 <div class="likely-on-page">
                     <div class="likely" data-url="{{ request.scheme }}://{{ request.get_host }}{{ offer.get_absolute_url }}" data-media="{{ request.scheme }}://{{ request.get_host }}{% if offer.product.image %}{{ offer.product.image.url }}{% endif %}" data-title="{{ offer.full_title }}">
                         <div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
-                        <div class="facebook" title="Поделится facebook">facebook</div>
                         <div class="odnoklassniki" title="Класснуть">Класснуть</div>
                     </div>
                 </div>
@@ -89,6 +108,7 @@
             </div>
         {% endif %}
     </div>
+
 {% endblock content %}
 
 {% block scripts %}
@@ -98,7 +118,7 @@
             currency: 'RUB',
             content_ids: ['{{ offer.product.article }}'],
             content_type: 'product'
-        });
+        }); 
     </script>
     {{ block.super }}
 {% endblock %}

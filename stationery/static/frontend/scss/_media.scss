@@ -41,10 +41,26 @@
 		}
 		}
 		}
-	
+                .index-catalog__section{ 
+		.index-catalog{
+			display: inherit;
+                .index-catalog--category-video:nth-of-type(2n){
+		margin-left:0;
+		}
+		.index-catalog--category-video:nth-of-type(2n+1){
+		margin-right:0;
+		}
+                }
+                }
 		.recursetree .level--1 {
 			width: 100%;
 		}
+                .index-catalog__section .index-catalog .index-catalog--category {
+                padding-top:55%;
+                }
+                .index-catalog__section .index-catalog .index-catalog--category-video:first-child {
+                padding-top:55%;
+                }
 	
 		.index-about{
 		display: inherit;
@@ -73,7 +89,7 @@
 	
 		 .index-offers__section{
 			 display: inherit;
-			 margin-left: -10px;
+			 margin-left: 20px;
 	
 				 .category-offers--item{
 				 width:90%;

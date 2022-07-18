@@ -175,8 +175,8 @@ do ($=jQuery, window, document) ->
   $(document).ready ->
 		if ($(window).width() > 720)
 			$('.sub-menu').hide()
-  $('.activ-catalog').click ->
-    $('.sub-menu').slideToggle()
+  $('.navbar-menu--root-item').click ->
+    $(this).find('.sub-menu').slideToggle()
     return
   return
 

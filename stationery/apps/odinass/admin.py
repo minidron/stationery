@@ -1,3 +1,4 @@
+from ast import keyword
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
@@ -15,7 +16,7 @@ from sorl.thumbnail.admin import AdminImageMixin
 from lib.utils import l
 
 from odinass import models as odinass_models
-from odinass.models import Category
+from odinass.models import Category, Tags
 
 
 @admin.register(odinass_models.Category)
@@ -227,6 +228,8 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
                 'content',
                 'field_offers',
                 'field_properties',
+                'new_price',
+                'stock',
             ),
         }),
         ('Дополнительно', {
@@ -347,6 +350,10 @@ class PriceTypeAdmin(admin.ModelAdmin):
         return False
 
 
+class TagsAdminInline(admin.TabularInline):
+    extra = 1
+    model = Tags
+
 @admin.register(odinass_models.Offer)
 class OfferAdmin(admin.ModelAdmin):
     search_fields = [
@@ -358,6 +365,17 @@ class OfferAdmin(admin.ModelAdmin):
         'field_prices',
         'field_rests',
     ]
+
+    fieldsets = (
+        (None, {
+            'fields': ('title','slug', 'product','field_prices','field_rests')
+        }),
+        ('СЕО настройки', {
+            'classes': ('open',),
+            'fields': ('description', 'keywords',),
+        }),
+    )
+    inlines = [TagsAdminInline]
 
     def has_add_permission(self, request):
         """

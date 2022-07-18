@@ -263,3 +263,29 @@
     }
 }
 /* ------------------------------------------------------------------------- */
+
+
+/*-------------------tags------------------------------------------*/
+.tags{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    a{
+        text-decoration: none;
+        color: #333;
+        font-family: Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+        padding-right: 10px;
+        padding-top: 5px;
+    }
+    .bg-tag{
+        background: rgb(209, 209, 209);
+        border-radius: 5px;
+        .tag-link{
+            padding: 10px;
+            font-size: 12px; 
+        }
+    }
+}
+/*---------------end----------------------*/
+

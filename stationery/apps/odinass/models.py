@@ -232,6 +232,9 @@ class Product(models.Model):
     content = RichTextField(
         'описание',
         blank=True, default='')
+    new_price = models.DecimalField('Старая цена', max_digits=12, decimal_places=2, blank=True, null=True)
+    stock = models.TextField('Условия акции', max_length=200, blank=True, null=True)
+    
 
     class Meta:
         default_related_name = 'products'
@@ -410,6 +413,8 @@ class OfferQuerySet(models.QuerySet):
                         ))))
 
 
+
+
 class Offer(models.Model):
     """
     Предложение
@@ -419,6 +424,8 @@ class Offer(models.Model):
     title = models.CharField(
         'наименование',
         max_length=254)
+    description = models.TextField('Дескрипшен', max_length=300, blank=True, null=True)
+    keywords = models.TextField('Ключевые слова', max_length=500, blank=True, null=True)
     slug = models.SlugField(
         'slug',
         blank=True, max_length=254)
@@ -445,10 +452,16 @@ class Offer(models.Model):
         path = '/'.join([self.product.category.path, self.slug])
         return reverse('pages:catalog', kwargs={'path': path})
 
+    def get_absolute_tags(self):
+        tag = self.slug
+        path = '/'.join([self.product.category.path, self.title])
+        return reverse('pages:catalog', kwargs={'path': path,'tag':tag})
+
     def autoslug(self):
         if self.slug:
             return
         self.slug = slugify(self.title)
+        
 
     def price(self, user=None):
         price_params = {}
@@ -523,6 +536,14 @@ class Offer(models.Model):
             return weight
         except PropertyValue.DoesNotExist:
             return 0
+
+
+class Tags(models.Model):
+    """
+    Тэги товара
+    """
+    tegs = models.CharField('Тэги товара', max_length=100)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, verbose_name = 'Предложение товара', related_name = 'offer_tags')
 
 
 class ActionLog(object):

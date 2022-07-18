@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
     <meta name="description" content="{% block meta_description %}{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}" />
     <meta name="yandex-verification" content="0dd9f4133d1c19ee" />
     <title>{% block page_title %}{% endblock %}</title>
 
@@ -59,7 +58,7 @@
         </div>
     </header>
 
-    <nav class="navbar__section" style="background-color:{{ color_top.color }}">
+    <nav class="navbar__section">
         <div class="navbar-container">
             <span class="menu-toggle"><i class="fa fa-bars"></i></span>
 
@@ -74,6 +73,9 @@
                                     <a href="{{ node.get_absolute_url }}">{{ node }}</a>
                                     {% if not node.is_leaf_node %}
                                         <ul class="sub-menu-level-2 hide">
+                                            {% for i in children %}
+                                            {{i}}
+                                            {% endfor %}
                                             {{ children }}
                                         </ul>
                                     {% endif %}
@@ -83,41 +85,20 @@
                         {% endrecursetree %}
                     </ul>
                 </li>
-
-                {% for item in solo_menu %}
                 <li class="navbar-menu--root-item">
-                    <a href="{% url 'pages:static' item.slug %}">{{ item.title }}</a></li>
+                    <a href="{% url 'pages:static' 'доставка' %}">Доставка</a></li>
                 </li>
-                {% endfor %}
+                <li class="navbar-menu--root-item">
+                    <a href="{% url 'pages:static' 'о-компании' %}">О компании</a>
+                </li>
                 <li class="navbar-menu--root-item">
                     <a href="{% url 'pages:blog' %}">Мастер-классы</a>
                 </li>
-		        <li class="navbar-menu--root-item">
-                    <a href="https://kancmiropt.ru/catalog/kresla-i-stulya/vazhno/">Акции</a>
+		<li class="navbar-menu--root-item">
+                    <a href="https://kancmiropt.ru/catalog/rasprodazha/">Акции</a>
                 </li>
-                {% for item in page_menu %}
-                <li class="navbar-menu--root-item" id="{{ forloop.counter  }}">
-                    <a href="#">{{ item.title }} <i class="fa fa-angle-down"></i></a>
-                    <ul class="sub-menu id="link-{{forloop.counter}}">
-                        {% for i in item.page.all %}
-                        <li>
-                            <a href="{% url 'pages:static' i.slug %}">{{ i.title }}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                {% endfor %}
             </ul>
-            {% for item in page_menu %}
-            <script>
-                let spam = '{{ forloop.counter  }}'
-                let menu = document.getElementById(`${spam}`)
-                let submenu = document.getElementById(`link-${spam}`)
-                menu.onclick = function () {
-                    submenu.style.display = 'block'
-                }
-            </script>
-            {% endfor %}
+
             {% block navbar_cart %}
                 <div v-cloak id="navbar-cart-app" class="navbar-cart">
                     <cart-link
@@ -224,15 +205,6 @@
         <a href="https://kanzoboz.ru/?rate=504730"><img src="http://rating.kanzoboz.ru/?id=504730" width="88" height="31" alt="Рейтинг канцелярских компаний" style="float: right; margin-right: 5%"></a>
         <!--/ Kanzoboz.ru counter-->
     </footer>
-    <script>
-        let vashno = document.querySelectorAll('a')
-        vashno.forEach(element => {
-            if (element.text == "Важно") {
-                element.style.display = 'none'
-            }
-        })
-    </script>
-
 
     {% block scripts %}
         {% csrf_token %}

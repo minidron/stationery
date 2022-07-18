@@ -91,6 +91,8 @@ TEMPLATES = [
                 'pages.context_processors.menu',
                 'pages.context_processors.config',
                 'cart.context_processors.cart',
+                'pages.context_processors.Vkwidget',
+		'pages.context_processors.get_footer_color',
             ],
         },
     },

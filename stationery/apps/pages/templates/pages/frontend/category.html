@@ -19,14 +19,13 @@
 {% endblock %}
 
 
-
 {% block content %}
     <div class="back-to">
         {% if category.parent %}
             <a href="{{ category.parent.get_absolute_url }}"><img src="/static/frontend/images/back.png" alt=""></a>
         {% endif %}
     </div>
-    <h1 class="main--title">{{ category.title }}</h1>
+    <h1 class="main--title" id="change-title">{{ category.title }}</h1>
 
     {% if category.content %}
         <div class="category-description ">
@@ -35,7 +34,7 @@
     {% endif %}
 
     {% if category.get_children %}
-        <div class="sub-categories-container">
+        <div class="sub-categories-container" style="padding-bottom:50px;">
             {% spaceless %}
 
             <ul class="recursetree">
@@ -54,7 +53,7 @@
                                             {% endthumbnail %}
                                         </span>
 
-                                        <a href="{{ node.get_absolute_url }}">{{ node }}</a>
+                                        <a id="nonelink-akcia" href="{{ node.get_absolute_url }}">{{ node }}</a>
                                     </div>
                                 {% else %}
                                     <a href="{{ node.get_absolute_url }}">{{ node }}</a>
@@ -71,7 +70,6 @@
                     {% endwith %}
                 {% endrecursetree %}
             </ul>
-
             {% endspaceless %}
         </div>
     {% endif %}
@@ -146,6 +144,12 @@
                             {% endif %}
                         </div>
                         <div class="offer-price">
+                            {% if offer.product.new_price %}
+                            <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}" style="color:red"><s>{{ offer.product.new_price }}</s></div>
+                            {% endif %}
+                            {% if offer.product.stock %}
+                            <div class="offer-info--offer-code" style="color:#0085CF">{{ offer.product.stock }}</div>
+                            {% endif %}
                             <div class="offer-price--price{% if offer.retail_price %} has_price{% endif %}">{{ offer.retail_price|price|default:'Нет цены' }}</div>
                             <div class="offer-price--availability">
                                 Наличие: <span>{% for rest in offer.rests.all %}<span title="{{ rest.warehouse }}">{{ rest }}</span>{% if not forloop.last %} | {% endif %}{% endfor %}</span>
@@ -162,7 +166,6 @@
                             <div class="likely-on-page">
                                 <div class="likely" data-url="{{ request.scheme }}://{{ request.get_host }}{{ offer.get_absolute_url }}" data-media="{{ request.scheme }}://{{ request.get_host }}{% if offer.product.image %}{{ offer.product.image.url }}{% endif %}" data-title="{{ offer.full_title }}">
                                     <div class="vkontakte" title="Поделится вконтакте">Вконтакте</div>
-                                    <div class="facebook" title="Поделится facebook">facebook</div>
                                     <div class="odnoklassniki" title="Класснуть">Класснуть</div>
                                 </div>
                             </div>
@@ -209,5 +212,25 @@
     </form>
     {% endif %}
 
+    <script>
+      document.addEventListener("DOMContentLoaded", function(event) {  
+        var elements_akciya = document.getElementById('change-title').innerText;
+        if (elements_akciya == 'Важно'){
+           elements_akciya = 'Акции';
+           document.querySelector('.breadcrumbs--item').style.display = "none";
+        };
+        document.getElementById('change-title').innerHTML = elements_akciya;
 
+        var akcialink = document.getElementById('nonelink-akcia').innerText;
+
+        if (akcialink == 'Важно'){
+            var change = document.querySelector('.level--1');
+            change.style.display = "none";
+        }
+
+
+       
+});
+   </script>
+   
 {% endblock content %}

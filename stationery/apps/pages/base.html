@@ -93,10 +93,10 @@
                     <a href="{% url 'pages:blog' %}">Мастер-классы</a>
                 </li>
 		        <li class="navbar-menu--root-item">
-                    <a href="https://kancmiropt.ru/catalog/kresla-i-stulya/vazhno/">Акции</a>
+                    <a href="https://kancmiropt.ru/catalog/kresla-i-stulya/vazhno/">Акции.</a>
                 </li>
                 {% for item in page_menu %}
-                <li class="navbar-menu--root-item" id="{{ forloop.counter  }}">
+                <li class="navbar-menu--root-item" id="{{ forloop.counter }}">
                     <a href="#">{{ item.title }} <i class="fa fa-angle-down"></i></a>
                     <ul class="sub-menu id="link-{{forloop.counter}}">
                         {% for i in item.page.all %}
