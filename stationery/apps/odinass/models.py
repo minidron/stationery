@@ -68,6 +68,9 @@ class Category(MPTTModel):
     views = models.IntegerField(
         'кол-во просмотров',
         default=0)
+    metatitle = models.TextField('Тайтл', max_length=200, blank=True, null=True)
+    description = models.TextField('Дескрипшен', max_length=300, blank=True, null=True)
+    h1_title = models.TextField('H1 тэг', max_length=200, blank=True, null=True)
 
     class MPTTMeta:
         order_insertion_by = ['title']

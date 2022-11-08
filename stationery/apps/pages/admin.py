@@ -5,7 +5,7 @@ from adminsortable2.admin import SortableAdminMixin
 
 from pages.models import Page, Blog, Slider, MenuPage
 
-from .models import Vkvidjet,FooterImg,Color,SocialLink,HeaderLogo,ImgCategory,ColorTopHead
+from .models import Vkvidjet,FooterImg,Color,SocialLink,HeaderLogo,ImgCategory,ColorTopHead,ImagePage
 
 
 
@@ -29,6 +29,15 @@ class PageAdmin(admin.TabularInline):
             ),
         }),
     )
+
+class ImagePageAdmin(admin.TabularInline):
+    def get_href(self,obj):
+        return 'https://kancmiropt.ru' + obj.url_img.url
+    readonly_fields = ('get_href',)
+    model = ImagePage
+
+    get_href.short_description = 'Ссылка на изображение'
+
 
 @admin.register(MenuPage)
 class MenuPageAdmin(admin.ModelAdmin):
@@ -58,6 +67,7 @@ class TransferPageAdmin(admin.ModelAdmin):
         }),
     )
 
+    inlines = [ImagePageAdmin, ] 
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):

@@ -1,5 +1,8 @@
 {% extends "pages/frontend/base.html" %}
 
+{% block page_title %}{% if category.metatitle %}{{ category.metatitle }}{% else %}{{ category.title }} недорого{% endif %}{% endblock %}
+{% block meta_description %}{% if category.description %}{{ category.description }}{% else %}{{ category.title }} в Твой Мир. Купите онлайн от 2000р., доставим бесплатно по Московской области.{% endif %}{% endblock %}
+
 {% load static thumbnail pages_tag mptt_tags %}
 
 
@@ -25,7 +28,7 @@
             <a href="{{ category.parent.get_absolute_url }}"><img src="/static/frontend/images/back.png" alt=""></a>
         {% endif %}
     </div>
-    <h1 class="main--title" id="change-title">{{ category.title }}</h1>
+    <h1 class="main--title" id="change-title">{% if category.h1_title %}{{ category.h1_title }}{% else %}{{ category.title }} в Серпухове{% endif %}</h1>
 
     {% if category.content %}
         <div class="category-description ">

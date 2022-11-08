@@ -1,8 +1,18 @@
 
 @media screen and (min-device-width : 320px) and (max-device-width : 480px){
 
+	.recursetree .level--1 {
+		width: calc(50% - 10px) !important;
+	}
 
-
+	.recursetree--title{
+		a{
+			font: $fw-medium 17px/20px $ff-Roboto;
+		}
+	}
+	.mobile-last-item{
+		padding-top: 5px;
+	}
 	/*---------------index-------------*/
 		.swiper-container{
 		width: 100%;

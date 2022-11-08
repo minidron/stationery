@@ -49,6 +49,9 @@ class CategoryAdmin(DraggableMPTTAdmin):
                 'views',
                 'parent',
                 'order',
+                'h1_title',
+                'metatitle',
+                'description',
             ),
         }),
     )

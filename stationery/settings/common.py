@@ -129,6 +129,7 @@ MEDIA_ROOT = path('../media')
 # -----------------------------------------------------------------------------
 
 
+
 # BOWER SETTINGS --------------------------------------------------------------
 STATICFILES_FINDERS += (
     'djangobower.finders.BowerFinder',

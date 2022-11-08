@@ -1,5 +1,6 @@
 """ from msilib.schema import Class """
 from operator import mod
+from statistics import mode
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -238,6 +239,21 @@ class ColorTopHead(models.Model):
     class Meta:
         verbose_name = 'Цвет полоски меню'
         verbose_name_plural = 'Цвет полоски меню'
+
+    def __str__(self):
+        return self.title
+
+class ImagePage(models.Model):
+
+    title = models.CharField(max_length=100, unique=True)
+    url_img = models.ImageField(upload_to='slider/', verbose_name='Изображение')
+    page = models.ForeignKey('Page', related_name='img_page', on_delete=models.CASCADE, verbose_name='Страница')
+
+    
+
+    class Meta:
+        verbose_name = 'Картинка на странице'
+        verbose_name_plural = 'Картинки на странице'
 
     def __str__(self):
         return self.title
