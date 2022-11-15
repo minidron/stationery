@@ -50,22 +50,25 @@ class Cart(object):
         """
         offer_id = str(offer_id)
 
-        if offer_id not in self.cart:
-            self.cart[offer_id] = {'quantity': 0}
-
-        if update_quantity:
-            new_quantity = quantity
-        else:
+        if offer_id in self.cart and not update_quantity:
             new_quantity = self.cart[offer_id]['quantity'] + quantity
+        else:
+            new_quantity = quantity
 
-        # Если на складе не хватает товара, то мы не его добавляем в корзину.
-        instance = Offer.objects.get(pk=offer_id)
-        if new_quantity < 0 or new_quantity > instance.rest_limit:
-            if self.cart[offer_id]['quantity'] == 0:
-                del self.cart[offer_id]
-            return -1
+        """
+        Если на складе не хватает товара, то мы не его добавляем в корзину.
+        Данное условие не применяется к юр. лицам.
+        """
+        is_opt = self.request.user.groups.filter(name='Оптовик').exists()
+        if not is_opt:
+            instance = Offer.objects.get(pk=offer_id)
+            if new_quantity > instance.rest_limit:
+                return -1
 
-        self.cart[offer_id]['quantity'] = new_quantity
+        if offer_id in self.cart:
+            self.cart[offer_id]['quantity'] = new_quantity
+        else:
+            self.cart[offer_id] = {'quantity': new_quantity}
 
         if self.cart[offer_id]['quantity'] == 0:
             del self.cart[offer_id]
