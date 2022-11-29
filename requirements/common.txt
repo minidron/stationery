@@ -15,7 +15,7 @@ django-constance==2.3.1
 django-elasticsearch-dsl==7.1.4
 django-extensions==1.9.8
 django-filebrowser-no-grappelli==3.7.5
-django-filter==1.1.0
+django-filter==2.4.0
 django-hijack-admin==2.1.10
 django-hijack==2.1.10
 django-logentry-admin==1.0.4
