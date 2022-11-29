@@ -26,7 +26,7 @@ DEFAULTS = {
 
     'PAYMENT_DEFAULT_METHOD': 'yandex_money',
     'PAYMENT_METHOD': [
-        'yandex_money',  # Яндекс.Деньги
+        #'yandex_money',  # Яндекс.Деньги
         'bank_card',  # банковская карта
         'sberbank',  # Сбербанк Онлайн (интернет-банк Сбербанка)
         # 'cash',  # оплата наличными в терминале
