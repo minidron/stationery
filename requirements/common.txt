@@ -36,7 +36,7 @@ psycopg2==2.8.5
 python-dateutil==2.6.1
 pytils==0.4.1
 pytz==2022.6
-pyyaml==3.12
+PyYAML==6.0
 raven==6.2.1
 requests==2.21.0
 sorl-thumbnail==12.5.0
