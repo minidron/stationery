@@ -1,20 +1,18 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.urls import reverse
 
+from lib.email import create_email
+from orders.fields import YandexPointField
 from yandex_kassa.models import Payment
 from yandex_kassa.signals import payment_done
 
-from lib.email import create_email
-
-from orders.fields import YandexPointField
-
-
 Group = 'auth.Group'
-User = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+User = get_user_model()
 
 
 class OrderStatus(object):

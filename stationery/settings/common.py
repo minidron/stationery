@@ -22,6 +22,8 @@ WSGI_APPLICATION = 'stationery.wsgi.application'
 ALLOWED_HOSTS = ['kancmiropt.ru']
 DEFAULT_DOMAIN = 'https://kancmiropt.ru'
 
+AUTH_USER_MODEL = 'accounts.User'
+
 ADMINS = [
     ('Pavel Alekin', 'minidron@yandex.ru')
 ]
@@ -38,11 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'django.contrib.staticfiles',
     'django_extensions',
+
     'djangobower',
     'pipeline',
     'rest_framework',
     'django_filters',
-    'yandex_kassa',
     'lib',
     'mptt',
     'adminsortable2',
@@ -56,10 +58,13 @@ INSTALLED_APPS = [
     'hijack_admin',
     'compat',
     'password_reset',
-    'odinass',
-    'pages',
-    'orders',
+
+    'accounts',
     'cart',
+    'odinass',
+    'orders',
+    'pages',
+    'yandex_kassa',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -92,7 +97,7 @@ TEMPLATES = [
                 'pages.context_processors.config',
                 'cart.context_processors.cart',
                 'pages.context_processors.Vkwidget',
-		'pages.context_processors.get_footer_color',
+                'pages.context_processors.get_footer_color',
             ],
         },
     },
@@ -127,7 +132,6 @@ STATIC_ROOT = path('../../static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = path('../media')
 # -----------------------------------------------------------------------------
-
 
 
 # BOWER SETTINGS --------------------------------------------------------------

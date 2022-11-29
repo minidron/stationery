@@ -1,17 +1,19 @@
 from django import forms
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
-from django.contrib.auth.models import Group, User
-from django.db.models import FloatField, F, Sum
+from django.contrib.auth.models import Group
+from django.db.models import F, FloatField, Sum
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
-
 from hijack_admin.admin import HijackUserAdminMixin
 
-from orders.models import (GroupSettings, Item, Office, Order, OrderStatus,
-                           Profile)
+from orders.models import (
+    GroupSettings, Item, Office, Order, OrderStatus, Profile)
+
+UserModel = get_user_model()
 
 
 class ItemInline(admin.TabularInline):
@@ -166,8 +168,7 @@ class OfficeAdmin(SortableAdminMixin, admin.ModelAdmin):
     form = OfficeFormAdmin
 
 
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+admin.site.register(UserModel, CustomUserAdmin)
 
 admin.site.unregister(Group)
 admin.site.register(Group, CustomGroupAdmin)
