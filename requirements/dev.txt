@@ -1,7 +1,7 @@
 -r common.txt
 
 bumpversion==0.5.3
-django-debug-toolbar==1.11
+django-debug-toolbar==2.2
 django-nose==1.4.5
 Fabric3==1.14.post1
 factory-boy==2.9.2

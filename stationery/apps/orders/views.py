@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Group
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -15,12 +14,10 @@ from password_reset.views import Recover, RecoverDone, Reset
 
 from cart.cart import Cart
 from cart.conf import CART_SESSION_ID
-
 from lib.email import create_email
-
-from orders.forms import (CompanyRegistrationForm, ItemFormSet, OrderForm,
-                          RegistrationForm, UserProfile,
-                          YaPaymentFormWithoutCash)
+from orders.forms import (
+    CompanyRegistrationForm, ItemFormSet, OrderForm, RegistrationForm,
+    UserProfile, YaPaymentFormWithoutCash)
 from orders.models import Order, OrderStatus
 
 
@@ -65,17 +62,14 @@ class RegistrationView(FormView):
         user_data = form.cleaned_data
         user.email = user_data.get('email')
         user.first_name = user_data.get('fio')
-        user.profile.phone = user_data.get('phone')
+        user.phone = user_data.get('phone')
 
         if company_form:
             company_data = company_form.cleaned_data
-            user.profile.company = company_data.get('company_name')
-            user.profile.company_address = company_data.get('company_address')
-            user.profile.inn = company_data.get('inn')
-
-            group = Group.objects.get(name='Оптовик')
-            group.user_set.add(user)
-            user.profile.save()
+            user.company = company_data.get('company_name')
+            user.company_address = company_data.get('company_address')
+            user.inn = company_data.get('inn')
+            user.is_wholesaler = True
             user.save()
 
         username = user_data.get('username')
@@ -97,16 +91,15 @@ class UpdateProfileView(LoginRequiredMixin, FormView):
 
     def get_initial(self):
         user = self.request.user
-        is_opt = user.groups.filter(name='Оптовик').exists()
 
         data_mapping = {
             'fio': user.first_name,
-            'phone': user.profile.phone,
+            'phone': user.phone,
             'email': user.email,
-            'user_type': 2 if is_opt else 1,
-            'company_name': user.profile.company,
-            'inn': user.profile.inn,
-            'company_address': user.profile.company_address,
+            'user_type': 2 if user.is_wholesaler else 1,
+            'company_name': user.company,
+            'inn': user.inn,
+            'company_address': user.company_address,
             'create_order': self.request.GET.get('create_order'),
         }
 
@@ -136,24 +129,21 @@ class UpdateProfileView(LoginRequiredMixin, FormView):
     def form_valid(self, form, company_form=None):
         user = self.request.user
         user_data = form.cleaned_data
-        group = Group.objects.get(name='Оптовик')
 
         user.email = user_data['email']
         user.first_name = user_data['fio']
-        user.profile.phone = user_data['phone']
+        user.phone = user_data['phone']
 
         if company_form:
             company_data = company_form.cleaned_data
 
-            user.profile.company = company_data['company_name']
-            user.profile.company_address = company_data['company_address']
-            user.profile.inn = company_data['inn']
-
-            group.user_set.add(user)
-            user.profile.save()
+            user.company = company_data['company_name']
+            user.company_address = company_data['company_address']
+            user.inn = company_data['inn']
+            user.is_wholesaler = True
 
         else:
-            group.user_set.remove(user)
+            user.is_wholesaler = False
 
         user.save()
 
@@ -251,19 +241,13 @@ class CartView(LoginRequiredMixin, FormView):
 
     def validate_user(self):
         user = self.request.user
-        is_opt = user.groups.filter(name='Оптовик').exists()
 
         attrs = ['first_name']
-        profile_attrs = ['phone']
-        if is_opt:
-            profile_attrs += ['company', 'inn', 'company_address']
+        if user.is_wholesaler:
+            attrs += ['phone', 'company', 'inn', 'company_address']
 
         for attr in attrs:
             if not getattr(user, attr, None):
-                return False
-
-        for attr in profile_attrs:
-            if not getattr(user.profile, attr, None):
                 return False
 
         return True
@@ -309,7 +293,7 @@ class CartView(LoginRequiredMixin, FormView):
     def send_mail(self, form):
         user = form.order.user
 
-        if user.groups.filter(name='Оптовик'):
+        if user.is_wholesaler:
             email_address = settings.EMAIL_OPT
         else:
             return True
@@ -373,11 +357,10 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
         """
         cart = Cart(self.request)
         user = cart.request.user
-        is_opt = user.groups.filter(name='Оптовик').exists()
         order = kwargs.get('object', self.get_object())
         can_pay = order.status in [OrderStatus.INWORK]
 
-        kwargs['can_pay'] = not is_opt and can_pay
+        kwargs['can_pay'] = not user.is_wholesaler and can_pay
         if 'form' not in kwargs:
             kwargs['form'] = self.get_form()
         return super().get_context_data(**kwargs)
@@ -396,7 +379,7 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
         if self.request.method == 'GET':
             order = self.get_object()
             kwargs['initial'] = {
-                'phone': self.request.user.profile.phone,
+                'phone': self.request.user.phone,
                 'email': self.request.user.email,
                 'delivery_type': order.delivery_type,
                 'delivery_address': order.delivery_address,

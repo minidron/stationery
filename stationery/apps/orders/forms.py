@@ -139,7 +139,7 @@ class UserProfile(forms.Form):
         required=True)
     email = forms.EmailField(
         label='E-mail',
-        required=False)
+        required=True)
     user_type = forms.ChoiceField(
         label='Тип пользователя',
         required=True,

@@ -1,9 +1,6 @@
 import collections
-from email.policy import HTTP
 import operator
-
 from functools import reduce
-from urllib import request
 
 from django import forms
 from django.db.models import F, Func, Max, Min, Prefetch, Q
@@ -11,11 +8,9 @@ from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView, TemplateView
 
-from odinass.models import Category, Offer, Property, PropertyValue, Product, Tags
+from odinass.models import Category, Offer, Property, PropertyValue, Tags
 from odinass.serializers import SearchOfferFilter
-
 from orders.models import Office
-
 from pages.models import Blog, Page, Slider
 
 
@@ -411,17 +406,16 @@ class TagsView(TemplateView):
     template_name = 'pages/frontend/category_tags.html'
 
     def get(self, request, *args, **kwargs):
-        print(kwargs)
         tag = request.GET.get('tag')
         kwargs['tag'] = tag
         context = self.get_context_data(**kwargs)
         tags_title = Tags.objects.filter(tegs=tag).first()
         if tags_title:
             context['tags_title'] = tags_title
-            return self.render_to_response(context) 
+            return self.render_to_response(context)
         else:
             raise Http404()
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({

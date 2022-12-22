@@ -59,8 +59,7 @@ class Cart(object):
         Если на складе не хватает товара, то мы не его добавляем в корзину.
         Данное условие не применяется к юр. лицам.
         """
-        is_opt = self.request.user.groups.filter(name='Оптовик').exists()
-        if not is_opt:
+        if not self.request.user.is_wholesaler:
             instance = Offer.objects.get(pk=offer_id)
             if new_quantity > instance.rest_limit:
                 return -1

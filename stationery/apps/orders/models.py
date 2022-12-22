@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.gis.db import models
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -199,7 +198,7 @@ class Order(models.Model):
                 'site': settings.DEFAULT_DOMAIN,
                 'order': self,
                 'items': self.items.all(),
-                'is_opt': user.groups.filter(name='Оптовик').exists(),
+                'is_opt': user.is_wholesaler,
             }
         )
 
@@ -225,7 +224,7 @@ class Order(models.Model):
                 'site': settings.DEFAULT_DOMAIN,
                 'order': self,
                 'items': self.items.all(),
-                'is_opt': user.groups.filter(name='Оптовик').exists(),
+                'is_opt': user.is_wholesaler,
             }
         )
 
@@ -302,71 +301,6 @@ class Item(models.Model):
     @property
     def total_weight(self):
         return self.offer.weight * self.quantity
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(
-        User,
-        verbose_name='пользователь',
-        related_name='profile',
-        on_delete=models.CASCADE)
-    price_type = models.ForeignKey(
-        'odinass.PriceType',
-        verbose_name='тип цены',
-        db_index=True, blank=True, null=True)
-    company = models.CharField(
-        'компания',
-        max_length=254, blank=True)
-    company_address = models.TextField(
-        'юридический адрес',
-        blank=True)
-    inn = models.CharField(
-        'ИНН',
-        max_length=254, blank=True)
-    phone = models.CharField(
-        'телефон',
-        max_length=254, blank=True)
-
-    class Meta:
-        default_related_name = 'profiles'
-        verbose_name = 'профиль'
-        verbose_name_plural = 'профили'
-
-    def __str__(self):
-        return self.user.username
-
-
-class GroupSettings(models.Model):
-    group = models.OneToOneField(
-        Group,
-        verbose_name='группа',
-        related_name='settings',
-        on_delete=models.CASCADE)
-    email = models.EmailField(
-        'почта',
-        max_length=254, blank=True)
-
-    class Meta:
-        default_related_name = 'group_settings'
-        verbose_name = 'настройка групп'
-        verbose_name_plural = 'настройки групп'
-
-    def __str__(self):
-        return self.group.name
-
-
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    instance.profile.save()
-
-
-@receiver(post_save, sender=Group)
-def create_or_update_group_settings(sender, instance, created, **kwargs):
-    if created:
-        GroupSettings.objects.create(group=instance)
-    instance.settings.save()
 
 
 @receiver(payment_done, sender=Payment)
