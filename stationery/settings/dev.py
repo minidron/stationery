@@ -1,28 +1,20 @@
-from stationery.settings.common import *  # NOQA
-
+from .common import INSTALLED_APPS, MIDDLEWARE, TEMPLATES, TEST
 
 DEBUG = True
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 YANDEX_MONEY_DEBUG = DEBUG
 
-if not TEST:
-    INSTALLED_APPS += ('debug_toolbar', )
-    MIDDLEWARE_CLASSES += (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
+
+# DJANGO DEBUG TOOLBAR --------------------------------------------------------
+INSTALLED_APPS += ['debug_toolbar']
+
+MIDDLEWARE += [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+# -----------------------------------------------------------------------------
 
 
-INTERNAL_IPS = ['192.168.0.%d' % num for num in range(1, 255)]
-
-
-def custom_show_toolbar(request):
-    return DEBUG
-
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': 'settings.dev.custom_show_toolbar',
-}
-
+# LOGGING ---------------------------------------------------------------------
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -53,6 +45,8 @@ LOGGING = {
         },
     }
 }
+# -----------------------------------------------------------------------------
+
 
 if TEST:
     # Радикально ускоряет фабрики пользователей.

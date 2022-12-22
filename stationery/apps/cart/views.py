@@ -77,7 +77,7 @@ class PaymentView(LoginRequiredMixin, FormView):
         cart = Cart(self.request)
         user = cart.request.user
         context.update({
-            'is_opt': user.groups.filter(name='Оптовик').exists(),
+            'is_opt': user.is_wholesaler,
         })
         return context
 
@@ -91,7 +91,7 @@ class PaymentView(LoginRequiredMixin, FormView):
             cart = Cart(self.request)
 
             kwargs['initial'] = {
-                'phone': self.request.user.profile.phone,
+                'phone': self.request.user.phone,
                 'email': self.request.user.email,
                 'delivery_type': DeliveryType.EXW,
                 'delivery_address': '',
@@ -125,7 +125,6 @@ class PaymentView(LoginRequiredMixin, FormView):
         data = form.cleaned_data
         cart = Cart(self.request)
         user = cart.request.user
-        is_opt = user.groups.filter(name='Оптовик').exists()
 
         with transaction.atomic():
             order_data = {
@@ -137,7 +136,7 @@ class PaymentView(LoginRequiredMixin, FormView):
                 'zip_code': data['zip_code'],
             }
 
-            if not is_opt:
+            if not user.is_wholesaler:
                 order_data['delivery_price'] = fetch_delivery_price(
                     data['delivery_type'],
                     '142200',
@@ -147,7 +146,7 @@ class PaymentView(LoginRequiredMixin, FormView):
                 if data['payment_method_data'] == PaymentMethod.CASH:
                     order_data['status'] = OrderStatus.CONFIRMED
 
-            if is_opt:
+            if user.is_wholesaler:
                 order_data['status'] = OrderStatus.CONFIRMED
 
             order = Order.objects.create(**order_data)
@@ -162,7 +161,7 @@ class PaymentView(LoginRequiredMixin, FormView):
                     'unit_price': offer.retail_price,
                 })
 
-            if not is_opt:
+            if not user.is_wholesaler:
                 if data['payment_method_data'] != PaymentMethod.CASH:
                     return form.create_payment(
                         request=self.request, order=order, payer=user)

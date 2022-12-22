@@ -27,8 +27,6 @@ def menu(request):
 
     page_menu = MenuPage.objects.all()
 
-    print(solo_menu)
-
     return {
         'categories': categories,
         'full_categories': full_categories,

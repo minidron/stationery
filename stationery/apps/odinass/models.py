@@ -3,16 +3,7 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.db.models import (
-    Case,
-    F,
-    IntegerField,
-    OuterRef,
-    Prefetch,
-    Subquery,
-    Sum,
-    Value,
-    When
-)
+    Case, F, IntegerField, OuterRef, Prefetch, Subquery, Sum, Value, When)
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.template.loader import render_to_string
@@ -68,9 +59,18 @@ class Category(MPTTModel):
     views = models.IntegerField(
         'кол-во просмотров',
         default=0)
-    metatitle = models.TextField('Тайтл', max_length=200, blank=True, null=True)
-    description = models.TextField('Дескрипшен', max_length=300, blank=True, null=True)
-    h1_title = models.TextField('H1 тэг', max_length=200, blank=True, null=True)
+    metatitle = models.TextField(
+        'Тайтл',
+        max_length=200,
+        blank=True, null=True)
+    description = models.TextField(
+        'Дескрипшен',
+        max_length=300,
+        blank=True, null=True)
+    h1_title = models.TextField(
+        'H1 тэг',
+        max_length=200,
+        blank=True, null=True)
 
     class MPTTMeta:
         order_insertion_by = ['title']
@@ -235,9 +235,14 @@ class Product(models.Model):
     content = RichTextField(
         'описание',
         blank=True, default='')
-    new_price = models.DecimalField('Старая цена', max_digits=12, decimal_places=2, blank=True, null=True)
-    stock = models.TextField('Условия акции', max_length=200, blank=True, null=True)
-    
+    new_price = models.DecimalField(
+        'Старая цена',
+        max_digits=12, decimal_places=2,
+        blank=True, null=True)
+    stock = models.TextField(
+        'Условия акции',
+        max_length=200,
+        blank=True, null=True)
 
     class Meta:
         default_related_name = 'products'
@@ -380,8 +385,8 @@ class Price(models.Model):
 class OfferQuerySet(models.QuerySet):
     def offers(self, user=None, category=None, ids=None):
         price_params = {}
-        if user and hasattr(user, 'profile') and user.profile.price_type:
-            price_params['price_type'] = user.profile.price_type
+        if user and hasattr(user, 'price_type') and user.price_type:
+            price_params['price_type'] = user.price_type
         else:
             price_params['price_type__is_default'] = True
 
@@ -416,8 +421,6 @@ class OfferQuerySet(models.QuerySet):
                         ))))
 
 
-
-
 class Offer(models.Model):
     """
     Предложение
@@ -427,8 +430,14 @@ class Offer(models.Model):
     title = models.CharField(
         'наименование',
         max_length=254)
-    description = models.TextField('Дескрипшен', max_length=300, blank=True, null=True)
-    keywords = models.TextField('Ключевые слова', max_length=500, blank=True, null=True)
+    description = models.TextField(
+        'Дескрипшен',
+        max_length=300,
+        blank=True, null=True)
+    keywords = models.TextField(
+        'Ключевые слова',
+        max_length=500,
+        blank=True, null=True)
     slug = models.SlugField(
         'slug',
         blank=True, max_length=254)
@@ -458,18 +467,17 @@ class Offer(models.Model):
     def get_absolute_tags(self):
         tag = self.slug
         path = '/'.join([self.product.category.path, self.title])
-        return reverse('pages:catalog', kwargs={'path': path,'tag':tag})
+        return reverse('pages:catalog', kwargs={'path': path, 'tag': tag})
 
     def autoslug(self):
         if self.slug:
             return
         self.slug = slugify(self.title)
-        
 
     def price(self, user=None):
         price_params = {}
-        if user and hasattr(user, 'profile') and user.profile.price_type:
-            price_params['price_type'] = user.profile.price_type
+        if user and hasattr(user, 'price_type') and user.price_type:
+            price_params['price_type'] = user.price_type
         else:
             price_params['price_type__is_default'] = True
 
@@ -545,8 +553,14 @@ class Tags(models.Model):
     """
     Тэги товара
     """
-    tegs = models.CharField('Тэги товара', max_length=100)
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, verbose_name = 'Предложение товара', related_name = 'offer_tags')
+    tegs = models.CharField(
+        'Тэги товара',
+        max_length=100)
+    offer = models.ForeignKey(
+        Offer,
+        verbose_name='Предложение товара',
+        on_delete=models.CASCADE,
+        related_name='offer_tags')
 
 
 class ActionLog(object):
