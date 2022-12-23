@@ -71,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'accounts.middleware.AuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -164,18 +164,6 @@ BOWER_INSTALLED_APPS = (
 # -----------------------------------------------------------------------------
 
 
-# REST FRAMEWORK SETTINGS -----------------------------------------------------
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAdminUser',
-    ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
-}
-# -----------------------------------------------------------------------------
-
-
 # PIPELINE SETTINGS -----------------------------------------------------------
 STATICFILES_FINDERS += (
     'pipeline.finders.PipelineFinder',
@@ -265,18 +253,6 @@ PIPELINE = {
 # -----------------------------------------------------------------------------
 
 
-# API -------------------------------------------------------------------------
-REST_FRAMEWORK = {
-    # 'DEFAULT_RENDERER_CLASSES': [
-    #     'rest_framework.renderers.JSONRenderer',
-    # ],
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
-}
-# -----------------------------------------------------------------------------
-
-
 # IPYTHON NOTEBOOK ------------------------------------------------------------
 IPYTHON_ARGUMENTS = [
     '--ext', 'django_extensions.management.notebook_extension',
@@ -286,6 +262,16 @@ NOTEBOOK_ARGUMENTS = [
     '--ip=0.0.0.0',
     '--no-browser',
 ]
+# -----------------------------------------------------------------------------
+
+
+# REST FRAMEWORK SETTINGS -----------------------------------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'UNAUTHENTICATED_USER': 'accounts.models.AnonymousUser',
+}
 # -----------------------------------------------------------------------------
 
 

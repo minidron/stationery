@@ -1,7 +1,6 @@
 from decimal import Decimal
 
 from cart.conf import CART_SESSION_ID
-
 from odinass.models import Offer
 
 
