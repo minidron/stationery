@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import (
+    AbstractUser, AnonymousUser as DjangoAnonymousUser)
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -99,3 +100,16 @@ class User(AbstractUser):
         ordering = ['email']
         verbose_name = 'пользователь'
         verbose_name_plural = 'пользователи'
+
+
+class AnonymousUser(DjangoAnonymousUser):
+    """
+    Расширяем `AnonymousUser`.
+    """
+
+    @property
+    def is_wholesaler(self):
+        """
+        Все `AnonymousUser` не являются оптовиками.
+        """
+        return False
