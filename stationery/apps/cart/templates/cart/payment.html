@@ -84,11 +84,17 @@
                         {{ form.phone.errors }}
                     </div>
 
+                    {% if form.email %}
                     <div class="order-field-row">
                         {{ form.email.label_tag }}
                         {{ form.email }}
                         {{ form.email.errors }}
+
+                        {% if not request.user.is_authenticated %}
+                        <a class="payments__login-link" href="{% url 'account:login' %}?next={% url 'account:payment' %}">Войти</a>
+                        {% endif %}
                     </div>
+                    {% endif %}
                 {% else %}
                     <div class="order-field-row address">
                         {{ form.delivery_address.label_tag }}

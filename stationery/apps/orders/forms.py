@@ -153,11 +153,20 @@ class UserProfile(forms.Form):
 
 
 class YaPaymentForm(BasePaymentForm):
+    """
+    Форма оплаты и доставки.
+    """
+    phone = forms.CharField(
+        label='Телефон',
+        required=True)
+    email = forms.EmailField(
+        label='Email',
+        required=True)
     delivery_type = forms.TypedChoiceField(
-        label='Доставка',
+        label='Получение товара',
         coerce=int,
         widget=forms.RadioSelect(), choices=DeliveryType.CHOICES,
-        required=False)
+        required=True)
     delivery_address = forms.CharField(
         label='Адрес доставки',
         required=False)
@@ -167,16 +176,20 @@ class YaPaymentForm(BasePaymentForm):
     payment_method_data = forms.ChoiceField(
         label='Способ оплаты',
         widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES,
-        required=False)
+        required=True)
     comment = forms.CharField(
         label='Комментарий к заказу',
         widget=forms.Textarea(), required=False)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, disabled_fields=None, *args, **kwargs):
+        disabled_fields = disabled_fields or []
         super().__init__(*args, **kwargs)
         weight = kwargs.get('initial', {}).get('weight', None)
         if isinstance(weight, Number) and weight == 0:
             self.fields['delivery_type'].choices = [DeliveryType.CHOICES[0]]
+
+        for field_name in disabled_fields:
+            self.fields[field_name].disabled = True
 
     def clean(self):
         cleaned_data = super().clean()

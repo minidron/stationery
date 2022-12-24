@@ -52,7 +52,7 @@ class DeliveryType(object):
     RUSSIANPOST = 2
 
     CHOICES = (
-        (EXW, 'Самовывоз'),
+        (EXW, 'Самовывоз из пункта выдачи (Серпухов, ул. Ворошилова, 94)'),
         (RUSSIANPOST, 'Почта России'),
     )
 

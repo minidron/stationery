@@ -106,10 +106,6 @@ class AnonymousUser(DjangoAnonymousUser):
     """
     Расширяем `AnonymousUser`.
     """
-
-    @property
-    def is_wholesaler(self):
-        """
-        Все `AnonymousUser` не являются оптовиками.
-        """
-        return False
+    email = ''
+    phone = ''
+    is_wholesaler = False
