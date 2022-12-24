@@ -2,7 +2,7 @@ import uuid
 
 from django.utils import dateparse
 
-from yandex_checkout import Payment
+from yookassa import Payment
 
 from yandex_kassa.exceptions import YandexKassaException
 from yandex_kassa.models import PaymentMethod, PaymentStatus

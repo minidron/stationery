@@ -43,4 +43,4 @@ requests==2.21.0
 sorl-thumbnail==12.5.0
 transliterate==1.10.2
 Werkzeug==0.16.1
-yandex-checkout==1.0.11
+yookassa==2.3.3
