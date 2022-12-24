@@ -25,4 +25,8 @@
 
 <p>Полная стоимость: <strong>{{ order.amount }}</strong></p>
 
+{% if order.delivery_type == 1 %}
+<p>Адрес магазина: г. Серпухов, ул. Ворошилова, 94</p>
+{% endif %}
+
 <p><a href="{{ site }}{{ order.get_absolute_url }}">Открыть заказ</a></p>

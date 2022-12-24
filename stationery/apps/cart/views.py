@@ -1,18 +1,20 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
+from django.contrib.auth import get_user_model, login
 from django.db import transaction
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
 
-from yandex_kassa.models import PaymentMethod
-
+from accounts.utils import normalize_email
 from cart.cart import Cart
 from cart.conf import CART_KEY
 from cart.forms import CartItemFormSet
-
+from lib.email import create_email
 from orders.forms import YaPaymentForm
 from orders.models import DeliveryType, Item, Order, OrderStatus
 from orders.utils import fetch_delivery_price
+from yandex_kassa.models import PaymentMethod
 
 
 class CartView(FormView):
@@ -33,23 +35,6 @@ class CartView(FormView):
         })
         return kwargs
 
-    def post(self, request, *args, **kwargs):
-        """
-        Валидация всех форм.
-        """
-        cart_form = self.get_form()
-        user = cart_form.cart.request.user
-
-        # Пользователь не авторизован.
-        if not user.is_authenticated:
-            return HttpResponseRedirect(reverse('account:login') +
-                                        '?next=%s' % reverse('account:cart'))
-
-        if cart_form.is_valid():
-            return self.form_valid(cart_form)
-        else:
-            return self.form_invalid(cart_form)
-
     def form_valid(self, form):
         """
         Для уверенности мы пересохраняем данные из формы в сессию пользователя.
@@ -65,7 +50,7 @@ class CartView(FormView):
         return super().form_valid(form)
 
 
-class PaymentView(LoginRequiredMixin, FormView):
+class PaymentView(FormView):
     """
     Страница оплаты и доставки.
     """
@@ -81,29 +66,30 @@ class PaymentView(LoginRequiredMixin, FormView):
         })
         return context
 
+    def get_initial(self):
+        """
+        Контактные данные из профиля пользователя.
+        """
+        user = self.request.user
+
+        return {
+            'email': user.email,
+            'phone': user.phone,
+            'delivery_type': DeliveryType.EXW,
+            'delivery_address': '',
+            'zip_code': '',
+            'weight': Cart(self.request).get_total_weight(),
+        }
+
     def get_form_kwargs(self):
         """
-        Передаём данные для создания формы оплаты.
+        Если пользователь зарегистрирован, то запрещаем редактировать почту и
+        телефон.
         """
-        kwargs = {}
-
-        if self.request.method == 'GET':
-            cart = Cart(self.request)
-
-            kwargs['initial'] = {
-                'phone': self.request.user.phone,
-                'email': self.request.user.email,
-                'delivery_type': DeliveryType.EXW,
-                'delivery_address': '',
-                'zip_code': '',
-                'weight': cart.get_total_weight(),
-            }
-
-        elif self.request.method in ('POST', 'PUT'):
-            kwargs.update({
-                'data': self.request.POST,
-            })
-        return kwargs
+        form_kwargs = super().get_form_kwargs()
+        if self.request.user.is_authenticated:
+            form_kwargs['disabled_fields'] = ['email']
+        return form_kwargs
 
     def form_valid(self, form):
         """
@@ -114,9 +100,58 @@ class PaymentView(LoginRequiredMixin, FormView):
         cart = Cart(self.request)
         if cart.get_total_price() == 0:
             return self.form_invalid(form)
+
+        if not self.request.user.is_authenticated:
+            data = form.cleaned_data
+            created, user = self.get_or_create_user(data['email'],
+                                                    data['phone'])
+            if created:
+                login(self.request, user)
+            else:
+                login_url = reverse('account:login')
+                payment_url = reverse('account:payment')
+                return redirect(f'{login_url}?next={payment_url}')
+
         self.success_url = self.create_order(form)
         cart.clear()  # очищаем корзину.
         return super().form_valid(form)
+
+    def get_or_create_user(self, email, phone):
+        """
+        Возвращает пользователя, если он есть, если нет, то вначале
+        регистрирует его.
+        """
+        User = get_user_model()
+
+        try:
+            user = User.objects.get(email=normalize_email(email))
+            return (False, user)
+        except User.DoesNotExist:
+            password = User.objects.make_random_password()
+            user = User.objects.create_user(
+                email=normalize_email(email),
+                password=password,
+                phone=phone,
+            )
+
+            body_html = render_to_string(
+                'email/auto_registered_user.html',
+                {
+                    'site': settings.DEFAULT_DOMAIN,
+                    'username': user.email,
+                    'password': password,
+                }
+            )
+
+            email = create_email(
+                'Спасибо за регистрацию!',
+                body_html,
+                user.email
+            )
+
+            email.send()
+
+            return (True, user)
 
     def create_order(self, form):
         """

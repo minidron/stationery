@@ -191,7 +191,7 @@ PIPELINE = {
             'source_filenames': (
                 'frontend/scss/style.scss',
             ),
-            'output_filename': 'frontend/css/style-2020-02-24.css',
+            'output_filename': 'frontend/css/style-2022-12-25.css',
         },
         'vue': {
             'source_filenames': (

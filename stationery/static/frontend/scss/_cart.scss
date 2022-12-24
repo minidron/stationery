@@ -225,21 +225,20 @@
 									width:100%;
 								}
                 &:hover {
-										background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
-										
+                    background-color: darken(get($color, 'button', 'normal', 'background'), 10%);
                 }
             }
         }
 
         .cart-info--price {
             font: $fw-bold 18px/18px $ff-Roboto;
-						color: get($color, 'nav', 'text');
-						@include media('<=phone') {
-							font-size: 20px;
-							padding-top: 20px;
-							text-align: center;
-							padding-bottom: 20px;
-						}
+            color: get($color, 'nav', 'text');
+            @include media('<=phone') {
+                font-size: 20px;
+                padding-top: 20px;
+                text-align: center;
+                padding-bottom: 20px;
+            }
 
             &:after {
                 @include fa-icon;
@@ -271,6 +270,17 @@
                 }
             }
         }
+    }
+}
+
+.payments__login-link {
+    margin-left: 20px;
+    font: $fw-regular 16px/20px $ff-PT-Sans;
+    text-decoration: none;
+    color: get($color, 'link', 'base');
+
+    &:hover {
+        color: get($color, 'link', 'hover');
     }
 }
 /* ------------------------------------------------------------------------- */
