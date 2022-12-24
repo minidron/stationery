@@ -13,7 +13,7 @@ from django.views.generic import DetailView, FormView, ListView, TemplateView
 from password_reset.views import Recover, RecoverDone, Reset
 
 from cart.cart import Cart
-from cart.conf import CART_SESSION_ID
+from cart.conf import CART_KEY
 from lib.email import create_email
 from orders.forms import (
     CompanyRegistrationForm, ItemFormSet, OrderForm, RegistrationForm,
@@ -192,10 +192,10 @@ class UserLogoutView(LogoutView):
 
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-        cart = request.session.get(CART_SESSION_ID)
+        cart = request.session.get(CART_KEY)
         auth_logout(request)
         if cart is not None:
-            request.session[CART_SESSION_ID] = cart
+            request.session[CART_KEY] = cart
         next_page = self.get_next_page()
         if next_page:
             return HttpResponseRedirect(next_page)

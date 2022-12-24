@@ -7,7 +7,7 @@ from django.views.generic import FormView
 from yandex_kassa.models import PaymentMethod
 
 from cart.cart import Cart
-from cart.conf import CART_SESSION_ID
+from cart.conf import CART_KEY
 from cart.forms import CartItemFormSet
 
 from orders.forms import YaPaymentForm
@@ -60,7 +60,7 @@ class CartView(FormView):
             cart_items[str(offer_form.offer.pk)] = {
                 'quantity': offer_form.cleaned_data['quantity'],
             }
-        self.request.session[CART_SESSION_ID] = cart_items
+        self.request.session[CART_KEY] = cart_items
         self.request.session.modified = True
         return super().form_valid(form)
 
