@@ -1,1 +1,1 @@
-CART_SESSION_ID = 'cart'
+CART_KEY = 'cart'

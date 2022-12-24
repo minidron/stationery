@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from cart.conf import CART_SESSION_ID
+from cart.conf import CART_KEY
 from odinass.models import Offer
 
 
@@ -11,9 +11,9 @@ class Cart(object):
     def __init__(self, request):
         self.request = request
         self.session = request.session
-        cart = self.session.get(CART_SESSION_ID)
+        cart = self.session.get(CART_KEY)
         if not cart:
-            cart = self.session[CART_SESSION_ID] = {}
+            cart = self.session[CART_KEY] = {}
         self.cart = cart
 
     def __iter__(self):
@@ -33,14 +33,14 @@ class Cart(object):
         """
         Сохранение изменение в корзине (сохраняем сессию).
         """
-        self.session[CART_SESSION_ID] = self.cart
+        self.session[CART_KEY] = self.cart
         self.session.modified = True
 
     def clear(self):
         """
         Очистка корзины.
         """
-        self.session[CART_SESSION_ID] = {}
+        self.session[CART_KEY] = {}
         self.session.modified = True
 
     def add_offer(self, offer_id, quantity=1, update_quantity=False):
