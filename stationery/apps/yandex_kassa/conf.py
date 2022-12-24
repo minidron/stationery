@@ -4,7 +4,7 @@ from django.conf import settings as _settings
 from django.core.signals import setting_changed
 from django.dispatch import receiver
 
-from yandex_checkout import Configuration
+from yookassa import Configuration
 
 
 DEFAULTS = {
