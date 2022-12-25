@@ -1,16 +1,9 @@
-from stationery.settings.common import *  # NOQA
-
+from .common import INSTALLED_APPS, TEMPLATES
 
 DEBUG = False
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
-INSTALLED_APPS += (
-    'raven.contrib.django.raven_compat',
-)
-
-MIDDLEWARE_CLASSES += (
-    # 'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
-)
+INSTALLED_APPS += ['raven.contrib.django.raven_compat']
 
 RAVEN_CONFIG = {
     'dsn': 'http://9fd1d4c4158d467ca1a98c64456761ac:369c2a99e989412b9d585b777ef837fb@sentry.kancmiropt.ru/2',  # NOQA
