@@ -5,10 +5,21 @@ from __future__ import unicode_literals
 from django.db import migrations
 from django.db.models import Count
 
+from accounts.export_user import XlsxUserExport
 from accounts.utils import normalize_email
 
 
-def remove_with_empty_email(apps, schema_editor):
+def backup_without_email(apps, schema_editor):
+    """
+    Сохраняем пользователей без email.
+    """
+    User = apps.get_model('accounts', 'User')
+    users = User.objects.filter(email='')
+    xlsx = XlsxUserExport(users)
+    xlsx.generate()
+
+
+def remove_without_email(apps, schema_editor):
     """
     Удаляем пользователей с пустым email.
     """
@@ -56,7 +67,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            remove_with_empty_email,
+            backup_without_email,
+            reverse_code=migrations.RunPython.noop
+        ),
+        migrations.RunPython(
+            remove_without_email,
             reverse_code=migrations.RunPython.noop
         ),
         migrations.RunPython(
