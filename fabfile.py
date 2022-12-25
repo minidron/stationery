@@ -25,7 +25,6 @@ class Fabric(DjangoFabric):
         """
         local('yarn --cwd %s serve' % self.vue_app_path)
 
-
     def fab_vue_build(self):
         """
         Сделать билд VUE приложения.

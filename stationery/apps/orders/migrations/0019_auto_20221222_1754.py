@@ -8,6 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('accounts', '0005_copy_from_profile'),
         ('orders', '0018_auto_20200108_1206'),
     ]
 

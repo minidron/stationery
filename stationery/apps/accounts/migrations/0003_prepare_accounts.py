@@ -63,6 +63,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('accounts', '0002_rename_user_table'),
+        ('orders', '0018_auto_20200108_1206'),
     ]
 
     operations = [
