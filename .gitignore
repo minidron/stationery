@@ -13,6 +13,7 @@ stationery/static/scss/*/*.css
 .idea
 .vscode
 /media/*
+/env/
 /cover/
 /django-resized/
 Procfile.local

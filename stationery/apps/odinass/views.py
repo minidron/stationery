@@ -24,6 +24,8 @@ from odinass.tasks import import_file
 logger = logging.getLogger(__name__)
 
 
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class ExchangeView(View):
     def __init__(self, **kwargs):

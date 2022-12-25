@@ -172,13 +172,13 @@ do ($=jQuery, window, document) ->
 
 	# TOGGLE MENU
 	# ---------------------------------------------------------------------------
-  $(document).ready ->
-		if ($(window).width() > 720)
-			$('.sub-menu').hide()
-  $('.navbar-menu--root-item').click ->
-    $(this).find('.sub-menu').slideToggle()
-    return
+$(document).ready ->
+  if ($(window).width() > 720)
+    $('.sub-menu').hide()
+$('.navbar-menu--root-item').click ->
+  $(this).find('.sub-menu').slideToggle()
   return
+return
 
 $(document).mouseup (e) ->
   container = $('.sub-menu')
@@ -188,19 +188,19 @@ $(document).mouseup (e) ->
 	# ---------------------------------------------------------------------------
 
 
-	$(document).ready ->
-		$('.sub-menu > *:nth-child(2)').hover ->
-			$('.sub-menu-level-2').hide()
-			$(this).find(".sub-menu-level-2:eq(0)").show()
-		$('.sub-menu > *:nth-child(1)').hover ->
-			$('.sub-menu-level-2').hide()
-			$(this).find(".sub-menu-level-2:eq(0)").show()
-		$('.sub-menu > *:nth-child(3)').hover ->
-			$('.sub-menu-level-2').hide()
-			$(this).find(".sub-menu-level-2:eq(0)").show()
-		$('.sub-menu > *:nth-child(4)').hover ->
-			$('.sub-menu-level-2').hide()
-			$(this).find(".sub-menu-level-2:eq(0)").show()
+$(document).ready ->
+  $('.sub-menu > *:nth-child(2)').hover ->
+    $('.sub-menu-level-2').hide()
+    $(this).find(".sub-menu-level-2:eq(0)").show()
+  $('.sub-menu > *:nth-child(1)').hover ->
+    $('.sub-menu-level-2').hide()
+    $(this).find(".sub-menu-level-2:eq(0)").show()
+  $('.sub-menu > *:nth-child(3)').hover ->
+    $('.sub-menu-level-2').hide()
+    $(this).find(".sub-menu-level-2:eq(0)").show()
+  $('.sub-menu > *:nth-child(4)').hover ->
+    $('.sub-menu-level-2').hide()
+    $(this).find(".sub-menu-level-2:eq(0)").show()
 
 
 
@@ -212,20 +212,20 @@ $(document).mouseup (e) ->
 
 	# MASK PHONE
 	# ---------------------------------------------------------------------------
-	$(document).ready ->
-		$('#id_phone').mask("+7 (999) 999-99-99")
-		return
-	#----------------------------------------------------------------------------
+$(document).ready ->
+  $('#id_phone').mask("+7 (999) 999-99-99")
+  return
+#----------------------------------------------------------------------------
 
 
 	# BREADCRUMS ON PHONE
 	# ----------------------------------------------------------------------------
-	$(document).ready ->
-		if ((window.screen.width < 480) and ($('.breadcrumbs').children("li").length) == 0)
-			$('.breadcrumbs__section').css("display", "none")
-		else
-			$('.breadcrumbs__section').css("display", "block")
-		return
+$(document).ready ->
+  if ((window.screen.width < 480) and ($('.breadcrumbs').children("li").length) == 0)
+    $('.breadcrumbs__section').css("display", "none")
+  else
+    $('.breadcrumbs__section').css("display", "block")
+  return
 	# ----------------------------------------------------------------------------
 
 # BREADCRUMS NONE
@@ -234,7 +234,14 @@ $(document).mouseup (e) ->
 		if (($('.breadcrumbs').children("li").length) == 0)
 			$('.breadcrumbs__section').css("display", "none")
 		return
-	# ----------------------------------------------------------------------------
+	# ---------------------------------------------------------------------------
+
+# MODAL WINDOW
+  #-----------------------------------------------------------------------------
+  $(document).ready ->
+    alert('hello')
+    return
+  #-----------------------------------------------------------------------------
 
 
 
