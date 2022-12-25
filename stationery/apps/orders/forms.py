@@ -1,15 +1,15 @@
 from numbers import Number
 
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
 from django.utils.functional import cached_property
 
+from orders.models import DeliveryType, Item, Order
 from yandex_kassa.conf import settings as kassa_settings
 from yandex_kassa.forms import BasePaymentForm
 from yandex_kassa.models import PaymentMethod
-
-from orders.models import Item, Order, DeliveryType
 
 
 class OrderForm(forms.ModelForm):
@@ -101,14 +101,15 @@ class RegistrationForm(UserCreationForm):
     phone = forms.CharField(
         label='Телефон',
         required=True)
-    email = forms.EmailField(
-        label='E-mail',
-        required=False)
     user_type = forms.ChoiceField(
         label='Тип пользователя',
         required=True,
         choices=((1, 'физическое лицо'), (2, 'юридическое лицо')),
         widget=forms.RadioSelect())
+
+    class Meta:
+        fields = ('email',)
+        model = get_user_model()
 
 
 class CompanyRegistrationForm(forms.Form):

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout as auth_logout
+from django.contrib.auth import login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
@@ -58,11 +58,7 @@ class RegistrationView(FormView):
 
     def form_valid(self, form, company_form=None):
         user = form.save()
-
-        user_data = form.cleaned_data
-        user.email = user_data.get('email')
-        user.first_name = user_data.get('fio')
-        user.phone = user_data.get('phone')
+        user.first_name = form.cleaned_data.get('fio')
 
         if company_form:
             company_data = company_form.cleaned_data
@@ -70,11 +66,8 @@ class RegistrationView(FormView):
             user.company_address = company_data.get('company_address')
             user.inn = company_data.get('inn')
             user.is_wholesaler = True
-            user.save()
 
-        username = user_data.get('username')
-        raw_password = user_data.get('password1')
-        user = authenticate(username=username, password=raw_password)
+        user.save()
         login(self.request, user)
         return super().form_valid(form)
 
