@@ -149,10 +149,11 @@ BOWER_INSTALLED_APPS = (
     'es6-promise#4.2',
     'font-awesome#4.7',
     'ilyabirman-likely#2.3',
-    'include-media#1.4',
     'include-media-export#1.0',
+    'include-media#1.4',
     'jquery-ui#1.12',
     'jquery.maskedinput#1.4',
+    'js-cookie#2.2.1',
     'normalize-css#7',
     'nouislider#10.1',
     'owl.carousel#2.2',
@@ -191,7 +192,7 @@ PIPELINE = {
             'source_filenames': (
                 'frontend/scss/style.scss',
             ),
-            'output_filename': 'frontend/css/style-2022-12-25.css',
+            'output_filename': 'frontend/css/style-2022-12-26.css',
         },
         'vue': {
             'source_filenames': (
@@ -208,9 +209,10 @@ PIPELINE = {
                 'bower_components/swiper/dist/js/swiper.min.js',
                 'bower_components/jquery.maskedinput/dist/jquery.maskedinput.min.js',  # NOQA
                 'bower_components/Likely/release/likely.js',
+                'bower_components/js-cookie/src/js.cookie.js',
                 'frontend/js/jquery.popmenu.js',
             ),
-            'output_filename': 'frontend/js/libs-2020-09-20.js',
+            'output_filename': 'frontend/js/libs-2022-12-26.js',
         },
         'vuecart': {
             'source_filenames': (
@@ -229,8 +231,9 @@ PIPELINE = {
         'frontend': {
             'source_filenames': (
                 'frontend/coffee/script.coffee',
+                'frontend/js/select_user_type.js',
             ),
-            'output_filename': 'frontend/js/script-2020-09-20.js',
+            'output_filename': 'frontend/js/script-2022-12-26.js',
         },
         'vue-vendors': {
             'source_filenames': (
