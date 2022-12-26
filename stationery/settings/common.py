@@ -233,7 +233,7 @@ PIPELINE = {
                 'frontend/coffee/script.coffee',
                 'frontend/js/select_user_type.js',
             ),
-            'output_filename': 'frontend/js/script-2022-12-26.js',
+            'output_filename': 'frontend/js/script-2022-12-26-2.js',
         },
         'vue-vendors': {
             'source_filenames': (

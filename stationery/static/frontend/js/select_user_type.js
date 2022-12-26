@@ -18,6 +18,7 @@
         }
 
         closeBtn.addEventListener('click', function () {
+            Cookies.set('showModal', false);
             closeModal(modalWindow);
         });
 
