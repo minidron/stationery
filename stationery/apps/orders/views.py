@@ -17,7 +17,7 @@ from cart.conf import CART_KEY
 from lib.email import create_email
 from orders.forms import (
     CompanyRegistrationForm, ItemFormSet, OrderForm, RegistrationForm,
-    UserProfile, YaPaymentFormWithoutCash)
+    UserProfile, YaPaymentForm)
 from orders.models import Order, OrderStatus
 
 
@@ -332,7 +332,7 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
     Подробный просмотр заказа.
     """
     login_url = reverse_lazy('account:login')
-    form_class = YaPaymentFormWithoutCash
+    form_class = YaPaymentForm
     form_initial = None
     model = Order
     template_name = 'pages/frontend/history_detail.html'
@@ -368,19 +368,25 @@ class HistoryDetailView(LoginRequiredMixin, DetailView):
         """
         Передаём данные для создания формы оплаты.
         """
-        kwargs = {}
-        if self.request.method == 'GET':
-            order = self.get_object()
-            kwargs['initial'] = {
-                'phone': self.request.user.phone,
-                'email': self.request.user.email,
+        user = self.request.user
+        order = self.get_object()
+
+        kwargs = {
+            'disabled_fields': ['email'],
+            'is_wholesaler': user.is_wholesaler,
+            'initial': {
+                'email': user.email,
+                'phone': user.phone,
                 'delivery_type': order.delivery_type,
                 'delivery_address': order.delivery_address,
                 'zip_code': order.zip_code,
                 'weight': order.weight,
-            }
-        elif self.request.method in ('POST', 'PUT'):
+            },
+        }
+
+        if self.request.method in ('POST', 'PUT'):
             kwargs['data'] = self.request.POST
+
         return kwargs
 
     def post(self, request, *args, **kwargs):

@@ -167,7 +167,7 @@ class YaPaymentForm(BasePaymentForm):
         label='Получение товара',
         coerce=int,
         widget=forms.RadioSelect(), choices=DeliveryType.CHOICES,
-        required=True)
+        required=False)
     delivery_address = forms.CharField(
         label='Адрес доставки',
         required=False)
@@ -177,7 +177,7 @@ class YaPaymentForm(BasePaymentForm):
     payment_method_data = forms.ChoiceField(
         label='Способ оплаты',
         widget=forms.RadioSelect(), choices=PaymentMethod.CHOICES,
-        required=True)
+        required=False)
     comment = forms.CharField(
         label='Комментарий к заказу',
         widget=forms.Textarea(), required=False)
@@ -271,10 +271,3 @@ class YaPaymentForm(BasePaymentForm):
     def create_payment(self, request, order=None, payer=None):
         self.request = request
         return super().create_payment(order, payer)
-
-
-class YaPaymentFormWithoutCash(YaPaymentForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        field = self.fields['payment_method_data']
-        field.widget.choices = field.widget.choices[1:]
