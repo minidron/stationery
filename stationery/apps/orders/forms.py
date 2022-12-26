@@ -182,7 +182,9 @@ class YaPaymentForm(BasePaymentForm):
         label='Комментарий к заказу',
         widget=forms.Textarea(), required=False)
 
-    def __init__(self, disabled_fields=None, *args, **kwargs):
+    def __init__(
+        self, disabled_fields=None, is_wholesaler=False, *args, **kwargs
+    ):
         disabled_fields = disabled_fields or []
         super().__init__(*args, **kwargs)
         weight = kwargs.get('initial', {}).get('weight', None)
@@ -191,6 +193,12 @@ class YaPaymentForm(BasePaymentForm):
 
         for field_name in disabled_fields:
             self.fields[field_name].disabled = True
+
+        if is_wholesaler:
+            skip_fields = [
+                'phone', 'email', 'delivery_type', 'payment_method_data']
+            for field_name in skip_fields:
+                self.fields[field_name].required = False
 
     def clean(self):
         cleaned_data = super().clean()

@@ -89,6 +89,7 @@ class PaymentView(FormView):
         form_kwargs = super().get_form_kwargs()
         if self.request.user.is_authenticated:
             form_kwargs['disabled_fields'] = ['email']
+            form_kwargs['is_wholesaler'] = self.request.user.is_wholesaler
         return form_kwargs
 
     def form_valid(self, form):
