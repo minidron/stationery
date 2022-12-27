@@ -1,7 +1,7 @@
 Django==1.11.29
 
 pip==20.3.4
-setuptools==49.6.0
+setuptools==65.5.1
 
 git+https://github.com/minidron/fabric_class.git@0.0.3
 
