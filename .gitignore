@@ -8,7 +8,7 @@ stationery/static/coffee/*.js
 stationery/static/coffee/*/*.js
 stationery/static/scss/*.css
 stationery/static/scss/*/*.css
-
+/env
 /.ipynb_checkpoints/
 .idea
 .vscode

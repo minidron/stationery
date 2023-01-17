@@ -859,7 +859,11 @@ body {
         font: $fw-regular 20px/36px $ff-PT-Sans;
     }
 }
-
+.btn-title{
+    font: $fw-regular 20px/36px $ff-PT-Sans;
+    padding-top: 30px;
+    font-weight: bold;
+}
 .buttons-change {
     padding: 30px 0 30px 0;
 
