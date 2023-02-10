@@ -27,7 +27,7 @@ django-resized==0.3.11
 djangorestframework==3.8.2
 importlib-metadata==4.2.0
 ipdb==0.10.3
-ipython==4.2.1
+ipython==8.10.0
 jupyter==1.0.0
 libsass==0.20.1
 lxml==4.5.2
