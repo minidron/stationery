@@ -42,6 +42,6 @@ raven==6.2.1
 requests==2.21.0
 sorl-thumbnail==12.5.0
 transliterate==1.10.2
-Werkzeug==0.16.1
+Werkzeug==2.2.3
 XlsxWriter==3.0.3
 yookassa==2.3.3
