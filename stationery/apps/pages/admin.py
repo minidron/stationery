@@ -5,7 +5,7 @@ from adminsortable2.admin import SortableAdminMixin
 
 from pages.models import Page, Blog, Slider, MenuPage
 
-from .models import Vkvidjet,FooterImg,Color,SocialLink,HeaderLogo,ImgCategory,ColorTopHead,ImagePage
+from .models import Vkvidjet,FooterImg,Color,SocialLink,HeaderLogo,ImgCategory,ColorTopHead,ImagePage, CategoryList
 
 
 
@@ -113,3 +113,4 @@ class ColorTopHeadAdmin(admin.ModelAdmin):
 admin.site.register(SocialLink)
 admin.site.register(HeaderLogo)
 admin.site.register(ImgCategory)
+admin.site.register(CategoryList)

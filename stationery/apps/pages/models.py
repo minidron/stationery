@@ -230,6 +230,19 @@ class ImgCategory(models.Model):
     def __str__(self):
         return self.title
 
+class CategoryList(models.Model):
+
+    title = models.CharField(max_length=20, verbose_name='Выводимое название',unique=True)
+    img = models.ImageField(upload_to="slider/", verbose_name='Картинка')
+    link = models.CharField(max_length=200, verbose_name='Ссылка на категорию')
+
+    class Meta:
+        verbose_name = 'Вывод категорий на главной'
+        verbose_name_plural = 'Вывод категорий на главной'
+
+    def __str__(self):
+        return self.title
+
 class ColorTopHead(models.Model):
    
 

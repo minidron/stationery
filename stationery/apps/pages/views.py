@@ -11,7 +11,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 from odinass.models import Category, Offer, Property, PropertyValue, Tags
 from odinass.serializers import SearchOfferFilter
 from orders.models import Office
-from pages.models import Blog, Page, Slider
+from pages.models import Blog, Page, Slider, CategoryList
 
 
 class IndexView(TemplateView):
@@ -28,6 +28,7 @@ class IndexView(TemplateView):
                                 .filter(product__is_favorite=True)
                                 .order_by('product__order')),
             'slider_list': Slider.objects.all(),
+            'category_list': CategoryList.objects.all()
         })
         return context
 

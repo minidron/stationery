@@ -57,38 +57,16 @@
 
     <div class="index-catalog__section">
         <ul class="recursetree">
+            {% for index in category_list %}
             <li class="level--1 rounded clickable index-level">
                 <div class="recursetree--title">
                         <span class="sub-category--icon">
-                            <img src="{{ imgcategory.0.img.url }}" alt="Бумага и канцтовары">
+                            <img src="{{ index.img }}" alt="Бумага и канцтовары">
                         </span>
-                        <a href="/catalog/bumaga-i-kantstovaryi/">Бумага и канцовары</a>
+                        <a href="{{ index.link }}">{{ index.title }}</a>
                 </div>
             </li>
-            <li class="level--1 rounded clickable index-level">
-                <div class="recursetree--title">
-                        <span class="sub-category--icon">
-                            <img src="{{ imgcategory.1.img.url }}" alt="Кресла и стулья">
-                        </span>
-                        <a href="/catalog/kresla-i-stulya/">Кресла и стулья</a>
-                </div>
-            </li>
-            <li class="level--1 rounded clickable index-level">
-                <div class="recursetree--title">
-                        <span class="sub-category--icon">
-                            <img src="{{ imgcategory.2.img.url }}" alt="Хобби и творчество">
-                        </span>
-                        <a href="/catalog/hobbi-i-tvorchestvo/">Хобби и творчество</a>
-                </div>
-            </li>
-            <li class="level--1 rounded clickable index-level">
-                <div class="recursetree--title mobile-last-item">
-                        <span class="sub-category--icon">
-                            <img src="{{ imgcategory.3.img.url }}" alt="Хозтовары">
-                        </span>
-                        <a href="/catalog/hoztovaryi-ofisnaya-kuhnya/">Хозтовары</a>
-                </div>
-            </li>
+            {% endfor %}
         </ul>
     </div>
 
