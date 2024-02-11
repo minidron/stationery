@@ -2,7 +2,6 @@
 
 stationery/apps/*/static/coffee/*.js
 stationery/apps/*/static/scss/*.css
-stationery/settings/local.py
 stationery/static/bower_components/
 stationery/static/coffee/*.js
 stationery/static/coffee/*/*.js
